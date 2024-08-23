@@ -113,12 +113,12 @@ const App = () => {
     <DataProvider>
     <Router>
       <div className='app-container'>
-        {!authToken && (
+        {authToken && (
           <div className='sidebar-container'>
             <Sidebar />
           </div>
         )}
-        {!authToken && (
+        {authToken && (
           <div className='content-container'>
             <Navbar />
             <Routes>
@@ -185,7 +185,7 @@ const App = () => {
           </div>
         )}
         </div>
-        {!!authToken && <Login  />}
+        {!authToken && <Login  />}
       </Router>
     </DataProvider>
   );
