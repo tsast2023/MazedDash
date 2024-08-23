@@ -6,7 +6,7 @@ import axios from "axios";
 import Cookies from "js-cookie"
 function AnnonceCreator() {
   const token = Cookies.get('token');
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [showSuivantModal, setShowSuivantModal] = useState(false);
     const [showPlanifierModal, setShowPlanifierModal] = useState(false);
     const [fileInputType, setFileInputType] = useState("");

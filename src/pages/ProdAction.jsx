@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from "react-i18next";
 
 function ProdAction() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
 
   const goBack = () => {

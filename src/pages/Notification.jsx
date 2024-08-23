@@ -4,9 +4,10 @@ import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+
 const Notification = () => {
   const token = Cookies.get("token");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();  // Access the i18n instance
   const [isMobile, setIsMobile] = useState(false);
   const [Notification, setNotification] = useState({
     titleAr: "",
@@ -30,6 +31,13 @@ const Notification = () => {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Effect to change the direction based on the selected language
+  // useEffect(() => {
+  //   const direction = i18n.language === "ar" ? "rtl" : "ltr";
+  //   document.documentElement.dir = direction; // Set the direction of the document
+  // }, [i18n.language]);
+
   const sendNotofication = async (e) => {
     e.preventDefault();
     try {
@@ -43,6 +51,7 @@ const Notification = () => {
       console.log(error);
     }
   };
+
   return (
     <div className="content-container">
       <div id="main">
@@ -76,7 +85,6 @@ const Notification = () => {
                             type="text"
                             id="fr"
                             className="form-control"
-                            // placeholder={t("title(francais)")}
                             required
                           />
 
@@ -91,13 +99,12 @@ const Notification = () => {
                             type="text"
                             id="fr"
                             className="form-control"
-                            // placeholder={t("notification(francais)")}
                             required
                           />
                         </div>
 
                         <div className="form-group">
-                          <label htmlFor="fr">{t("title(englais)")}</label>
+                          <label htmlFor="en">{t("title(englais)")}</label>
                           <input
                             onChange={(e) =>
                               setNotification({
@@ -106,9 +113,8 @@ const Notification = () => {
                               })
                             }
                             type="text"
-                            id="fr"
+                            id="en"
                             className="form-control"
-                            // placeholder={t("title(englais)")}
                             required
                           />
                           <label htmlFor="en">{t("body(englais)")}</label>
@@ -122,13 +128,12 @@ const Notification = () => {
                             type="text"
                             id="en"
                             className="form-control"
-                            // placeholder={t("body(englais)")}
                             required
                           />
                         </div>
 
                         <div className="form-group">
-                          <label htmlFor="fr">{t("title(arabe)")}</label>
+                          <label htmlFor="ar">{t("title(arabe)")}</label>
                           <input
                             onChange={(e) =>
                               setNotification({
@@ -137,8 +142,8 @@ const Notification = () => {
                               })
                             }
                             type="text"
-                            id="fr"
-                            className="form-control"                            // placeholder={t("title(arabe)")}
+                            id="ar"
+                            className="form-control"
                             required
                           />
                           <label htmlFor="ar">{t("body(arabe)")}</label>
@@ -152,7 +157,6 @@ const Notification = () => {
                             type="text"
                             id="ar"
                             className="form-control"
-                            // placeholder={t("body(arabe)")}
                             required
                           />
                           <br />
@@ -160,9 +164,9 @@ const Notification = () => {
                       </div>
                     </form>
                     <div className="col-12 d-flex justify-content-end">
-                    <Button type="submit" className="btn btn-primary me-1 mb-1">
-                      {t("Envoyer a tous")}
-                    </Button>
+                      <Button type="submit" className="btn btn-primary me-1 mb-1">
+                        {t("Envoyer a tous")}
+                      </Button>
                     </div> 
                   </div>
                 </div>

@@ -53,7 +53,7 @@ const hexToRgba = (hex, alpha) => {
 };
 
 const Playground = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [broken, setBroken] = useState(false);

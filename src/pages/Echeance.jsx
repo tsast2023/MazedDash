@@ -41,16 +41,39 @@ export function Echeance() {
                     {isMobile ? (
                       <table className="table">
                         <tbody>
-                          <tr></tr>
                           <tr>
-                            <td>{t("Date de paiement")}</td>
+                            <td>{t("Photo de Profile")}</td>
                             <td>
-                                Lorem
+                              <img style={{borderRadius:"50px"}} className="imgtable" src="./Mazed.jpg" alt="img" />
                             </td>
                           </tr>
                           <tr>
-                            <td>{t("Montant à payer")}</td>
+                            <td>{t("Nom")}</td>
+                            <td>fdfdf</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Prénom")}</td>
                             <td>Lorem</td>
+                          </tr>
+                          <tr>
+                            <td>{t("pseudo")}</td>
+                            <td>Lorem Lorem</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Numéro de téléphone")}</td>
+                            <td>Lorem</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Email")}</td>
+                            <td>Lorem Lorem</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Date de paiement")}</td>
+                            <td>Lorem</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Montant à payer")}</td>
+                            <td>Lorem Lorem</td>
                           </tr>
                           <tr>
                             <td>{t("Montant restant")}</td>
@@ -60,29 +83,59 @@ export function Echeance() {
                             <td>{t("Montant à payer chaque mois")}</td>
                             <td>Lorem Lorem</td>
                           </tr>
-                          <td colSpan="2">
-                            <hr />
-                          </td>
+                          <tr>
+                            <td>{t("Modifier")}</td>
+                            <td>
+                              <button className="btn">
+                                <i className="fa-solid fa-pen-to-square"></i>
+                              </button>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colSpan="2">
+                              <hr />
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
                     ) : (
                       <table className="table">
                         <thead>
                           <tr>
+                            <th>{t("Photo de Profile")}</th>
+                            <th>{t("Nom")}</th>
+                            <th>{t("Prénom")}</th>
+                            <th>{t("pseudo")}</th>
+                            <th>{t("Numéro de téléphone")}</th>
+                            <th>{t("Email")}</th>
                             <th>{t("Date de paiement")}</th>
                             <th>{t("Montant à payer")}</th>
                             <th>{t("Montant restant")}</th>
                             <th>{t("Montant à payer chaque mois")}</th>
+                            <th>{t("Modifier")}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
+                            <td>
+                              <img style={{borderRadius:"50px"}} className="imgtable" src="./Mazed.jpg" alt="img" />
+                            </td>
+                            <td>fdfdf</td>
                             <td>Lorem</td>
-                            <td> Lorem Lorem </td>
+                            <td>Lorem Lorem</td>
+                            <td>Lorem</td>
+                            <td>Lorem Lorem</td>
+                            <td>Lorem</td>
+                            <td>Lorem Lorem</td>
                             <td className="text-bold-500">
                               {t("Lorem Lorem")}
                             </td>
                             <td>Lorem Lorem</td>
+                            <td>
+                              <button className="btn">
+                                <i className="fa-solid fa-pen-to-square"></i>
+                              </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>

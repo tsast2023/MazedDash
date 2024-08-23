@@ -12,7 +12,7 @@ function ListeAdministrateur() {
   const roles = state.Roles;
   const [data,setData] = useState({email:"" , numTel:"" , email:"" , identifiant:"" , roleName:(roles && roles[0].name) || "" , password:""});
   const [role , setRoles] = useState("");
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);

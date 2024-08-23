@@ -5,7 +5,7 @@ import "../css/DemandeCreation.css";
 
 
 function DemandeVendeurCreation() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

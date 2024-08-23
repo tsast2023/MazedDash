@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 function QuestionEdit() {
   const token = Cookies.get('token');
   const [question , setQuestion]= useState({question:"" ,questionAr:"",questionEn:"", reponse:"" , reponseAr:"" ,reponseEn:"" })
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const editQuestion = async(id)=>{
     try {
       const res = await axios.put(`http://192.168.0.103:8081/api/questions/${id}` , {headers : {Authorization: `Bearer ${token}`}});

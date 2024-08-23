@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 
 const ProductDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

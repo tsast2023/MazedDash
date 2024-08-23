@@ -63,7 +63,7 @@ function Modal({ t  , id , traiterDemande}) {
 // TableRow component
 function TableRow({ userData, onAccept }) {
   const token = Cookies.get('token')
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const downloadFile = async (fileId, token) => {
     try {
       const res = await axios.get(`http://192.168.0.103:8081/api/demandeTransfert/file/${fileId}`, {
@@ -182,7 +182,7 @@ function TableRow({ userData, onAccept }) {
 
 // ResponsiveTable component
 function ResponsiveTable({ data, headers, isMobile }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleAccept = () => {
     // Handle acceptance logic
@@ -241,7 +241,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
 function Transfer() {
   const state = useContext(GlobalState);
   const demandesTransfert = state.demandesT || []
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

@@ -12,7 +12,7 @@ function EnchèreEdit(props) {
   const token = Cookies.get('token');
   const state = useContext(GlobalState);
   const categories = state.Categories;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const [steps, setSteps] = useState(0);
   const fileInputRef = React.createRef();

@@ -91,7 +91,7 @@ const Modal = ({ t, handleImageChange, tuto, setTuto, addTuto }) => {
 };
 
 const TableRow = ({ item, handleDelete }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <tr>
@@ -107,7 +107,7 @@ const TableRow = ({ item, handleDelete }) => {
 };
 
 const ResponsiveTable = ({ tutorials, handleDelete, isMobile }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div className="table-responsive">
@@ -160,7 +160,7 @@ const ResponsiveTable = ({ tutorials, handleDelete, isMobile }) => {
 
 const Tutoriel = () => {
   const token = Cookies.get('token')
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [tuto, setTuto] = useState({ ordre: 0, description: "",descriptionAr:"" ,descriptionEn:"", file: "" });
   const state = useContext(GlobalState);
   const tutorials = state.tutorials;

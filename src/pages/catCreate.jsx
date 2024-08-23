@@ -11,7 +11,7 @@ const CatCreate = () => {
   const [category, setcategory] = useState({nomCategorieArabe:"" ,nomCategorieEnglish:"",nomCategorie:"" ,icon:""});
   const [inputs, setInputs] = useState([]);
   const state = useContext(GlobalState);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const goBack = () => {
     window.history.back(); // Simulate a browser back button

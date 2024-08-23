@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function ParticipantList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [modalShow, setModalShow] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 

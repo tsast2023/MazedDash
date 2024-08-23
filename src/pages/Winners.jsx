@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 function Winners() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [isMobile, setIsMobile] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [additionalTables, setAdditionalTables] = useState([]);
@@ -27,6 +27,11 @@ function Winners() {
       // Clean up the event listener on component unmount
       return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    // useEffect(() => {
+    //   const direction = i18n.language === "ar" ? "rtl" : "ltr";
+    //   document.documentElement.dir = direction; // Set the direction of the document
+    // }, [i18n.language]);
   
     const handleAddTable = () => {
       setAdditionalTables([
@@ -134,7 +139,7 @@ function Winners() {
                               <td>{t("Type de paiement")}</td>
                               <td>Type de paiement</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                               <td>{t("Echéance")}</td>
                               <td>
                                 <i
@@ -142,7 +147,7 @@ function Winners() {
                                   onClick={() => setShowModal(true)}
                                 ></i>
                               </td>
-                            </tr>
+                            </tr> */}
                             <td colSpan="2">
                               <hr />
                             </td>
@@ -156,10 +161,12 @@ function Winners() {
                               <th>{t("Nom")}</th>
                               <th>{t("Prénom")}</th>
                               <th>{t("Pseudo")}</th>
+                              <th>{t("Email")}</th>
+                              <th>{t("Numéro de téléphone")}</th>
                               <th>{t("Enchère")}</th>
                               <th>{t("Type de paiement")}</th>
-                              <th>{t("Echéance")}</th>
-                              <th>{t("Liste echéance")}</th>
+                              {/* <th>{t("Echéance")}</th>
+                              <th>{t("Liste echéance")}</th> */}
                             </tr>
                           </thead>
                           <tbody>
@@ -177,6 +184,8 @@ function Winners() {
                                 {t("Lorem Lorem")}
                               </td>
                               <td>Lorem Lorem</td>
+                              <td>Lorem Lorem</td>
+                              <td>Lorem Lorem</td>
                               <td>
                                 <Link
                                   to="/DetailEnchere"
@@ -186,17 +195,17 @@ function Winners() {
                                 </Link>
                               </td>
                               <td>Payement</td>
-                              <td>
+                              {/* <td>
                                 <i
                                   className="fa-solid fa-plus"
                                   onClick={() => setShowModal(true)}
                                 ></i>
-                              </td>
-                              <td>
+                              </td> */}
+                              {/* <td>
                                 <Link to="/Echéance">
                                 <i className="fa-solid fa-eye"></i>
                                 </Link>
-                                </td>
+                                </td> */}
                             </tr>
                           </tbody>
                         </table>

@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 
 function TermesList() {
   const token = Cookies.get('token');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const state = useContext(GlobalState);
   const termes = state.Termes

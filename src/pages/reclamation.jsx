@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Modal, Button, Form } from "react-bootstrap";
 
 function Reclamation() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [showModal1, setShowModal1] = useState(false);
   const [showModal2, setShowModal2] = useState(false);

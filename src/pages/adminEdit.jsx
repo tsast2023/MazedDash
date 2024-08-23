@@ -3,8 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
 function AdminEdit() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id, name, pseudo, role } = useParams();
+  
+  
 
   return (
     <div className="content-container">

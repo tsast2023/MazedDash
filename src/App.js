@@ -70,9 +70,13 @@ import DemandeCatAdmin from './pages/DemandeCatAdmin';
 import { Echeance } from './pages/Echeance';
 import Winners from './pages/Winners';
 import Notification from './pages/Notification';
+import { useTranslation } from "react-i18next";
+
 const App = () => {
   const [token, setToken] = useState(null);
   const authToken= Cookies.get('token');
+  const { t, i18n } = useTranslation();
+
   
   useEffect(() => {
     const requestPermission = async () => {
@@ -108,17 +112,22 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const direction = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = direction; // Set the direction of the document
+  }, [i18n.language]);
+
   return (
  
     <DataProvider>
     <Router>
       <div className='app-container'>
-        {authToken && (
+        {!authToken && (
           <div className='sidebar-container'>
             <Sidebar />
           </div>
         )}
-        {authToken && (
+        {!authToken && (
           <div className='content-container'>
             <Navbar />
             <Routes>
@@ -185,7 +194,7 @@ const App = () => {
           </div>
         )}
         </div>
-        {!authToken && <Login  />}
+        {!!authToken && <Login  />}
       </Router>
     </DataProvider>
   );

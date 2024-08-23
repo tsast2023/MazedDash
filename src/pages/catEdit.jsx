@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from "react-i18next";
 
 function CategoryModificationForm() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [label, setLabel] = useState('');
   const [type, setType] = useState('');
 

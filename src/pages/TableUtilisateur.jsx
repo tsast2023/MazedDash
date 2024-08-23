@@ -9,7 +9,7 @@ import axios from "axios";
 import Cookies from 'js-cookie'
 function TableUtilisateur() {
   const token = Cookies.get('token');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [modalShow, setModalShow] = useState(false);
  
   const [isMobile, setIsMobile] = useState(false);

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { GlobalState } from '../GlobalState';
 
 function Commandes() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const state = useContext(GlobalState);
   const commandes = state.Commandes;
@@ -49,7 +49,7 @@ function Commandes() {
 }
 
 function DesktopTable({commandes}) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <table className="table" id="table1">
       <thead>
@@ -86,7 +86,7 @@ function DesktopTable({commandes}) {
 }
 
 function MobileTable({commandes}) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <table className="table" id="table1">
       <tbody>
@@ -171,7 +171,7 @@ function MobileTable({commandes}) {
 }
 
 function StatusModal() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="modal fade" id="statusModal" tabIndex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
       <div className="modal-dialog">

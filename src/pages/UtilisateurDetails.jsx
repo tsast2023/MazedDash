@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 function UtilisateurDetails() {
   const location = useLocation();
   const { user } = location.state || {}; 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   
   const handleBlockClick = () => {

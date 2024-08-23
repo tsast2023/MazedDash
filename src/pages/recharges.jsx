@@ -7,7 +7,7 @@ import { Table } from "react-bootstrap";
 import Cookies from 'js-cookie'
 function Recharges() {
   const token = Cookies.get('token');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const state = useContext(GlobalState);
   const cartes = state.cartes;
   const [carteRech, setCarteRech] = useState({ numSérie: "", valeur: "" });

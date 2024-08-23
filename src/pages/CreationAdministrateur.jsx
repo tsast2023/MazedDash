@@ -9,7 +9,7 @@ function CreationAdministrateur() {
   const roles = state.Roles;
   const [data,setData] = useState({prenom:"" , numTel:"" , email:"" , identifiant:"" , roleName:(roles && roles[0].name) || "" , password:""});
   
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const submitAdmin = async(e)=>{
     e.preventDefault();

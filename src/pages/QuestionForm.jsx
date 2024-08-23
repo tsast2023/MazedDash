@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 function QuestionForm() {
   const token = Cookies.get('token');
   const [question , setQuestion]= useState({question:"" ,questionAr:"",questionEn:"", reponse:"" , reponseAr:"" ,reponseEn:"" })
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const addQuestion = async(e)=>{
     e.preventDefault();
     try {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const ProductEditForm = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [label, setLabel] = useState("");
   const [image, setImage] = useState(null);
   const [initialStock, setInitialStock] = useState("");

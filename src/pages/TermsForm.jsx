@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 function TermsForm() {
   const token = Cookies.get('token')
   const [termes , setTermes] = useState({text :"" , sujet:""})
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const submitTerme = async(e)=>{
     e.preventDefault();
     try {

@@ -10,7 +10,7 @@ const DemandeProduitAdmin = () => {
   const token = Cookies.get('token')
   const state = useContext(GlobalState);
   const demandes = state.demandes
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [starClicked, setStarClicked] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);

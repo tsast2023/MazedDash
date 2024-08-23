@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 const App = () => {
   const [imageFiles, setImageFiles] = useState([]);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const goBack = () => {
     window.history.back(); // Simulate a browser back button

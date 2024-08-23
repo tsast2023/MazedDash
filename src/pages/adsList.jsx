@@ -6,7 +6,7 @@ import { GlobalState } from "../GlobalState";
 import axios from "axios";
 
 function AdsList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showCarouselModal, setShowCarouselModal] = useState(false);

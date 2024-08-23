@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function VendeurForm() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedType, setSelectedType] = useState("square");
   const [birthdate, setBirthdate] = useState("");
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 function QuestionDetail() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="content-container">
       <div id="main">

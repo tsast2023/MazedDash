@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const ProdList = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [starClicked, setStarClicked] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);

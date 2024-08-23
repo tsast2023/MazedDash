@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useTranslation } from 'react-i18next';
 
 function TableVendeurs() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

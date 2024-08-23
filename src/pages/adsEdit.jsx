@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { useTranslation } from "react-i18next";
 
 function AdsList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showCarouselModal, setShowCarouselModal] = useState(false);

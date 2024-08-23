@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 function PartDetail() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClose = () => setShowModal(false);

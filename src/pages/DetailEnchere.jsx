@@ -23,7 +23,7 @@ function DetailEnchere(props) {
     montantRestant: "",
     montantChaqueMois: "",
   });
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     console.log(participants , filteredUsers)

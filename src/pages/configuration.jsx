@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 
 function Configuration() {
   const token = Cookies.get('token');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showEmail1, setShowEmail1] = useState(true);
   const [showEmail2, setShowEmail2] = useState(true);
   const [showFac, setShowFac] = useState(true);

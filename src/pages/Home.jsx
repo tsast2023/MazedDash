@@ -4,7 +4,7 @@ import i18n from "../i18n";
 import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const chartOptions = {
     chart: {
       height: 350,
@@ -117,7 +117,7 @@ const Dashboard = () => {
           </div>
         </section>
         <section className="row g-3">
-          <div className="col-12 col-lg-4 mb-4">
+          {/* <div className="col-12 col-lg-4 mb-4">
             <div className="card h-100">
               <div className="card-header">
                 <h4>{t("Traffic sur les produits")}</h4>
@@ -131,8 +131,8 @@ const Dashboard = () => {
                 />
               </div>
             </div>
-          </div>
-          <div className="col-12 col-lg-4 mb-4">
+          </div> */}
+          <div className="col-12 col-lg-6 mb-6">
             <div className="card h-100">
               <div className="card-header">
                 <h4>{t("Traffic sur les enchères")}</h4>
@@ -147,7 +147,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-lg-4 mb-4">
+          <div className="col-12 col-lg-6 mb-6">
             <div className="card h-100">
               <div className="card-header">
                 <h4>{t("Traffic sur les catégories")}</h4>

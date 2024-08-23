@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Cookies from 'js-cookie'
 function UtilisateurForm() {
   const token = Cookies.get('token')
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [data , setData] = useState({nomFamille:"" , prenom:"", pseudo:"" , email:"" , numTel:"" , role:""})
  //create user api bot found
   const addUser = async(e)=>{
