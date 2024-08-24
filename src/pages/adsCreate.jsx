@@ -59,7 +59,7 @@ function AnnonceCreator() {
     };
 const publishNow = async() =>{
   try {
-    const res = await axios.post('http://192.168.0.103:8081/api/annonce/createAnnonce' , {contenu , type},{headers:{Authorization: `Bearer ${token}`}});
+    const res = await axios.post('http://192.168.2.104:8081/api/annonce/createAnnonce' , {contenu , type},{headers:{Authorization: `Bearer ${token}`}});
     console.log(res.data)
   } catch (error) {
     console.log(error)
@@ -67,7 +67,7 @@ const publishNow = async() =>{
 }
 const scheduledAds = async() =>{
   try {
-    const res = await axios.post('http://192.168.0.103:8081/api/annonce/planifier',{contenu , type , datePublication},{headers:{Authorization: `Bearer ${token}`}} );
+    const res = await axios.post('http://192.168.2.104:8081/api/annonce/planifier',{contenu , type , datePublication},{headers:{Authorization: `Bearer ${token}`}} );
     console.log(res.data)
   } catch (error) {
     console.log(error)

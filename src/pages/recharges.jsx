@@ -10,7 +10,7 @@ function Recharges() {
   const { t, i18n } = useTranslation();
   const state = useContext(GlobalState);
   const cartes = state.cartes;
-  const [carteRech, setCarteRech] = useState({ numSérie: "", valeur: "" });
+  const [carteRech, setCarteRech] = useState({ numSérie: "", valeur: ""  , "valeurBonusRecharge" :""});
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ function Recharges() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.103:8081/api/carte/deleteCarte?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://192.168.2.104:8081/api/carte/deleteCarte?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -67,7 +67,7 @@ function Recharges() {
   const addCarte = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://192.168.0.103:8081/api/carte/publishNow', carteRech , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.post('http://192.168.2.104:8081/api/carte/publishNow', carteRech , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
       window.location.reload();
     } catch (error) {
@@ -142,6 +142,19 @@ function Recharges() {
                                   onChange={e => setCarteRech({ ...carteRech, numSérie: e.target.value })}
                                 />
                               </div>
+                              <label htmlFor="serialNumber">
+                                {t("Valeur de Bonus de la Carte")}
+                              </label>
+                              <div className="form-group">
+                                <input
+                                  id="serialNumber"
+                                  type="text"
+                                  placeholder={t("Écrivez ici")}
+                                  className="form-control"
+                                  maxLength="25"
+                                  onChange={e => setCarteRech({ ...carteRech, valeurBonusRecharge: e.target.value })}
+                                />
+                              </div>
                               <label htmlFor="value">{t("Valeur")}</label>
                               <div className="form-group">
                                 <input
@@ -205,16 +218,20 @@ function Recharges() {
                           <td className="text-bold-500">{item.numSérie}</td>
                         </tr>
                         <tr>
+                          <td>{t("Valeur")}</td>
+                          <td>{item.valeur}</td>
+                        </tr>
+                        <tr>
+                          <td>{t("Valeur Bonus")}</td>
+                          <td>{item.valeurBonusRecharge}</td>
+                        </tr>
+                        <tr>
+                        <tr>
                           <td>{t("Statut")}</td>
                           <td>
                             <span className={item.statuscarte === "NONUTILISER" ? "badge bg-success" : "badge bg-danger"}>{item.statuscarte}</span>
                           </td>
                         </tr>
-                        <tr>
-                          <td>{t("Valeur")}</td>
-                          <td>{item.valeur}</td>
-                        </tr>
-                        <tr>
                           <td>{t("Supprimer")}</td>
                           <td>
                             <i
@@ -233,8 +250,9 @@ function Recharges() {
                     <thead>
                       <tr>
                         <th>{t("Numéro de série")}</th>
-                        <th>{t("Statut")}</th>
                         <th>{t("Valeur")}</th>
+                        <th>{t("Valeur Bonus")}</th>
+                        <th>{t("Statut")}</th>
                         <th>{t("Supprimer")}</th>
                       </tr>
                     </thead>
@@ -242,10 +260,12 @@ function Recharges() {
                       {cartes ? cartes.map((item) => (
                         <tr key={item.id}>
                           <td className="text-bold-500">{item.numSérie}</td>
+                          <td>{item.valeur}</td>
+                          <td>{item.valeurBonusRecharge}</td>
                           <td>
                             <span className={item.statuscarte === "NONUTILISER" ? "badge bg-success" : "badge bg-danger"}>{item.statuscarte}</span>
                           </td>
-                          <td>{item.valeur}</td>
+                  
                           <td>
                             <i
                               className="fa-solid fa-trash deleteIcon"

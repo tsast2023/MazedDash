@@ -42,7 +42,7 @@ const Notification = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://192.168.0.103:8081/Notification/sendToAll",
+        "http://192.168.2.104:8081/Notification/sendToAll",
         Notification,
         { headers: { Authorization: `Bearer ${token}` } }
       );

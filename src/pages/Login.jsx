@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 
 const Login = () => {
 
-  const [data, setData] = useState({login : "" , password: "" , deviceToken:""});
+  const [data, setData] = useState({login : "" , password: "" , deviceToken:"" , language : "FR"});
 
   useEffect(() => {
     const deviceToken = Cookies.get('fcmToken');
@@ -16,7 +16,7 @@ const Login = () => {
     try {
       
       console.log(data)
-      const res = await  axios.post('http://192.168.0.103:8090/api/auth/login' , data);
+      const res = await  axios.post('http://192.168.2.104:8090/api/auth/login' , data);
       console.log(res.data.refreshtoken)
       Cookies.set('token' , res.data.refreshtoken )
       window.location.href = "/"

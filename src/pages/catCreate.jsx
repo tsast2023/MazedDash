@@ -35,7 +35,7 @@ const CatCreate = () => {
     console.log(category)
     try {
       const res = await axios.post(
-        "http://192.168.0.103:8081/api/categories/addCategorie",
+        "http://192.168.2.104:8081/api/categories/addCategorie",
         category, // Send the data as a JSON object
        
     

@@ -166,7 +166,7 @@ function EnchèreCreation() {
       console.log(updatedData);
 
       const res = await axios.post(
-        "http://192.168.0.103:8081/api/bid/createBrouillon",
+        "http://192.168.2.104:8081/api/bid/createBrouillon",
         updatedData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -200,7 +200,7 @@ function EnchèreCreation() {
 
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.103:8081/api/bid/publishBidNow",
+        "http://192.168.2.104:8081/api/bid/publishBidNow",
         formData,
         {
           headers: {
@@ -231,7 +231,7 @@ function EnchèreCreation() {
 
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.103:8081/api/bid/scheduleBidPublication",
+        "http://192.168.2.104:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {

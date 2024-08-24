@@ -47,7 +47,7 @@ function DetailEnchere(props) {
 
     const approverUser = async(enchereId , userId) =>{
       try {
-        const res = await axios.post(`http://192.168.0.103:8081/api/bid/approve/${enchereId}/${userId}`, {} , {headers:{Authorization: `Bearer ${token}`}})
+        const res = await axios.post(`http://192.168.2.104:8081/api/bid/approve/${enchereId}/${userId}`, {} , {headers:{Authorization: `Bearer ${token}`}})
         console.log(res.data)
       } catch (error) {
         console.log(error)

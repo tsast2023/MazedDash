@@ -42,7 +42,7 @@ const Navbar = ({ username }) => {
   };
 
   useEffect(() => {
-    const direction = i18n.language === "ar" ? "rtl" : "ltr";
+    const direction = i18n.language === "AR" ? "rtl" : "ltr";
     document.documentElement.dir = direction;
   }, [i18n.language]);
 
@@ -103,19 +103,19 @@ const Navbar = ({ username }) => {
         <div className="notification-content">
           <div
             className="notification-item"
-            onClick={() => changeLanguage("en")}
+            onClick={() => changeLanguage("EN")}
           >
             English
           </div>
           <div
             className="notification-item"
-            onClick={() => changeLanguage("fr")}
+            onClick={() => changeLanguage("FR")}
           >
             Français
           </div>
           <div
             className="notification-item"
-            onClick={() => changeLanguage("ar")}
+            onClick={() => changeLanguage("AR")}
           >
             العربية
           </div>

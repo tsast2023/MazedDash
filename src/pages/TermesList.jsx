@@ -61,7 +61,7 @@ function TermesList() {
 
   const deleteItem = async(id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.103:8081/api/termes/deleteTerme/${id}` , {headers : {Authorization: `Bearer ${token}`}})
+      const res = await axios.delete(`http://192.168.2.104:8081/api/termes/deleteTerme/${id}` , {headers : {Authorization: `Bearer ${token}`}})
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -74,7 +74,7 @@ function TermesList() {
   const updateTermes = async(e , id)=>{
     e.preventDefault()
     try {
-      const res = await axios.put(`http://192.168.0.103:8081/api/termes/updateTermme/${id}`, data , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.put(`http://192.168.2.104:8081/api/termes/updateTermme/${id}`, data , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
