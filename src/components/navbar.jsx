@@ -12,7 +12,6 @@ const Navbar = ({ username }) => {
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const [isNotificationMenuOpen, setIsNotificationMenuOpen] = useState(false);
-
   const { t, i18n } = useTranslation();
 
   const handleNotificationToggle = () => {
@@ -41,8 +40,10 @@ const Navbar = ({ username }) => {
     setIsLangMenuOpen(false);
   };
 
+  
+
   useEffect(() => {
-    const direction = i18n.language === "AR" ? "rtl" : "ltr";
+    const direction = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.dir = direction;
   }, [i18n.language]);
 
@@ -103,19 +104,19 @@ const Navbar = ({ username }) => {
         <div className="notification-content">
           <div
             className="notification-item"
-            onClick={() => changeLanguage("EN")}
+            onClick={() => changeLanguage("en")}
           >
             English
           </div>
           <div
             className="notification-item"
-            onClick={() => changeLanguage("FR")}
+            onClick={() => changeLanguage("fr")}
           >
             Français
           </div>
           <div
             className="notification-item"
-            onClick={() => changeLanguage("AR")}
+            onClick={() => changeLanguage("ar")}
           >
             العربية
           </div>

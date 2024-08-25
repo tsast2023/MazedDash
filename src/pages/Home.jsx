@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import ReactApexChart from "react-apexcharts";
 import i18n from "../i18n";
 import { useTranslation } from "react-i18next";
+import { GlobalState } from "../GlobalState";
 
 const Dashboard = () => {
+  const state = useContext(GlobalState);
+  const users = state.Users;
   const { t, i18n } = useTranslation();
   const chartOptions = {
     chart: {
@@ -109,7 +112,7 @@ const Dashboard = () => {
                     <h6 className="text-muted stats-text">
                       {t("Nombre d'inscriptions")}
                     </h6>
-                    <h6 className="stats-number mb-0">80.000</h6>
+                    <h6 className="stats-number mb-0">{80.000}</h6>
                   </div>
                 </div>
               </div>
