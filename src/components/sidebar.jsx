@@ -180,6 +180,17 @@ const Playground = () => {
                 icon={<i className="fa-solid fa-bookmark"></i>}
               >
                  <MenuItem
+                    component={<Link to="/demandeAds" />}
+                    onClick={() => setActiveLink("/demandeAds")}
+                    style={
+                      activeLink === "/demandeAds"
+                        ? menuItemStyles.active
+                        : null
+                    }
+                  >
+                    {t("Demande annonce")}
+                  </MenuItem>
+                  <MenuItem
                     component={<Link to="/DemandeEnchereAdmin" />}
                     onClick={() => setActiveLink("/DemandeEnchereAdmin")}
                     style={

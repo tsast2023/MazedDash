@@ -71,6 +71,7 @@ import { Echeance } from './pages/Echeance';
 import Winners from './pages/Winners';
 import Notification from './pages/Notification';
 import { useTranslation } from "react-i18next";
+import DemandeAds from './pages/DemandeAds';
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -190,6 +191,7 @@ const App = () => {
               <Route path='/echeances' element={<Echeance/>}/>
               <Route path='/winners' element={<Winners/>}/>
               <Route path='/notification' element={<Notification/>}/>
+              <Route path='/demandeAds' element={<DemandeAds/>}/>
             </Routes>
           </div>
         )}

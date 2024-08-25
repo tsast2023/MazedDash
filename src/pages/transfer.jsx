@@ -66,7 +66,7 @@ function TableRow({ userData, onAccept }) {
   const { t, i18n } = useTranslation();
   const downloadFile = async (fileId, token) => {
     try {
-      const res = await axios.get(`http://192.168.2.104:8081/api/demandeTransfert/file/${fileId}`, {
+      const res = await axios.get(`http://localhost:8081/api/demandeTransfert/file/${fileId}`, {
         responseType: 'blob', // This is important for downloading binary data
         headers: { Authorization: `Bearer ${token}` } // Assuming you need authorization
       });
@@ -89,7 +89,7 @@ function TableRow({ userData, onAccept }) {
       console.log(id, status, cause);
       
       const res = await axios.post(
-        `http://192.168.2.104:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`, 
+        `http://localhost:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`, 
         {}, // Empty body
         {
           headers: { 

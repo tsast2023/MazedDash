@@ -16,12 +16,15 @@ function DetailEnchere(props) {
   const filteredUsers = users.filter(user => participants.includes(user.id));
   const [isMobile, setIsMobile] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedGan , setselectedGan] = useState();
+  const [selectedEnch , setselectedEnch] = useState();
   const [additionalTables, setAdditionalTables] = useState([]);
   const [newTableData, setNewTableData] = useState({
-    date: "",
-    montantPayer: "",
-    montantRestant: "",
-    montantChaqueMois: "",
+    datePayement: "",
+    montantPayer: 0,
+    enchereId:props.selectedItem.id,
+    encherissementId:"",
+    typepaiement:"CASH"
   });
   const { t, i18n } = useTranslation();
 
@@ -43,11 +46,17 @@ function DetailEnchere(props) {
   const deleteItem = () => {
     // Implement your delete logic here
   };
-
+  const funModal = (user , enchere , encherissmentId) =>{
+    setselectedGan(user);
+    setShowModal(true)
+    setselectedEnch(enchere)
+    console.log(encherissmentId)
+    setNewTableData({...newTableData , encherissementId : encherissmentId })
+  }
 
     const approverUser = async(enchereId , userId) =>{
       try {
-        const res = await axios.post(`http://192.168.2.104:8081/api/bid/approve/${enchereId}/${userId}`, {} , {headers:{Authorization: `Bearer ${token}`}})
+        const res = await axios.post(`http://localhost:8081/api/bid/approve/${enchereId}/${userId}`, {} , {headers:{Authorization: `Bearer ${token}`}})
         console.log(res.data)
       } catch (error) {
         console.log(error)
@@ -55,7 +64,7 @@ function DetailEnchere(props) {
     }
 
 
-
+    
 
   const handleAddTable = () => {
     setAdditionalTables([
@@ -152,7 +161,16 @@ function DetailEnchere(props) {
 
 
   const [mainImage, setMainImage] = useState(props.selectedItem.galerie[0]);
-
+const addEcheance = async(e) =>{
+  console.log(newTableData)
+  e.preventDefault();
+  try {
+    const res = await axios.post(`http://localhost:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`, {} , {headers:{Authorization: `Bearer ${token}`}})
+    console.log(res.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
   return (
     <div className="content-container">
       <div id="main">
@@ -324,47 +342,57 @@ function DetailEnchere(props) {
                 {isMobile ? (
                   <table className="table" id="table2">
                     <tbody>
-                      <tr>
-                        <td>{t("User")}</td>
-                        <td>
-                          <img
-                            style={{ borderRadius: "50px" }}
-                            className="imgtable"
-                            src="./Mazed.jpg"
-                            alt="img"
-                          />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{t("Nom")}</td>
-                        <td>Seif</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Prénom")}</td>
-                        <td>Seif</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Pseudo")}</td>
-                        <td>Clubisty</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Heure de majoration")}</td>
-                        <td>Date Here</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Valeur Majoration")}</td>
-                        <td>04/07/2026</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Montant total")}</td>
-                        <td>69</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Gagant")}</td>
-                        <td>
-                          <i className="fa-solid fa-trophy"></i>
-                        </td>
-                      </tr>
+                    {props.selectedItem && props.selectedItem.enchérissement?.length > 0 && 
+  props.selectedItem.enchérissement
+    .sort((a, b) => new Date(b.heureMajoration) - new Date(a.heureMajoration)) // Sort by heureMajoration, newest first
+    .map((item) => (
+      <React.Fragment key={item.id || item.participant.pseudo}> {/* Use React.Fragment with a unique key */}
+        <tr>
+          <td>{t("User")}</td>
+          <td>
+            <img
+              style={{ borderRadius: "50px" }}
+              className="imgtable"
+              src="./Mazed.jpg"
+              alt="img"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>{t("Nom")}</td>
+          <td>{item.participant.nomFamille}</td>
+        </tr>
+        <tr>
+          <td>{t("Prénom")}</td>
+          <td>{item.participant.prenom}</td>
+        </tr>
+        <tr>
+          <td>{t("Pseudo")}</td>
+          <td>{item.participant.pseudo}</td>
+        </tr>
+        <tr>
+          <td>{t("Heure de majoration")}</td>
+          <td>{item.heureMajoration}</td>
+        </tr>
+        <tr>
+          <td>{t("Valeur Majoration")}</td>
+          <td>{item.valeurMajorationUser}</td>
+        </tr>
+        <tr>
+          <td>{t("Montant total")}</td>
+          <td>{item.montantTot}</td>
+        </tr>
+        <tr>
+          <td>{t("Gagnant")}</td>
+          <td>
+            <i className="fa-solid fa-trophy" onClick={() => funModal(item.participant , item.enchere , item.id)}></i>
+          </td>
+        </tr>
+      </React.Fragment>
+    ))
+}
+
+                     
                     </tbody>
                   </table>
                 ) : (
@@ -382,26 +410,33 @@ function DetailEnchere(props) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <img
-                            style={{ borderRadius: "50px" }}
-                            className="imgtable"
-                            src="./Mazed.jpg"
-                            alt="img"
-                          />
-                        </td>
-                        <td>Seif</td>
-                        <td>Seif</td>
-                        <td>Clubisty</td>
-                        <td>Date Here</td>
-                        <td>04/07/2026</td>
-                        <td>69</td>
-                        <td>
-                            <i className="fa-solid fa-trophy" onClick={() => setShowModal(true)}
-                            ></i>
-                        </td>
-                      </tr>
+                    {props.selectedItem && props.selectedItem.enchérissement?.length > 0 && 
+  props.selectedItem.enchérissement
+    .sort((a, b) => new Date(b.heureMajoration) - new Date(a.heureMajoration)) // Sort by heureMajoration, newest first
+    .map((item) => (
+      <tr key={item.id || item.participant.pseudo}> {/* Add a unique key prop */}
+        <td>
+          <img
+            style={{ borderRadius: "50px" }}
+            className="imgtable"
+            src="./Mazed.jpg"
+            alt="img"
+          />
+        </td>
+        <td>{item.participant.nomFamille}</td>
+        <td>{item.participant.prenom}</td>
+        <td>{item.participant.pseudo}</td>
+        <td>{item.heureMajoration}</td>
+        <td>{item.valeurMajorationUser}</td>
+        <td>{item.montantTot}</td>
+        <td>
+          <i className="fa-solid fa-trophy" onClick={() => funModal(item.participant , item.enchere , item.id)}></i>
+        </td>
+      </tr>
+    ))
+}
+
+                      
                     </tbody>
                   </table>
                 )}
@@ -416,12 +451,24 @@ function DetailEnchere(props) {
           <Modal.Title>{t("Ajouter Echéance")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={addEcheance}>
+          <Form.Group>
+              <Form.Label>{t("Type de payement")}</Form.Label>
+              <Form.Control
+                as="select"
+                name="typepaiement"
+                value={newTableData.selectedOption}
+                onChange={handleInputChange}
+              >
+                <option value="CASH">{t("CASH")}</option>
+                <option value="ParFacilité">{t("ParFacilité")}</option>
+              </Form.Control>
+            </Form.Group>
             <Form.Group>
               <Form.Label>{t("Date de paiement")}</Form.Label>
               <Form.Control
-                type="date"
-                name="date"
+                type="datetime-local"
+                name="datePayement"
                 value={newTableData.date}
                 onChange={handleInputChange}
               />
@@ -429,54 +476,24 @@ function DetailEnchere(props) {
             <Form.Group>
               <Form.Label>{t("Montant à payer")}</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 name="montantPayer"
                 value={newTableData.montantPayer}
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>{t("Montant restant")}</Form.Label>
-              <Form.Control
-                type="text"
-                name="montantRestant"
-                value={newTableData.montantRestant}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>{t("Montant à payer chaque mois")}</Form.Label>
-              <Form.Control
-                type="text"
-                name="montantChaqueMois"
-                value={newTableData.montantChaqueMois}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>{t("Type de payement")}</Form.Label>
-              <Form.Control
-                as="select"
-                name="selectedOption"
-                value={newTableData.selectedOption}
-                onChange={handleInputChange}
-              >
-                <option value="">{t("Type de payement")}</option>
-                <option value="option1">{t("Option 1")}</option>
-                <option value="option2">{t("Option 2")}</option>
-                <option value="option3">{t("Option 3")}</option>
-              </Form.Control>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
+           
+            <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             {t("Annuler")}
           </Button>
-          <Button variant="primary" onClick={handleAddTable}>
+          <Button type="submit" variant="primary" >
             {t("Ajouter")}
           </Button>
         </Modal.Footer>
+          </Form>
+        </Modal.Body>
+       
       </Modal>
     </div>
   );

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
+import { GlobalState } from "../GlobalState";
 function Winners() {
     const { t, i18n } = useTranslation();
     const [isMobile, setIsMobile] = useState(false);
@@ -13,7 +14,8 @@ function Winners() {
       montantRestant: "",
       montantChaqueMois: "",
     });
-  
+    const state = useContext(GlobalState);
+    const winners = state.winners
     useEffect(() => {
       const handleResize = () => {
         setIsMobile(window.innerWidth < 1212);
@@ -96,61 +98,68 @@ function Winners() {
                       {isMobile ? (
                         <table className="table">
                           <tbody>
-                            <tr></tr>
-                            <tr>
-                              <td>{t("User")}</td>
-                              <td>
-                                <img
-                                  style={{ borderRadius: "50px" }}
-                                  className="imgtable"
-                                  src="./Mazed.jpg"
-                                  alt="img"
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>{t("Nom")}</td>
-                              <td>Lorem</td>
-                            </tr>
-                            <tr>
-                              <td>{t("Prénom")}</td>
-                              <td>{t("Lorem Lorem")}</td>
-                            </tr>
-                            <tr>
-                              <td>{t("Pseudo")}</td>
-                              <td>{t("Lorem Lorem")}</td>
-                            </tr>
-                            <tr>
-                              <td>{t("Email")}</td>
-                              <td>Lorem@Lorem.Lorem</td>
-                            </tr>
-                            <tr>
-                              <td>{t("Enchère")}</td>
-                              <td>
-                                <Link
-                                  to="/DetailEnchere"
-                                  className="btn btn-outline block"
-                                >
-                                  <i className="fa-solid fa-eye font-medium-1"></i>
-                                </Link>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>{t("Type de paiement")}</td>
-                              <td>Type de paiement</td>
-                            </tr>
-                            {/* <tr>
-                              <td>{t("Echéance")}</td>
-                              <td>
-                                <i
-                                  className="fa-solid fa-plus"
-                                  onClick={() => setShowModal(true)}
-                                ></i>
-                              </td>
-                            </tr> */}
-                            <td colSpan="2">
-                              <hr />
-                            </td>
+                           {winners && winners.map((item)=>(
+                            <>
+                             <tr>
+                             <td>{t("User")}</td>
+                             <td>
+                               <img
+                                 style={{ borderRadius: "50px" }}
+                                 className="imgtable"
+                                 src="./Mazed.jpg"
+                                 alt="img"
+                               />
+                             </td>
+                           </tr>
+                           <tr>
+                             <td>{t("Nom")}</td>
+                             <td>{item.user.nomFamille}</td>
+                           </tr>
+                           <tr>
+                             <td>{t("Prénom")}</td>
+                             <td>{item.user.prenom}</td>
+                           </tr>
+                           <tr>
+                             <td>{t("Pseudo")}</td>
+                             <td>{item.user.pseudo}</td>
+                           </tr>
+                           <tr>
+                             <td>{t("Email")}</td>
+                             <td>{item.user.email}</td>
+                           </tr>
+                           <tr>
+                           <td>{t("numtel")}</td>
+                            <td>{item.user.numTel}</td>
+                           </tr>
+                           <tr>
+                             <td>{t("Enchère")}</td>
+                             <td>
+                               <Link
+                                 to="/DetailEnchere"
+                                 className="btn btn-outline block"
+                               >
+                                 <i className="fa-solid fa-eye font-medium-1"></i>
+                               </Link>
+                             </td>
+                           </tr>
+                           <tr>
+                             <td>{t("Type de paiement")}</td>
+                             <td>Type de paiement</td>
+                           </tr>
+                           {/* <tr>
+                             <td>{t("Echéance")}</td>
+                             <td>
+                               <i
+                                 className="fa-solid fa-plus"
+                                 onClick={() => setShowModal(true)}
+                               ></i>
+                             </td>
+                           </tr> */}
+                           <td colSpan="2">
+                             <hr />
+                           </td>
+                           </>
+                           ))}
                           </tbody>
                         </table>
                       ) : (
@@ -170,7 +179,8 @@ function Winners() {
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
+                          {winners && winners.map((item)=>(
+                              <tr>
                               <td>
                                 <img
                                   style={{ borderRadius: "50px" }}
@@ -179,34 +189,20 @@ function Winners() {
                                   alt="img"
                                 />
                               </td>
-                              <td>{t("Lorem Lorem")}</td>
+                              <td>{item.user.nomFamille}</td>
                               <td className="text-bold-500">
-                                {t("Lorem Lorem")}
+                              {item.user.prenom}
                               </td>
-                              <td>Lorem Lorem</td>
-                              <td>Lorem Lorem</td>
-                              <td>Lorem Lorem</td>
+                              <td>{item.user.pseudo}</td>
+                              <td>{item.user.email}</td>
+                              <td>{item.user.numTel}</td>
                               <td>
-                                <Link
-                                  to="/DetailEnchere"
-                                  className="btn btn-outline block"
-                                >
-                                  <i className="fa-solid fa-eye font-medium-1"></i>
-                                </Link>
+                              <i className="fa-solid fa-eye font-medium-1"></i>
                               </td>
-                              <td>Payement</td>
-                              {/* <td>
-                                <i
-                                  className="fa-solid fa-plus"
-                                  onClick={() => setShowModal(true)}
-                                ></i>
-                              </td> */}
-                              {/* <td>
-                                <Link to="/Echéance">
-                                <i className="fa-solid fa-eye"></i>
-                                </Link>
-                                </td> */}
+                              <td>{item.enchere.typePaiement}</td>
+                              
                             </tr>
+                          ))}
                           </tbody>
                         </table>
                       )}

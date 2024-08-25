@@ -11,7 +11,8 @@ function AnnonceCreator() {
     const [showPlanifierModal, setShowPlanifierModal] = useState(false);
     const [fileInputType, setFileInputType] = useState("");
     const [type, setTypeAnnonce] = useState("");
-    const [contenu, setAnnonce] = useState(null); // To hold the uploaded file as Base64
+    const [contenu, setAnnonce] = useState(null);
+    const [description , setDescripton] = useState(); // To hold the uploaded file as Base64
     const [datePublication , setDatePublication] = useState();
     const handleTypeChange = (e) => {
         const selectedType = e.target.value;
@@ -59,7 +60,8 @@ function AnnonceCreator() {
     };
 const publishNow = async() =>{
   try {
-    const res = await axios.post('http://192.168.2.104:8081/api/annonce/createAnnonce' , {contenu , type},{headers:{Authorization: `Bearer ${token}`}});
+    console.log(contenu , type , description)
+    const res = await axios.post(`http://localhost:8081/api/annonce/createAnnonce?contenu=${contenu.toString()}&type=${type}&description=${description}` , {},{headers:{Authorization: `Bearer ${token}`}});
     console.log(res.data)
   } catch (error) {
     console.log(error)
@@ -67,7 +69,7 @@ const publishNow = async() =>{
 }
 const scheduledAds = async() =>{
   try {
-    const res = await axios.post('http://192.168.2.104:8081/api/annonce/planifier',{contenu , type , datePublication},{headers:{Authorization: `Bearer ${token}`}} );
+    const res = await axios.post(`http://localhost:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,{},{headers:{Authorization: `Bearer ${token}`}} );
     console.log(res.data)
   } catch (error) {
     console.log(error)
@@ -104,6 +106,10 @@ const scheduledAds = async() =>{
                                         </div>
                                         <div className="col-12 mb-3" id="file-input-container">
                                             {handleFileInput()}
+                                        </div>
+                                        <div className="">
+                                            <h6 className="">Description:</h6>
+                                            <textarea className="form-control" name="description"  onChange={e=>setDescripton(e.target.value)}/>
                                         </div>
                                     </div>
                                 </div>

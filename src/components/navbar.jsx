@@ -4,8 +4,10 @@ import { useTranslation } from "react-i18next";
 import "../css/navbar.css";
 import i18n from "../i18n";
 import { GlobalState } from "../GlobalState";
-
+import Cookies from 'js-cookie'
+import axios from "axios";
 const Navbar = ({ username }) => {
+  const token = Cookies.get('token')
   const state = useContext(GlobalState);
   const notifications = state.notifications;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,9 +37,16 @@ const Navbar = ({ username }) => {
     setIsNotificationMenuOpen(false);
   };
 
-  const changeLanguage = (lng) => {
+  const changeLanguage = async(lng) => {
     i18n.changeLanguage(lng);
     setIsLangMenuOpen(false);
+    try {
+      const res = await axios.put(`http://localhost:8081/admin/language?newLanguage=${lng.toUpperCase()}` , {} , { headers: { Authorization: `Bearer ${token}` } });
+      console.log(res.data)
+      window.location.reload();
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   

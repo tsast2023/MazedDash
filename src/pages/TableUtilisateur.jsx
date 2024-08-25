@@ -86,7 +86,7 @@ function TableUtilisateur() {
   const blockItem = async(id) =>{
     
     try {
-      const res = await axios.put(`http://192.168.2.104:8081/admin/block/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.put(`http://localhost:8081/admin/block/${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -95,7 +95,7 @@ function TableUtilisateur() {
 
   const unblockItem = async(id) =>{
     try {
-      const res = await axios.put(`http://192.168.2.104:8081/admin/unblock/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.put(`http://localhost:8081/admin/unblock/${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -104,7 +104,7 @@ function TableUtilisateur() {
   const updateData = async(id , e) =>{
 e.preventDefault();
 try {
-  const res = await axios.put(`http://192.168.2.104:8081/admin/${id}/role/?role=${updateItem.role}` , {headers : {Authorization: `Bearer ${token}`}});
+  const res = await axios.put(`http://localhost:8081/admin/${id}/role/?role=${updateItem.role}` , {headers : {Authorization: `Bearer ${token}`}});
   console.log(res.data)
 } catch (error) {
   console.log(error)
