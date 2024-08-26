@@ -57,7 +57,7 @@ function Recharges() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:8081/api/carte/deleteCarte?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://192.168.0.101:8081/api/carte/deleteCarte?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -67,7 +67,7 @@ function Recharges() {
   const addCarte = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:8081/api/carte/publishNow', carteRech , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.post('http://192.168.0.101:8081/api/carte/publishNow', carteRech , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
       window.location.reload();
     } catch (error) {

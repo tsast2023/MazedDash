@@ -102,6 +102,44 @@ function DemandeAds() {
     closeEditModal(); // Example: Close modal after save
   };
 
+  const handleValidation = (action) => {
+    Swal.fire({
+      title: t("Êtes-vous sûr(e) ?"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: t("Oui"),
+      cancelButtonText: t("Non, annuler !"),
+      closeOnConfirm: false,
+      closeOnCancel: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (action === "valider") {
+          Swal.fire({
+            title: "Valider",
+            text: "Votre élément est validé :)",
+            icon: "success",
+            confirmButtonColor: "#8c111b",
+          });
+        } else {
+          Swal.fire({
+            title: "Refuser",
+            text: "Votre élément est refusé :)",
+            icon: "error",
+            confirmButtonColor: "#8c111b",
+          });
+        }
+      } else {
+        Swal.fire({
+          title: "Annulé",
+          text: "Votre élément est en sécurité :)",
+          icon: "error",
+          confirmButtonColor: "#8c111b",
+        });
+      }
+    });
+  };
+
   return (
     <div className="content-container">
       <section className="section">
@@ -115,12 +153,31 @@ function DemandeAds() {
                 <table className="table" id="table1">
                   <tbody>
                     <tr>
-                      <td>{t("Date de création")}</td>
-                      <td>01/01/2024</td>
+                      <td>{t("Photo de Profile")}</td>
+                      <td>
+                        <img
+                          style={{ borderRadius: "50px" }}
+                          className="imgtable"
+                          src="./Mazed.jpg"
+                          alt="img"
+                        />
+                      </td>
                     </tr>
                     <tr>
-                      <td>{t("Date de publication")}</td>
-                      <td>05/05/2024</td>
+                      <td>{t("Nom")}</td>
+                      <td>Lorem</td>
+                    </tr>
+                    <tr>
+                      <td>{t("Prénom")}</td>
+                      <td>Lorem</td>
+                    </tr>
+                    <tr>
+                      <td>{t("Pseudo")}</td>
+                      <td>Lorem</td>
+                    </tr>
+                    <tr>
+                      <td>{t("Numéro de téléphone")}</td>
+                      <td>202020</td>
                     </tr>
                     <tr>
                       <td>{t("Type")}</td>
@@ -145,15 +202,24 @@ function DemandeAds() {
                         </Button>
                       </td>
                     </tr> */}
-                    <tr>
-                      <td>{t("Supprimer")}</td>
-                      <td>
-                        <i
-                          className="fa-solid fa-trash deleteIcon"
-                          onClick={handleDelete}
-                        ></i>
-                      </td>
-                    </tr>
+                  <tr>
+                    <td>{t("Valider")}</td>
+                    <td>
+                      <i
+                        className="fa-solid fa-circle-check text-success"
+                        onClick={() => handleValidation("valider")}
+                      ></i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{t("Refuser")}</td>
+                    <td>
+                      <i
+                        className="fa-solid fa-circle-xmark text-danger"
+                        onClick={() => handleValidation("refuser")}
+                      ></i>
+                    </td>
+                  </tr>
                     <tr>
                       <td colSpan="2">
                         <hr />
@@ -165,19 +231,29 @@ function DemandeAds() {
                 <table className="table" id="table1">
                   <thead>
                     <tr>
-                      <th>{t("Date de création")}</th>
-                      <th>{t("Date de publication")}</th>
-                      <th>{t("Nombre de j'aime")}</th>
-                      <th>{t("Nombre de personne interessé")}</th>
+                      <th>{t("Photo de Profile")}</th>
+                      <th>{t("Nom")}</th>
+                      <th>{t("Prénom")}</th>
+                      <th>{t("Pseudo")}</th>
+                      <th>{t("Numéro de téléphone")}</th>
                       <th>{t("Type")}</th>
                       <th>{t("Voir")}</th>
-                      <th>{t("Supprimer")}</th>
+                      <th>{t("Accepter")}</th>
+                      <th>{t("Refuser")}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {annonces &&
                       annonces.map((item) => (
                         <tr>
+                          <td>
+                            <img
+                              style={{ borderRadius: "50px" }}
+                              className="imgtable"
+                              src="./Mazed.jpg"
+                              alt="img"
+                            />
+                          </td>
                           <td>{item.createdAt?.split("T")[0]}</td>
                           <td>{item.datePublication}</td>
                           <td>{item.likedByUsers.length}</td>
@@ -192,11 +268,17 @@ function DemandeAds() {
                             </Button>
                           </td>
                           <td>
-                            <i
-                              className="fa-solid fa-trash deleteIcon"
-                              onClick={() => handleDelete(item.id)}
-                            ></i>
-                          </td>
+                      <i
+                        className="fa-solid fa-circle-check text-success"
+                        onClick={() => handleValidation("valider")}
+                      ></i>
+                    </td>
+                    <td>
+                      <i
+                        className="fa-solid fa-circle-xmark text-danger"
+                        onClick={() => handleValidation("refuser")}
+                      ></i>
+                    </td>
                         </tr>
                       ))}
                   </tbody>

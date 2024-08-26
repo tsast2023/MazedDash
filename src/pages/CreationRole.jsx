@@ -48,7 +48,7 @@ function CreationRole() {
     console.log(data);
     try {
       const res = await axios.post(
-        "http://localhost:8081/admin/create-role",
+        "http://192.168.0.101:8081/admin/create-role",
         data ,{headers : {Authorization: `Bearer ${token}`} }
       );
       console.log(res.data);
