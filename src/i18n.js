@@ -423,11 +423,13 @@ const resources = {
       "Montant à payer": "Amount to be paid",
       "Montant restant": "Remaining amount",
       "Montant à payer chaque mois": "Amount to be paid each month",
-      "Echéances": "Due date"
+      "Echéances": "Due date",
+      "Mettre à jour la photo de profil": "Update profile picture"
     }
   },
   fr: {
     translation: {
+      "Mettre à jour la photo de profil": "Mettre à jour la photo de profil",
       "Montant à payer chaque mois": "Montant à payer chaque mois",
       "Montant à payer": "Montant à payer",
       "Date de paiement": "Date de paiement",
@@ -860,6 +862,7 @@ const resources = {
   },
   ar: {
     translation: {
+      "Mettre à jour la photo de profil": "تحديث صورة الملف الشخصي",
       "Liste echéance": "قائمة المواعيد النهائية",
       "Echéances": "المواعيد النهائية",
       "Montant à payer chaque mois": "المبلغ الذي يجب دفعه كل شهر",
