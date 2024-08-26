@@ -4,7 +4,7 @@ import "../css/sidebar.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 const Theme = "light";
 
 const themes = {
@@ -147,7 +147,9 @@ const Playground = () => {
                   component={<Link to="/CreationRole" />}
                   onClick={() => setActiveLink("/CreationRole")}
                   style={
-                    activeLink === "/CreationRole" ? menuItemStyles.active : null
+                    activeLink === "/CreationRole"
+                      ? menuItemStyles.active
+                      : null
                   }
                 >
                   {t("Creation D'un Role")}
@@ -179,39 +181,37 @@ const Playground = () => {
                 label={t("Demande")}
                 icon={<i className="fa-solid fa-bookmark"></i>}
               >
-                 <MenuItem
-                    component={<Link to="/demandeAds" />}
-                    onClick={() => setActiveLink("/demandeAds")}
-                    style={
-                      activeLink === "/demandeAds"
-                        ? menuItemStyles.active
-                        : null
-                    }
-                  >
-                    {t("Demande annonce")}
-                  </MenuItem>
-                  <MenuItem
-                    component={<Link to="/DemandeEnchereAdmin" />}
-                    onClick={() => setActiveLink("/DemandeEnchereAdmin")}
-                    style={
-                      activeLink === "/DemandeEnchereAdmin"
-                        ? menuItemStyles.active
-                        : null
-                    }
-                  >
-                    {t("Demande Enchére")}
-                  </MenuItem>
-                  <MenuItem
-                    component={<Link to="/DemandeProduitAdmin" />}
-                    onClick={() => setActiveLink("/DemandeProduitAdmin")}
-                    style={
-                      activeLink === "/DemandeProduitAdmin"
-                        ? menuItemStyles.active
-                        : null
-                    }
-                  >
-                    {t("Demande Categorie")}
-                  </MenuItem>
+                <MenuItem
+                  component={<Link to="/demandeAds" />}
+                  onClick={() => setActiveLink("/demandeAds")}
+                  style={
+                    activeLink === "/demandeAds" ? menuItemStyles.active : null
+                  }
+                >
+                  {t("Demande annonce")}
+                </MenuItem>
+                <MenuItem
+                  component={<Link to="/DemandeEnchereAdmin" />}
+                  onClick={() => setActiveLink("/DemandeEnchereAdmin")}
+                  style={
+                    activeLink === "/DemandeEnchereAdmin"
+                      ? menuItemStyles.active
+                      : null
+                  }
+                >
+                  {t("Demande Enchére")}
+                </MenuItem>
+                <MenuItem
+                  component={<Link to="/DemandeProduitAdmin" />}
+                  onClick={() => setActiveLink("/DemandeProduitAdmin")}
+                  style={
+                    activeLink === "/DemandeProduitAdmin"
+                      ? menuItemStyles.active
+                      : null
+                  }
+                >
+                  {t("Demande Categorie")}
+                </MenuItem>
                 {/* <SubMenu label={t("Demande Vendeur")}>
                   <MenuItem
                     component={<Link to="/DemandeVendeurCreation" />}
@@ -236,7 +236,6 @@ const Playground = () => {
                     {t("Demande Produit")}
                   </MenuItem>
                 </SubMenu> */}
-                
               </SubMenu>
 
               <SubMenu
@@ -500,7 +499,9 @@ const Playground = () => {
                 component={<Link to="/echeances" />}
                 icon={<i className="fa-solid fa-clock"></i>}
                 onClick={() => setActiveLink("/echeances")}
-                style={activeLink === "/echeances" ? menuItemStyles.active : null}
+                style={
+                  activeLink === "/echeances" ? menuItemStyles.active : null
+                }
               >
                 {t("Echéances")}
               </MenuItem>
@@ -533,16 +534,16 @@ const Playground = () => {
                 {t("Tutoriel")}
               </MenuItem>
               <MenuItem
-              icon={<i class="fa-solid fa-bell"></i>}
-                  component={<Link to="/notification" />}
-                  onClick={() => setActiveLink("/notification")}
-                  style={
-                    activeLink === "/notification" ? menuItemStyles.active : null
-                  }
-                >
-                  {t("Notifications")}
-                </MenuItem>
-                <MenuItem
+                icon={<i class="fa-solid fa-bell"></i>}
+                component={<Link to="/notification" />}
+                onClick={() => setActiveLink("/notification")}
+                style={
+                  activeLink === "/notification" ? menuItemStyles.active : null
+                }
+              >
+                {t("Notifications")}
+              </MenuItem>
+              <MenuItem
                 icon={<i className="fa-solid fa-right-from-bracket"></i>}
                 onClick={() => {
                   Cookies.remove("token");

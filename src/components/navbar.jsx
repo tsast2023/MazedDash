@@ -49,8 +49,6 @@ const Navbar = ({ username }) => {
     }
   };
 
-  
-
   useEffect(() => {
     const direction = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.dir = direction;
