@@ -70,6 +70,8 @@ function CategoryList() {
           text: "Supprimé(e) ! Votre élément a été supprimé.",
           icon: "success",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
       } else {
         Swal.fire({
@@ -108,12 +110,10 @@ const deleteC = async(id) =>{
           text: "Désactivé(e) ! Votre élément a été désactivé.",
           icon: "success",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
-        Swal.fire({
-          text: "Désactivé(e) ! Votre élément a été désactivé.",
-          icon: "success",
-          confirmButtonColor: "#b0210e",
-        });
+       
       } else {
         Swal.fire({
           text: "Annulé, Votre élément est en sécurité :)",
@@ -143,23 +143,17 @@ const deleteC = async(id) =>{
           text: "Désactivé(e) ! Votre élément a été désactivé.",
           icon: "success",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
-        Swal.fire({
-          text: "Désactivé(e) ! Votre élément a été désactivé.",
-          icon: "success",
-          confirmButtonColor: "#b0210e",
-        });
+        
       } else {
         Swal.fire({
           text: "Annulé, Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e",
         });
-        Swal.fire({
-          text: "Annulé, Votre élément est en sécurité :)",
-          icon: "error",
-          confirmButtonColor: "#b0210e",
-        });
+      
       }
     });
   };
@@ -178,23 +172,17 @@ const deleteC = async(id) =>{
           text: "Désactivé(e) ! Votre élément a été désactivé.",
           icon: "success",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
-        Swal.fire({
-          text: "Désactivé(e) ! Votre élément a été désactivé.",
-          icon: "success",
-          confirmButtonColor: "#b0210e",
-        });
+        
       } else {
         Swal.fire({
           text: "Annulé, Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e",
         });
-        Swal.fire({
-          text: "Annulé, Votre élément est en sécurité :)",
-          icon: "error",
-          confirmButtonColor: "#b0210e",
-        });
+       
       }
     });
   };
@@ -213,23 +201,17 @@ const deleteC = async(id) =>{
           text: "Désactivé(e) ! Votre élément a été désactivé.",
           icon: "success",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
-        Swal.fire({
-          text: "Désactivé(e) ! Votre élément a été désactivé.",
-          icon: "success",
-          confirmButtonColor: "#b0210e",
-        });
+       
       } else {
         Swal.fire({
           text: "Annulé, Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e",
         });
-        Swal.fire({
-          text: "Annulé, Votre élément est en sécurité :)",
-          icon: "error",
-          confirmButtonColor: "#b0210e",
-        });
+       
       }
     });
   };
@@ -274,7 +256,7 @@ const deleteC = async(id) =>{
 const alune = async(id)=>{
   try {
     console.log("done")
-    const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/set-al-une?alUne=true` ,{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/set-al-une?alUne=true` ,{},{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
     console.log("done true")
   } catch (error) {
@@ -283,7 +265,7 @@ const alune = async(id)=>{
 }
 const aluneFalse = async(id)=>{
   try {
-    const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/set-al-une?alUne=false` ,{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/set-al-une?alUne=false` ,{},{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
     console.log("done false")
   } catch (error) {

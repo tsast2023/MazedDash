@@ -214,20 +214,27 @@ const addEcheance = async(e) =>{
                             <p>{t("Majoration")}:{props.selectedItem.valeurMajoration.map((item)=>item + "/")}DT </p>
                             {/* <p>{t("Prix lors de la majoration")}</p> */}
                           </div>
-                        ):(
+                        ):props.selectedItem.status==="Ouverte" ?(
                           <div className="col-12">
-                          <p>{t("Terminer")}</p>
-                          <p>{t("Prix Mazed online final")}</p>
-                          <p>{t("Date/Heure")}</p>
-                          <p>{t("Nom et Prénom")}</p>
-                          <p>{t("Pseudo")}</p>
-                          <p>{t("Numéro du téléphone")}</p>
+                          <p>{t("Ouverte")}</p>
+                          <p>{t("Prix Mazed online final")}:{props.selectedItem.prixMazedOnline}DT</p>
+                          <p>{t("Date/Heure")}: {props.selectedItem.datedeclenchement}</p>
                           <button
                             type="button"
                             className="btn btn-outline-secondary"
                           >
                             {t("Publier")}
                           </button>
+                        </div>
+                        ):(
+                          <div className="col-12">
+                          <p>{t("Terminer")}</p>
+                          <p>{t("Prix Mazed online final")}:{props.selectedItem.prixMazedOnline}DT</p>
+                          <p>{t("Date/Heure")}</p>
+                          <p>{t("Nom et Prénom")}</p>
+                          <p>{t("Pseudo")}</p>
+                          <p>{t("Numéro du téléphone")}</p>
+                         
                         </div>
                         )}
                       

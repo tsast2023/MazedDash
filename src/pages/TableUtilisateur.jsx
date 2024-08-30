@@ -18,6 +18,7 @@ function TableUtilisateur() {
   const state = useContext(GlobalState);
   const users = state.Users
   const [updateItem , setUpdateItem] = useState({nomFamille:"",prenom:"",pseudo:"",role:""})
+  const [montant , setMontant] = useState();
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -45,7 +46,9 @@ function TableUtilisateur() {
     }).then((result) => {
       if (result.isConfirmed) {
         blockItem(id);
-        Swal.fire(t("Désactivé(e) !"), t("Votre élément a été désactivé."), "secondary");
+        Swal.fire(t("Désactivé(e) !"), t("Votre élément a été désactivé."), "secondary").then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
+        });
       } else {
         Swal.fire(t("Annulé"), t("Votre élément est en sécurité :)"), "error");
       }
@@ -56,8 +59,18 @@ function TableUtilisateur() {
     setCurrentItem(item);
   };
  const  openSoldeModal = (item) =>{
+  console.log(currentItem)
      setModalShow(true)
     setCurrentItem(item);
+  }
+  const addSolde = async(e) =>{
+    e.preventDefault();
+    try {
+      const res= await axios.post(`http://192.168.0.101:8081/admin/alimenter/${currentItem.id}?montant=${montant}` , {}, {headers : {Authorization: `Bearer ${token}`}} )
+      console.log(res.data) 
+    } catch (error) {
+      console.log(error)
+    }
   }
   const handleUnblockClick = (id) => {
     Swal.fire({
@@ -72,7 +85,9 @@ function TableUtilisateur() {
     }).then((result) => {
       if (result.isConfirmed) {
         unblockItem(id);
-        Swal.fire(t("Débloqué(e)"), t("Votre élément a été débloqué."), "secondary");
+        Swal.fire(t("Débloqué(e)"), t("Votre élément a été débloqué."), "secondary").then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
+        });
       } else {
         Swal.fire(t("Annulé"), t("Votre élément est en sécurité :)"), "error");
       }
@@ -144,6 +159,10 @@ try {
                       <td>{item.email}</td>
                     </tr>
                     <tr>
+                      <td>{t("Status")}</td>
+                      <td>{item.status}</td>
+                    </tr>
+                    <tr>
                       <td>{t("Détail")}</td>
                       <td>
                       <Link
@@ -188,7 +207,8 @@ try {
                     <tr>
                       <th>{t("Nom")}</th>
                       <th>{t("Pseudo")}</th>
-                      <th>{t("Role")}</th>
+                      <th>{t("Email")}</th>
+                      <td>{t("Status")}</td>
                       <th>{t("Détail")}</th>
                       {/* <th>{t("Modifier")}</th> */}
                       <th>{t("Bloquer")}</th>
@@ -202,6 +222,7 @@ try {
  <td>{item.prenom}</td>
  <td>{item.pseudo}</td>
  <td>{item.email}</td>
+ <td>{item.status}</td>
  <td>
 
      <i className="fa-solid fa-eye" data-bs-toggle="modal" data-bs-target="#viewModal" onClick={() => openModal('view', item)}></i>
@@ -463,12 +484,12 @@ try {
           <Modal.Title>{t("Ajouter Montant")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={addSolde}>
             <Form.Group className="mb-3">
               <Form.Label>{t("Montant")}</Form.Label>
-              <Form.Control type="number" placeholder={t("Entrez le montant")} />
+              <Form.Control onChange={e=>setMontant(e.target.value)} type="number" placeholder={t("Entrez le montant")} />
             </Form.Group>
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Label>{t("Manière de recharge")}</Form.Label>
               <Form.Select>
                 <option>{t("Virement bancaire")}</option>
@@ -477,7 +498,7 @@ try {
                 <option>{t("Visite Bureau Mazed")}</option>
                 <option>{t("Carte de recharge")}</option>
               </Form.Select>
-            </Form.Group>
+            </Form.Group> */}
             <Button variant="primary" type="submit">
               {t("Ajouter")}
             </Button>

@@ -15,65 +15,61 @@ function AnnonceCreator() {
   const [datePublication, setDatePublication] = useState();
   const [showPlanifierModal, setShowPlanifierModal] = useState(false);
 
+  // Handle type change
   const handleTypeChange = (e) => {
     const selectedType = e.target.value;
     setFileInputType(selectedType);
-    setTypeAnnonce(selectedType); // Set the type to the state as well
-  };
+    setTypeAnnonce(selectedType);
+};
 
-  // Handle file input based on the selected type
-  const handleFileInput = () => {
-    if (fileInputType === "image" || fileInputType === "video") {
-      return (
+// Handle file input
+const handleFileInput = () => {
+    return (
         <input
-          type="file"
-          className="form-control mb-3" // Add bottom margin for spacing between inputs
-          accept={fileInputType === "video" ? "video/*" : "image/*"}
-          onChange={handleFileUpload} // Call the upload handler
+            type="file"
+            className="form-control mb-3" // Add bottom margin for spacing between inputs
+            accept={fileInputType === "vidéo" ? "video/*" : "image/*"}
+            onChange={handleFileUpload}
         />
-      );
-    }
-    return null;
-  };
-
-  // Handle file upload and convert to Base64
-  const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to an Array
-    const filePromises = files.map(file =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve(reader.result); // Resolve with the Base64 result
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file); // Read file as Base64
-      })
     );
+};
 
-    // Wait for all promises to resolve and set Base64 data to state
-    Promise.all(filePromises)
-      .then(base64Files => {
-        setAnnonce(base64Files); // Save Base64 representation to state
-      })
-      .catch(err => {
-        console.error("Error converting file to Base64:", err);
-      });
-  };
-
-  const publishNow = async () => {
-    try {
-      console.log(contenu, type, description);
-      const res = await axios.post(
-        `http://192.168.0.101:8081/api/annonce/createAnnonce?contenu=${contenu.toString()}&type=${type}&description=${description}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
+// Handle file upload
+const handleFileUpload = (e) => {
+    const file = e.target.files[0]; // Get the first selected file
+    if (file) {
+        setAnnonce(file); // Set the file directly in the state
     }
-  };
+};
 
+
+const publishNow = async () => {
+  if (!contenu) {
+      console.error("No content file selected");
+      return; // Show an error or notify the user
+  }
+
+  const formData = new FormData();
+  formData.append("contenu", contenu); // Append the file
+  formData.append("type", type); // Append the type of the announcement
+  formData.append("description", description); // Append description
+
+  try {
+      const res = await axios.post(
+          "http://192.168.0.101:8081/api/annonce/createAnnonce",
+          formData, // Send the FormData
+          {
+              headers: {
+                  "Content-Type": "multipart/form-data", // Set content type
+                  Authorization: `Bearer ${token}` // Include the authorization token
+              }
+          }
+      );
+      console.log(res.data); // Log the response
+  } catch (error) {
+      console.error("Error creating announcement:", error);
+  }
+};
   const scheduledAds = async () => {
     try {
       const res = await axios.post(
@@ -110,7 +106,7 @@ function AnnonceCreator() {
                           >
                             <option value="">{t("Sélectionner le type d'annonce")}</option>
                             <option value="image">{t("Image")}</option>
-                            <option value="video">{t("Vidéo")}</option>
+                            <option value="vidéo">{t("Vidéo")}</option>
                           </select>
                         </div>
                       </div>

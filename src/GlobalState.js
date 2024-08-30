@@ -27,6 +27,7 @@ export const DataProvider = ({children}) => {
   const [notifications , setNotifications] = useState();
   const [me , setMe] = useState();
   const [demandeCat , setDemandeCat] = useState();
+  const [traffic , setTraffic] = useState();
   useEffect(()=>{
     const getAllAcheteur = async() =>{
       try {
@@ -218,7 +219,17 @@ export const DataProvider = ({children}) => {
         console.log(error , token)
       }
     }
+    const getTrafic= async()=>{
+      try {
+        const res = await axios.get('http://192.168.0.101:8081/api/bid/trafic', {headers : {Authorization: `Bearer ${token}`}})
+        console.log("All trafic:" , res.data)
+        setTraffic(res.data)
+      } catch (error) {
+        console.log(error , token)
+      }
+    }
 // getAllTermes()
+getTrafic()
 getAllVendeur()
 getAllAcheteur()
 getAllUsers();
@@ -262,7 +273,8 @@ getAllDemandeCategories();
     winners : winners,
     notifications: notifications,
     Me : me,
-    demandes: demandeCat
+    demandes: demandeCat,
+    Traffic : traffic
 
 
   }

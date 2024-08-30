@@ -59,7 +59,9 @@ const Playground = () => {
   const [broken, setBroken] = useState(false);
   const [hasImage, setHasImage] = useState(false);
   const [theme, setTheme] = useState(Theme);
-
+  const getLogo = () => {
+    return i18n.language === "ar" ? "./log-mazed-ar.png" : "./log-mazed.png";
+  };
   const toggleSidebar = () => {
     setToggled(!toggled);
   };
@@ -123,8 +125,8 @@ const Playground = () => {
           color: themes[theme].sidebar.color,
         }}
       >
-        <div className="header">
-          <img className="logo" src="./log-mazed.png" alt="logo" />
+         <div className="header">
+          <img className="logo" src={getLogo()} alt="logo" />
         </div>
         <div
           style={{ display: "flex", flexDirection: "column", height: "100%" }}

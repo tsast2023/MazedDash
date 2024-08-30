@@ -10,7 +10,7 @@ function Recharges() {
   const { t, i18n } = useTranslation();
   const state = useContext(GlobalState);
   const cartes = state.cartes;
-  const [carteRech, setCarteRech] = useState({ numSérie: "", valeur: ""  , "valeurBonusRecharge" :""});
+  const [carteRech, setCarteRech] = useState({ numSérie: "", valeur: ""  , valeurBonusRecharge:""});
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -45,6 +45,8 @@ function Recharges() {
           text: "Votre élément est Supprimer:)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });        // window.location.reload();
       } else {
         Swal.fire({   title: "Annulé",

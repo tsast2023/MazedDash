@@ -28,9 +28,9 @@ function Configuration() {
     nombreParticipantAttendu: 0,
     nombreMois: 0,
     extensionTime: 0,
-    ContractEnchere: "",          // French contract
-    ContractEnchereAr: "",       // Arabic contract
-    ContractEnchereEn: "",       // English contract
+    contractEnchere: "",          // French contract
+    contractEnchereAr: "",       // Arabic contract
+    contractEnchereEn: "",       // English contract
     autoFinancement: 0
   });
 
@@ -91,7 +91,7 @@ function Configuration() {
     const file = e.target.files[0];
     setDataConfig(prevState => ({
       ...prevState,
-      ContractEnchere: file // French contract
+      contractEnchere: file // French contract
     }));
   };
 
@@ -99,7 +99,7 @@ function Configuration() {
     const file = e.target.files[0];
     setDataConfig(prevState => ({
       ...prevState,
-      ContractEnchereAr: file // Arabic contract
+      contractEnchereAr: file // Arabic contract
     }));
   };
 
@@ -107,11 +107,13 @@ function Configuration() {
     const file = e.target.files[0];
     setDataConfig(prevState => ({
       ...prevState,
-      ContractEnchereEn: file // English contract
+      contractEnchereEn: file // English contract
     }));
   };
 
   const addBidConfig = async () => {
+    console.log(dataConfig)
+    console.log(localStorage.getItem('idenchere'))
     try {
       const formData = new FormData();
       Object.keys(dataConfig).forEach(key => {
@@ -119,27 +121,27 @@ function Configuration() {
       });
 
       // Add IdEnchere to FormData
-      formData.append('IdEnchere', localStorage.getItem('idEnchereConf'));
+      formData.append('IdEnchere', localStorage.getItem('idenchere'));
 
       // Add ContractEnchere file to FormData
-      if (dataConfig.ContractEnchere) {
-        formData.append('ContractEnchere', dataConfig.ContractEnchere);
+      if (dataConfig.contractEnchere) {
+        formData.append('ContractEnchere', dataConfig.contractEnchere);
       } else {
         console.error('ContractEnchere file is missing.');
         return;
       }
 
       // Add ContractEnchereAr file to FormData
-      if (dataConfig.ContractEnchereAr) {
-        formData.append('ContractEnchereAr', dataConfig.ContractEnchereAr);
+      if (dataConfig.contractEnchereAr) {
+        formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
       } else {
         console.error('ContractEnchereAr file is missing.');
         return;
       }
 
       // Add ContractEnchereEn file to FormData
-      if (dataConfig.ContractEnchereEn) {
-        formData.append('ContractEnchereEn', dataConfig.ContractEnchereEn);
+      if (dataConfig.contractEnchereEn) {
+        formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
       } else {
         console.error('ContractEnchereEn file is missing.');
         return;
@@ -157,8 +159,8 @@ function Configuration() {
         }
       );
 
-      console.log(res);
-      localStorage.removeItem('idEnchereConf');
+      console.log(res.data);
+      localStorage.removeItem('idenchere');
     } catch (error) {
       console.log(error);
     }
@@ -173,7 +175,7 @@ function Configuration() {
       });
 
       // Add IdEnchere and publicationDate to FormData
-      formData.append('IdEnchere', localStorage.getItem('idEnchereConf'));
+      formData.append('IdEnchere', localStorage.getItem('idenchere'));
       formData.append('publicationDate', dateScheduled);
 
       // Send the request with FormData
@@ -189,7 +191,7 @@ function Configuration() {
       );
 
       console.log(res.data);
-      localStorage.removeItem('idEnchereConf');
+      localStorage.removeItem('idenchere');
     } catch (error) {
       console.error("Error scheduling bid:", error);
     }

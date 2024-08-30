@@ -4,8 +4,9 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
-
+import Cookies from "js-cookie"
 function DemandeAds() {
+  const token = Cookies.get('token')
   const { t, i18n } = useTranslation();
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
@@ -13,9 +14,16 @@ function DemandeAds() {
   const [showEditModal, setShowEditModal] = useState(false); // State for edit modal
   const [isMobile, setIsMobile] = useState(false);
   const [editType, setEditType] = useState("");
+  const [selectedItem, setselectedItem] = useState("");
   const [uploadInputs, setUploadInputs] = useState([]);
   const state = useContext(GlobalState);
   const annonces = state.Annonces;
+  const filteredAnnonces = annonces?.filter(annonce => annonce.statusDemande === "EN_ATTENTE");
+  const showDetail = (item) =>{
+    console.log(item)
+    setShowImageModal(true)
+    setselectedItem(item)
+   }
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -30,7 +38,7 @@ function DemandeAds() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleDelete = (id) => {
+  const handleTraiterAccept = (id , status) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
       text: t(
@@ -43,9 +51,9 @@ function DemandeAds() {
       cancelButtonText: t("Non, annuler !"),
       closeOnConfirm: false,
       closeOnCancel: false,
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
-        deleteItem(id);
+        await traiterAnnonce(id , status);
         Swal.fire({
           title: "Supprimer",
           text: "Votre élément est Supprimer:)",
@@ -63,9 +71,9 @@ function DemandeAds() {
     });
   };
 
-  const deleteItem = async (id) => {
+  const traiterAnnonce = async (id , status) => {
     try {
-      const res = await axios.delete(``);
+      const res = await axios.post(`http://192.168.0.101:8081/api/annonce/traiter?id=${id}&statusDemande=${status}` , {} , {headers : {Authorization: `Bearer ${token}`} } );
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -102,7 +110,7 @@ function DemandeAds() {
     closeEditModal(); // Example: Close modal after save
   };
 
-  const handleValidation = (action) => {
+  const handleTraiter = (id , status) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
       icon: "warning",
@@ -112,9 +120,10 @@ function DemandeAds() {
       cancelButtonText: t("Non, annuler !"),
       closeOnConfirm: false,
       closeOnCancel: false,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        if (action === "valider") {
+        if (status === "APPROUVER") {
+          await traiterAnnonce(id , status);
           Swal.fire({
             title: "Valider",
             text: "Votre élément est validé :)",
@@ -122,6 +131,7 @@ function DemandeAds() {
             confirmButtonColor: "#8c111b",
           });
         } else {
+          await traiterAnnonce(id , status);
           Swal.fire({
             title: "Refuser",
             text: "Votre élément est refusé :)",
@@ -152,62 +162,48 @@ function DemandeAds() {
               {isMobile ? (
                 <table className="table" id="table1">
                   <tbody>
+                  {filteredAnnonces &&
+                      filteredAnnonces.map((item) => (
+                        <>
+                   
                     <tr>
-                      <td>{t("Photo de Profile")}</td>
-                      <td>
-                        <img
-                          style={{ borderRadius: "50px" }}
-                          className="imgtable"
-                          src="./Mazed.jpg"
-                          alt="img"
-                        />
-                      </td>
+                    <th>{t("Nom")}</th>
+                    <td>{item.user.nomFamille}</td>
                     </tr>
                     <tr>
-                      <td>{t("Nom")}</td>
-                      <td>Lorem</td>
+                    <th>{t("Prénom")}</th>
+                    <td>{item.user.prenom}</td>
                     </tr>
                     <tr>
-                      <td>{t("Prénom")}</td>
-                      <td>Lorem</td>
+                    <th>{t("Pseudo")}</th>
+                    <td>{item.user.pseudo}</td>
                     </tr>
                     <tr>
-                      <td>{t("Pseudo")}</td>
-                      <td>Lorem</td>
+                    <th>{t("Numéro de téléphone")}</th>
+                    <td>{item.user.numTel}</td>
                     </tr>
                     <tr>
-                      <td>{t("Numéro de téléphone")}</td>
-                      <td>202020</td>
-                    </tr>
-                    <tr>
-                      <td>{t("Type")}</td>
-                      <td>{t("Image")}</td>
+                    <th>{t("Type")}</th>
+                    <td>{item.type}</td>
                     </tr>
                     <tr>
                       <td>{t("Voir")}</td>
                       <td>
                         <Button
                           className="btn"
-                          onClick={() => setShowImageModal(true)}
+                          onClick={() => showDetail(item)}
                         >
                           <i className="fa-solid fa-eye"></i>
                         </Button>
                       </td>
                     </tr>
-                    {/* <tr>
-                      <td>{t("Editer")}</td>
-                      <td>
-                        <Button className="btn" onClick={openEditModal}>
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </Button>
-                      </td>
-                    </tr> */}
+                  
                   <tr>
                     <td>{t("Valider")}</td>
                     <td>
                       <i
                         className="fa-solid fa-circle-check text-success"
-                        onClick={() => handleValidation("valider")}
+                        onClick={() => handleTraiter(item.id , "APPROUVER")}
                       ></i>
                     </td>
                   </tr>
@@ -216,7 +212,7 @@ function DemandeAds() {
                     <td>
                       <i
                         className="fa-solid fa-circle-xmark text-danger"
-                        onClick={() => handleValidation("refuser")}
+                        onClick={() => handleTraiter(item.id ,"REFUSER")}
                       ></i>
                     </td>
                   </tr>
@@ -225,13 +221,15 @@ function DemandeAds() {
                         <hr />
                       </td>
                     </tr>
+                    </>
+                  ))}
                   </tbody>
                 </table>
               ) : (
                 <table className="table" id="table1">
                   <thead>
                     <tr>
-                      <th>{t("Photo de Profile")}</th>
+                      
                       <th>{t("Nom")}</th>
                       <th>{t("Prénom")}</th>
                       <th>{t("Pseudo")}</th>
@@ -243,26 +241,20 @@ function DemandeAds() {
                     </tr>
                   </thead>
                   <tbody>
-                    {annonces &&
-                      annonces.map((item) => (
+                    {filteredAnnonces &&
+                      filteredAnnonces.map((item) => (
                         <tr>
-                          <td>
-                            <img
-                              style={{ borderRadius: "50px" }}
-                              className="imgtable"
-                              src="./Mazed.jpg"
-                              alt="img"
-                            />
-                          </td>
-                          <td>{item.createdAt?.split("T")[0]}</td>
-                          <td>{item.datePublication}</td>
-                          <td>{item.likedByUsers.length}</td>
-                          <td>{item.interestedUsers.length}</td>
+                         
+                          <td>{item.user.nomFamille}</td>
+                          <td>{item.user.prenom}</td>
+                          <td>{item.user.pseudo}</td>
+                          <td>{item.user.numTel}</td>
                           <td>{item.type}</td>
+                          
                           <td>
                             <Button
                               className="btn"
-                              onClick={() => setShowImageModal(true)}
+                              onClick={() => showDetail(item)}
                             >
                               <i className="fa-solid fa-eye"></i>
                             </Button>
@@ -270,13 +262,13 @@ function DemandeAds() {
                           <td>
                       <i
                         className="fa-solid fa-circle-check text-success"
-                        onClick={() => handleValidation("valider")}
+                        onClick={() =>handleTraiter(item.id , "APPROUVER")}
                       ></i>
                     </td>
                     <td>
                       <i
                         className="fa-solid fa-circle-xmark text-danger"
-                        onClick={() => handleValidation("refuser")}
+                        onClick={() =>  handleTraiter(item.id ,"REFUSER")}
                       ></i>
                     </td>
                         </tr>
@@ -344,8 +336,8 @@ function DemandeAds() {
           </Modal.Footer>
         </Modal>
 
-        {/* Other Modals (Image, Video, Carousel) */}
-        <Modal
+      {/* Other Modals (Image, Video, Carousel) */}
+      <Modal
           show={showImageModal}
           onHide={() => setShowImageModal(false)}
           centered
@@ -355,17 +347,31 @@ function DemandeAds() {
           </Modal.Header>
           <Modal.Body>
             {/* Image content */}
-            <img
-              src="/assets/compiled/jpg/architecture1.jpg"
-              className="img-fluid"
-              alt={t("Image")}
-            />
+            {selectedItem ? (
+    selectedItem.type === "image" ? (
+        <img
+            src={selectedItem.contenu}
+            className="img-fluid"
+            alt={t("Image")}
+        />
+    ) : (
+        <video
+            controls
+            className="img-fluid" // You can adjust these styles as necessary
+            alt={t("Video")}
+            src={selectedItem.contenu} // Replace with your video source
+        >
+            Your browser does not support the video tag.
+        </video>
+    )
+) : null}
+           
             <div className="mt-3">
               <label>{t("Date de création")}</label>
               <input
                 type="text"
                 className="form-control"
-                value="01/01/2024"
+                value={selectedItem.createdAt?.split("T")[0]}
                 disabled
               />
             </div>
@@ -374,7 +380,7 @@ function DemandeAds() {
               <input
                 type="text"
                 className="form-control"
-                value="05/05/2024"
+                value={selectedItem.datePublication?.split("T")[0]}
                 disabled
               />
             </div>

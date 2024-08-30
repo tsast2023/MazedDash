@@ -198,7 +198,9 @@ const Tutoriel = () => {
           text: "Votre élément est Supprimer:)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
-        });      } else {
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
+        });    } else {
           Swal.fire({   title: "Annulé",
             text: "Votre élément est en sécurité :)",
             icon: "error",
@@ -229,13 +231,36 @@ const Tutoriel = () => {
 
   const addTuto = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://192.168.0.101:8081/api/tuto/publishNow", tuto , {headers : {Authorization: `Bearer ${token}`}});
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
+
+    const formData = new FormData();
+    formData.append('ordre', tuto.ordre);
+    formData.append('description', tuto.description);
+    formData.append('descriptionAr', tuto.descriptionAr);
+    formData.append('descriptionEn', tuto.descriptionEn);
+
+    // Append the image file
+    if (tuto.file) {
+        // You may need to convert the base64 to a Blob if it's a Data URI
+        const response = await fetch(tuto.file);
+        const blob = await response.blob();
+        formData.append('file', blob, 'image.jpeg'); // Naming the file here is ideal
     }
-  };
+
+    try {
+        const res = await axios.post("http://192.168.0.101:8081/api/tuto/publishNow", formData, {
+            headers: { 
+                Authorization: `Bearer ${token}`, 
+                'Content-Type': 'multipart/form-data' // Ensure to set the content type appropriately
+            }
+        });
+        window.location.reload();
+        console.log(res.data);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
 
   return (
     <div id="app">

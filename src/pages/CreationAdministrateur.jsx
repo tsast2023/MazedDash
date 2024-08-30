@@ -7,7 +7,7 @@ function CreationAdministrateur() {
   const token = Cookies.get('token')
   const state= useContext(GlobalState);
   const roles = state.Roles;
-  const [data,setData] = useState({prenom:"" , numTel:"" , email:"" , identifiant:"" , roleName:(roles && roles[0].name) || "" , password:""});
+  const [data,setData] = useState({prenom:"" , numTel:"" , email:"" , identifiant:"" , roleName:(roles && roles[0]?.name) || "" , password:""});
   
   const { t, i18n } = useTranslation();
 
@@ -123,8 +123,8 @@ function CreationAdministrateur() {
   
 
   {roles && roles.map(item => (
-    <option key={item.name} value={item.name}>
-      {item.name}
+    <option key={item?.name} value={item?.name}>
+      {item?.name}
     </option>
   ))}
 </select>

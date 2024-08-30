@@ -4,8 +4,9 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
-
+import Cookies from 'js-cookie'
 function AdsList() {
+  const token = Cookies.get('token')
   const { t, i18n } = useTranslation();
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
@@ -13,6 +14,7 @@ function AdsList() {
   const [showEditModal, setShowEditModal] = useState(false); // State for edit modal
   const [isMobile, setIsMobile] = useState(false);
   const [editType, setEditType] = useState("");
+  const [selectedItem, setselectedItem] = useState("");
   const [uploadInputs, setUploadInputs] = useState([]);
   const state = useContext(GlobalState);
   const annonces = state.Annonces;
@@ -29,7 +31,11 @@ function AdsList() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+ const showDetail = (item) =>{
+  console.log(item)
+  setShowImageModal(true)
+  setselectedItem(item)
+ }
   const handleDelete = (id) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
@@ -51,6 +57,8 @@ function AdsList() {
           text: "Votre élément est Supprimer:)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
       } else {
         Swal.fire({
@@ -65,7 +73,7 @@ function AdsList() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(``);
+      const res = await axios.delete(`http://192.168.0.101:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -114,24 +122,35 @@ function AdsList() {
               {isMobile ? (
                 <table className="table" id="table1">
                   <tbody>
+                  {annonces &&
+                      annonces.map((item) => (
+                        <>
                     <tr>
                       <td>{t("Date de création")}</td>
-                      <td>01/01/2024</td>
+                      <td>{item.createdAt?.split("T")[0]}</td>
                     </tr>
                     <tr>
                       <td>{t("Date de publication")}</td>
-                      <td>05/05/2024</td>
+                      <td>{item.datePublication}</td>
+                    </tr>
+                    <tr>
+                    <th>{t("Nombre de j'aime")}</th>
+                    <td>{item.likedByUsers.length}</td>
+                    </tr>
+                    <tr>
+                    <th>{t("Nombre de personne interessé")}</th>
+                      <td>{item.interestedUsers.length}</td>
                     </tr>
                     <tr>
                       <td>{t("Type")}</td>
-                      <td>{t("Image")}</td>
+                      <td>{item.type}</td>
                     </tr>
                     <tr>
                       <td>{t("Voir")}</td>
                       <td>
                         <Button
                           className="btn"
-                          onClick={() => setShowImageModal(true)}
+                          onClick={() => showDetail(item)}
                         >
                           <i className="fa-solid fa-eye"></i>
                         </Button>
@@ -150,7 +169,7 @@ function AdsList() {
                       <td>
                         <i
                           className="fa-solid fa-trash deleteIcon"
-                          onClick={handleDelete}
+                          onClick={()=>handleDelete(item.id)}
                         ></i>
                       </td>
                     </tr>
@@ -159,6 +178,8 @@ function AdsList() {
                         <hr />
                       </td>
                     </tr>
+                    </>
+                    ))}
                   </tbody>
                 </table>
               ) : (
@@ -186,7 +207,7 @@ function AdsList() {
                           <td>
                             <Button
                               className="btn"
-                              onClick={() => setShowImageModal(true)}
+                              onClick={() => showDetail(item)}
                             >
                               <i className="fa-solid fa-eye"></i>
                             </Button>
@@ -273,17 +294,31 @@ function AdsList() {
           </Modal.Header>
           <Modal.Body>
             {/* Image content */}
-            <img
-              src="/assets/compiled/jpg/architecture1.jpg"
-              className="img-fluid"
-              alt={t("Image")}
-            />
+            {selectedItem ? (
+    selectedItem.type === "image" ? (
+        <img
+            src={selectedItem.contenu}
+            className="img-fluid"
+            alt={t("Image")}
+        />
+    ) : (
+        <video
+            controls
+            className="img-fluid" // You can adjust these styles as necessary
+            alt={t("Video")}
+            src={selectedItem.contenu} // Replace with your video source
+        >
+            Your browser does not support the video tag.
+        </video>
+    )
+) : null}
+           
             <div className="mt-3">
               <label>{t("Date de création")}</label>
               <input
                 type="text"
                 className="form-control"
-                value="01/01/2024"
+                value={selectedItem.createdAt?.split("T")[0]}
                 disabled
               />
             </div>
@@ -292,7 +327,7 @@ function AdsList() {
               <input
                 type="text"
                 className="form-control"
-                value="05/05/2024"
+                value={selectedItem.datePublication?.split("T")[0]}
                 disabled
               />
             </div>

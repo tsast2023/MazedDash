@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-
+import { GlobalState } from "../GlobalState";
+import axios from 'axios';
+import Cookies from 'js-cookie'
 function Profile() {
-  const { t, i18n } = useTranslation();
+  const token = Cookies.get('token')
+  const { t } = useTranslation();
+  const state = useContext(GlobalState);
+  
+  const myAccount = state.Me;
 
   const [formData, setFormData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.net",
-    phone: "083xxxxxxxxx",
-    birthday: "",
+    name: myAccount?.nomFamille || "",
+    prenom: myAccount?.prenom || "",
+    photo: null, // Set to null initially
+  });
+
+  const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
-    confirmPassword: "",
-    photo: "/logo512.png" // Default photo
+    confirmPassword: ""
   });
 
   const handleChange = (event) => {
@@ -23,23 +30,72 @@ function Profile() {
     }));
   };
 
+  const handlePasswordChange = (event) => {
+    const { name, value } = event.target;
+    setPasswordData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prevState) => ({
-          ...prevState,
-          photo: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+      // Directly set the file from the input
+      setFormData((prevState) => ({
+        ...prevState,
+        photo: file, // Store the file directly
+      }));
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form data submitted:", formData);
+    const formDataToUpdate = new FormData();
+    formDataToUpdate.append("nomFamille", formData.name);
+    formDataToUpdate.append("prenom", formData.prenom);
+    
+    // Append the photo if it exists
+    if (formData.photo) {
+      formDataToUpdate.append("img", formData.photo); // Append the file directly
+    }
+
+    try {
+      const res = await axios.put(`http://192.168.0.101:8081/admin/updateUser`, formDataToUpdate, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Axios generally handles this automatically
+          Authorization: `Bearer ${token}` // Replace with your actual token
+        }
+      });
+      console.log('User details updated successfully', res.data);
+    } catch (error) {
+      console.error('Error updating details:', error);
+    }
+  };
+
+  const handlePasswordChangeSubmit = async (event) => {
+    event.preventDefault();
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      console.error("Passwords do not match!");
+      return; // Optionally alert the user
+    }
+
+    const passwordUpdateRequest = {
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword,
+    };
+
+    try {
+      const res = await axios.put('http://192.168.0.101:8081/admin/updatePassword', passwordUpdateRequest, {
+        headers: {
+          Authorization: `Bearer ${token}` // Replace with your actual token
+        }
+      });
+      console.log('Password updated successfully' , res.data);
+    } catch (error) {
+      console.error('Error updating password:', error);
+    }
   };
 
   return (
@@ -57,12 +113,11 @@ function Profile() {
                         height: "48px",
                         borderRadius: "5px",
                       }}
-                      src={formData.photo}
+                      src={formData.photo ? URL.createObjectURL(formData.photo) : myAccount?.photoDeProfil} // Use URL.createObjectURL for the new image
                       alt="Avatar"
                     />
                   </div>
-                  <h3 className="mt-3">John Doe</h3>
-                  <p className="text-small">Junior Software Engineer</p>
+                  <h3 className="mt-3">{formData.name} {formData.prenom}</h3> 
                 </div>
                 <div className="card-body">
                   <form onSubmit={handleSubmit}>
@@ -93,47 +148,20 @@ function Profile() {
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="name" className="form-label">
+                      <label htmlFor="prenom" className="form-label">
                         {t("Prénom")}
                       </label>
                       <input
                         type="text"
-                        name="name"
-                        id="name"
+                        name="prenom"
+                        id="prenom"
                         className="form-control"
-                        placeholder="Your Name"
-                        value={formData.name}
+                        placeholder="Your Prénom"
+                        value={formData.prenom}
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="email" className="form-label">
-                        {t("Email")}
-                      </label>
-                      <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        className="form-control"
-                        placeholder="Your Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="phone" className="form-label">
-                        {t("Numéro de téléphone")}
-                      </label>
-                      <input
-                        type="text"
-                        name="phone"
-                        id="phone"
-                        className="form-control"
-                        placeholder="Your Phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                      />
-                    </div>
+                   
                     <div className="form-group">
                       <button type="submit" className="btn btn-primary">
                         {t("Enregister")}
@@ -150,7 +178,7 @@ function Profile() {
                 <h3 className="new-price">{t("Changer le mot de passe")}</h3>
               </div>
               <div className="card-body">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handlePasswordChangeSubmit}>
                   <div className="form-group my-2">
                     <label htmlFor="current_password" className="form-label">
                       {t("Mot de passe actuel")}
@@ -161,8 +189,8 @@ function Profile() {
                       id="current_password"
                       className="form-control"
                       placeholder="Enter your current password"
-                      value={formData.currentPassword}
-                      onChange={handleChange}
+                      value={passwordData.currentPassword}
+                      onChange={handlePasswordChange}
                     />
                   </div>
                   <div className="form-group my-2">
@@ -175,8 +203,8 @@ function Profile() {
                       id="newPassword"
                       className="form-control"
                       placeholder="Enter new password"
-                      value={formData.newPassword}
-                      onChange={handleChange}
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
                     />
                   </div>
                   <div className="form-group my-2">
@@ -189,8 +217,8 @@ function Profile() {
                       id="confirmPassword"
                       className="form-control"
                       placeholder="Enter confirm password"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
+                      value={passwordData.confirmPassword}
+                      onChange={handlePasswordChange}
                     />
                   </div>
 

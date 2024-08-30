@@ -51,7 +51,9 @@ function EnchèreCreation() {
     nombreParticipantAttendu: 0,
     nombreMois: 0,
     extensionTime: 0,
-    ContractEnchere: "",
+    contractEnchere: null,
+    contractEnchereAr:null,
+    contractEnchereEn:null,
     autoFinancement: 0,
   });
 
@@ -85,36 +87,31 @@ function EnchèreCreation() {
     });
   };
 
-  const handleGalerieChange = (event) => {
-    const files = Array.from(event.target.files);
-    const filePromises = files.map((file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve(reader.result);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(filePromises)
-      .then((base64Files) => {
-        setData((prevData) => ({
-          ...prevData,
-          galerie: base64Files,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error converting files to base64:", error);
-      });
+  const handleGalerieChange = (e) => {
+    const files = Array.from(e.target.files); // Convert FileList to Array
+  
+    if (files.length === 0) {
+      console.error("No files selected");
+      return; // Exit early if no files
+    }
+  
+    setData((prevData) => ({
+      ...prevData,
+      galerie: files, // Store the files array directly in the state
+    }));
+  
+    console.log("Selected files:", files); // Log the selected files for debugging
   };
+  
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+const handleFileChange = (e) => {
+    const { id, files } = e.target;  // Destructure id and files
+    const file = files[0];
+
+    // Update state based on input id
     setDataConfig((prevState) => ({
       ...prevState,
-      ContractEnchere: file,
+      [id]: file, // Use the id of the input as the key in state
     }));
   };
 
@@ -135,43 +132,46 @@ function EnchèreCreation() {
 
   const addBid = async () => {
     try {
-      // Convert criteria inputs to maps
-      const critéreMap = critereInputs.reduce((acc, input) => {
+      const formData = new FormData();
+      
+      // Append fields to formData
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+  
+      // Append criteria maps
+      formData.append("critere", JSON.stringify(critereInputs.reduce((acc, input) => {
         if (input.label && input.value) {
           acc[input.label] = input.value;
         }
         return acc;
-      }, {});
-
-      const critéreMapAr = critereInputsAr.reduce((acc, input) => {
+      }, {})));
+      
+      formData.append("critereAr", JSON.stringify(critereInputsAr.reduce((acc, input) => {
         if (input.label && input.value) {
           acc[input.label] = input.value;
         }
         return acc;
-      }, {});
-
-      const critéreMapEn = critereInputsEn.reduce((acc, input) => {
+      }, {})));
+  
+      formData.append("critereEn", JSON.stringify(critereInputsEn.reduce((acc, input) => {
         if (input.label && input.value) {
           acc[input.label] = input.value;
         }
         return acc;
-      }, {});
-
-      const updatedData = {
-        ...data,
-        critére: critéreMap,
-        critéreAr: critéreMapAr,
-        critéreEn: critéreMapEn,
-      };
-      console.log(updatedData);
-
-      const res = await axios.post(
-        "http://192.168.0.101:8081/api/bid/createBrouillon",
-        updatedData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      }, {})));
+  
+      // If you have a 'galerie' array of images, append them
+      for (const file of data.galerie) {
+        formData.append('galerie', file);
+      }
+      formData.append("nombreMois", data.prixMazedOnline); 
+      console.log(formData)
+      // Make the request
+      const res = await axios.post("http://192.168.0.101:8081/api/bid/createBrouillon", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
       console.log(res.data);
       localStorage.setItem("idenchere", res.data.id);
       setSteps(steps + 1);
@@ -179,22 +179,41 @@ function EnchèreCreation() {
       console.error("Error adding bid:", error);
     }
   };
+  
 
   const addBidConfig = async () => {
+    console.log(dataConfig)
+    console.log(localStorage.getItem('idenchere'))
     try {
       const formData = new FormData();
-      Object.keys(dataConfig).forEach((key) => {
+      Object.keys(dataConfig).forEach(key => {
         formData.append(key, dataConfig[key]);
       });
 
       // Add IdEnchere to FormData
-      formData.append("IdEnchere", localStorage.getItem("idenchere"));
+      formData.append('IdEnchere', localStorage.getItem('idenchere'));
 
       // Add ContractEnchere file to FormData
-      if (dataConfig.ContractEnchere) {
-        formData.append("ContractEnchere", dataConfig.ContractEnchere);
+      if (dataConfig.contractEnchere) {
+        formData.append('ContractEnchere', dataConfig.contractEnchere);
       } else {
-        console.error("ContractEnchere file is missing.");
+        console.error('ContractEnchere file is missing.');
+        return;
+      }
+
+      // Add ContractEnchereAr file to FormData
+      if (dataConfig.contractEnchereAr) {
+        formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
+      } else {
+        console.error('ContractEnchereAr file is missing.');
+        return;
+      }
+
+      // Add ContractEnchereEn file to FormData
+      if (dataConfig.contractEnchereEn) {
+        formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
+      } else {
+        console.error('ContractEnchereEn file is missing.');
         return;
       }
 
@@ -205,17 +224,18 @@ function EnchèreCreation() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         }
       );
 
-      console.log(res);
-      localStorage.removeItem("idenchere");
+      console.log(res.data);
+      localStorage.removeItem('idenchere');
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   const addScheduledbid = async (e) => {
     e.preventDefault();
@@ -848,22 +868,51 @@ function EnchèreCreation() {
                                     />
                                   </div>
                                 </div>
-                                <div className="col-12">
-                                  <div className="form-group">
-                                    <label htmlFor="contract">
-                                      {t("Contrat")}
-                                    </label>
-                                    <input
-                                      ref={fileInputRef}
-                                      onChange={handleFileChange}
-                                      type="file"
-                                      id="contract"
-                                      className="form-control"
-                                      placeholder={t("Ecrire Ici")}
-                                      required
-                                    />
-                                  </div>
-                                </div>
+                                 <div className="col-12">
+        <div className="form-group">
+          <label htmlFor="ContractEnchere">
+            {t("Contrat")}
+          </label>
+          <input
+            onChange={handleFileChange}
+            type="file"
+            id="ContractEnchere" // Unique id for each input
+            className="form-control"
+            placeholder={t("Ecrire Ici")}
+            required
+          />
+        </div>
+      </div>
+      <div className="col-12">
+        <div className="form-group">
+          <label htmlFor="contractEnchereAr">
+            {t("Contrat (Arabe)")}
+          </label>
+          <input
+            onChange={handleFileChange}
+            type="file"
+            id="contractEnchereAr" // Unique id for Arabic contract
+            className="form-control"
+            placeholder={t("Ecrire Ici")}
+            required
+          />
+        </div>
+      </div>
+      <div className="col-12">
+        <div className="form-group">
+          <label htmlFor="contractEnchereEn">
+            {t("Contrat (Anglais)")} // Fix the label typo
+          </label>
+          <input
+            onChange={handleFileChange}
+            type="file"
+            id="contractEnchereEn" // Unique id for English contract
+            className="form-control"
+            placeholder={t("Ecrire Ici")}
+            required
+          />
+        </div>
+      </div>
                                 <div className="col-12">
                                   <label htmlFor="valeur-majoration">
                                     {t("Valeur de majoration")}

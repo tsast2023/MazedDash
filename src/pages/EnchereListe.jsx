@@ -289,7 +289,7 @@ function EnchereListe() {
                  <td>{t("Modifier")}</td>
                  <td>
                    <div className="buttons">
-                     <a onClick={()=>{localStorage.setItem("idEnchereConf" , item.id);setSteps(3)}} className="btn">
+                     <a onClick={()=>{localStorage.setItem("idenchere" , item.id);setSteps(3)}} className="btn">
                        <i className="fa-solid fa-pen-to-square"></i>
                      </a>
                    </div>
@@ -351,7 +351,7 @@ function EnchereListe() {
                    <td>
                     {item.status === "Brouillon"?(
                       <div className="buttons">
-                       <a onClick={()=>{localStorage.setItem("idEnchereConf" , item.id);setSteps(3)}}className="btn">
+                       <a onClick={()=>{localStorage.setItem("idenchere" , item.id);setSteps(3)}}className="btn">
                          <i className="fas fa-cog"></i>
                        </a>
                      </div>

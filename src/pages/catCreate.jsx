@@ -19,32 +19,52 @@ const CatCreate = () => {
 
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setcategory({ ...category, icon: reader.result });
-    };
-
-    reader.readAsDataURL(file);
-  };
+    const file = e.target.files[0]; // Assuming only one file is uploaded
+    if (file) {
+        setcategory((prevState) => ({ ...prevState, icon: file })); // Set file directly
+    }
+};
   
 
-  const submitCat = async (e) => {
-    e.preventDefault();
-    console.log(category)
-    try {
+const submitCat = async (e) => {
+  e.preventDefault(); // Prevent default form submission
+  console.log(category); // Log the category object for debugging
+
+  // Create FormData object
+  const formData = new FormData();
+  formData.append("nomCategorieArabe", category.nomCategorieArabe);
+  formData.append("nomCategorieEnglish", category.nomCategorieEnglish);
+  formData.append("nomCategorie", category.nomCategorie);
+  
+  // Append the icon file directly
+  if (category.icon) {
+      formData.append("icon", category.icon); // This should be the file from input
+  } else {
+      console.error("No icon file selected"); // Handle case when no file is selected
+  }
+
+  try {
       const res = await axios.post(
-        "http://192.168.0.101:8081/api/categories/addCategorie",
-        category, // Send the data as a JSON object
-       
-    
-            {headers : {Authorization: `Bearer ${token}`}}  // Set the content type to application/json
-      );     console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+          "http://192.168.0.101:8081/api/categories/addCategorie",
+          formData, // Send FormData
+          {
+              headers: {
+                  "Content-Type": "multipart/form-data", // Axios sets this automatically
+                  Authorization: `Bearer ${token}` // Set the authorization header
+              }
+          }
+      );
+
+      console.log(res.data); // Log the response data
+  } catch (error) {
+      console.error("Error creating category:", error.response?.data || error.message);
+  }
+};
+
+
+        
+ 
+
 
 
 

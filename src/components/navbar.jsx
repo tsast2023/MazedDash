@@ -48,6 +48,10 @@ const Navbar = ({ username }) => {
       console.log(error)
     }
   };
+  const getLogo = () => {
+    return i18n.language === "ar" ? "./log-mazed-ar.png" : "./log-mazed.png";
+  };
+  
 
   useEffect(() => {
     const direction = i18n.language === "ar" ? "rtl" : "ltr";
