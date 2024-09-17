@@ -25,7 +25,6 @@ function EnchèreCreation() {
     libProduct: "",
     avocat: "",
     notaire: "",
-    galerie: [],
     description: "",
     categoryName: categories ? categories[0].nomCategorie : "", // Default value if exists
     // New fields
@@ -34,9 +33,7 @@ function EnchèreCreation() {
     descriptionEn: "",
     libProduitAr: "",
     libProduitEn: "",
-    critére: [], // Main criteria
-    critéreAr: [], // Arabic criteria
-    critéreEn: [], // English criteria
+ 
   });
 
   const [dataConfig, setDataConfig] = useState({
@@ -45,6 +42,7 @@ function EnchèreCreation() {
     valeurMajoration: [],
     facilité: false,
     valeurFacilité: 0,
+    galerie: [],
     datedeclenchement: Date.now(),
     datefermeture: Date.now(),
     unité: "MOIS",
@@ -95,7 +93,7 @@ function EnchèreCreation() {
       return; // Exit early if no files
     }
   
-    setData((prevData) => ({
+    setDataConfig((prevData) => ({
       ...prevData,
       galerie: files, // Store the files array directly in the state
     }));
@@ -113,6 +111,7 @@ const handleFileChange = (e) => {
       ...prevState,
       [id]: file, // Use the id of the input as the key in state
     }));
+    console.log(dataConfig)
   };
 
   const handleCheckbox2Change = () => {
@@ -131,44 +130,40 @@ const handleFileChange = (e) => {
   }, [categories]);
 
   const addBid = async () => {
+   
     try {
-      const formData = new FormData();
+      const bidData = {
+        ...data,
+        critére: critereInputs.reduce((acc, input) => {
+          if (input.label && input.value) {
+            acc[input.label] = input.value;
+          }
+          return acc;
+        }, {}),
+        critéreAr: critereInputsAr.reduce((acc, input) => {
+          if (input.label && input.value) {
+            acc[input.label] = input.value;
+          }
+          return acc;
+        }, {}),
+        critéreEn: critereInputsEn.reduce((acc, input) => {
+          if (input.label && input.value) {
+            acc[input.label] = input.value;
+          }
+          return acc;
+        }, {})
+       
+      };
       
-      // Append fields to formData
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-  
-      // Append criteria maps
-      formData.append("critere", JSON.stringify(critereInputs.reduce((acc, input) => {
-        if (input.label && input.value) {
-          acc[input.label] = input.value;
-        }
-        return acc;
-      }, {})));
-      
-      formData.append("critereAr", JSON.stringify(critereInputsAr.reduce((acc, input) => {
-        if (input.label && input.value) {
-          acc[input.label] = input.value;
-        }
-        return acc;
-      }, {})));
-  
-      formData.append("critereEn", JSON.stringify(critereInputsEn.reduce((acc, input) => {
-        if (input.label && input.value) {
-          acc[input.label] = input.value;
-        }
-        return acc;
-      }, {})));
-  
-      // If you have a 'galerie' array of images, append them
-      for (const file of data.galerie) {
-        formData.append('galerie', file);
-      }
-      formData.append("nombreMois", data.prixMazedOnline); 
-      console.log(formData)
+      console.log(bidData)
+
+
+
+
+
+
       // Make the request
-      const res = await axios.post("http://192.168.0.101:8081/api/bid/createBrouillon", formData, {
+      const res = await axios.post("http://localhost:8081/api/bid/createBrouillon", bidData, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -182,19 +177,96 @@ const handleFileChange = (e) => {
   
 
   const addBidConfig = async () => {
-    console.log(dataConfig)
-    console.log(localStorage.getItem('idenchere'))
+    console.log(dataConfig);
+    console.log(valeurMajoration);
+    console.log(localStorage.getItem('idenchere'));
+    try {
+        const formData = new FormData();
+        Object.keys(dataConfig).forEach(key => {
+            formData.append(key, dataConfig[key]);
+        });
+
+        // Add IdEnchere to FormData
+        formData.append('IdEnchere', localStorage.getItem('idenchere'));
+        const valeurMajorationArray = String(valeurMajoration).split(',').map(Number);
+        valeurMajorationArray.forEach(value => {
+            formData.append('valeurMajoration', value);
+        });
+
+        // Add ContractEnchere file to FormData
+        if (dataConfig.contractEnchere) {
+            formData.append('ContractEnchere', dataConfig.contractEnchere);
+        } else {
+            console.error('ContractEnchere file is missing.');
+            return;
+        }
+
+        // Add ContractEnchereAr file to FormData
+        if (dataConfig.contractEnchereAr) {
+            formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
+        } else {
+            console.error('ContractEnchereAr file is missing.');
+            return;
+        }
+
+        // Add ContractEnchereEn file to FormData
+        if (dataConfig.contractEnchereEn) {
+            formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
+        } else {
+            console.error('ContractEnchereEn file is missing.');
+            return;
+        }
+
+        // Add ContractEnchereAr file to FormData
+        if (dataConfig.galerie) {
+            console.log("azaza", dataConfig.galerie);
+            for (const file of dataConfig.galerie) {
+              formData.append('galerie', file);
+            }
+        } else {
+            console.error('galerie file is missing.');
+            return;
+        }
+
+        // Console log FormData contents
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        // Send the request with FormData
+        const res = await axios.post(
+            "http://localhost:8081/api/bid/publishBidNow",
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
+
+        console.log(res.data);
+        localStorage.removeItem('idenchere');
+    } catch (error) {
+        console.log(error);
+    }
+};
+  
+
+  const addScheduledbid = async (e) => {
+    e.preventDefault();
     try {
       const formData = new FormData();
-      Object.keys(dataConfig).forEach(key => {
+      Object.keys(dataConfig).forEach((key) => {
         formData.append(key, dataConfig[key]);
       });
 
-      // Add IdEnchere to FormData
-      formData.append('IdEnchere', localStorage.getItem('idenchere'));
-
-      // Add ContractEnchere file to FormData
-      if (dataConfig.contractEnchere) {
+      // Add IdEnchere and publicationDate to FormData
+      formData.append("IdEnchere", localStorage.getItem("idenchere"));
+      formData.append("publicationDate", dateScheduled);
+      formData.append('valeurMajoration' , valeurMajoration)
+       // Add ContractEnchere file to FormData
+       if (dataConfig.contractEnchere) {
         formData.append('ContractEnchere', dataConfig.contractEnchere);
       } else {
         console.error('ContractEnchere file is missing.');
@@ -216,42 +288,12 @@ const handleFileChange = (e) => {
         console.error('ContractEnchereEn file is missing.');
         return;
       }
-
+      for (const file of dataConfig.galerie) {
+        formData.append('galerie', file);
+      }
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.101:8081/api/bid/publishBidNow",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-      console.log(res.data);
-      localStorage.removeItem('idenchere');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-
-  const addScheduledbid = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData();
-      Object.keys(dataConfig).forEach((key) => {
-        formData.append(key, dataConfig[key]);
-      });
-
-      // Add IdEnchere and publicationDate to FormData
-      formData.append("IdEnchere", localStorage.getItem("idenchere"));
-      formData.append("publicationDate", dateScheduled);
-
-      // Send the request with FormData
-      const res = await axios.post(
-        "http://192.168.0.101:8081/api/bid/scheduleBidPublication",
+        "http://localhost:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {
@@ -268,6 +310,7 @@ const handleFileChange = (e) => {
   };
 
   const handleCritereChange = (index, field, value, language) => {
+    console.log(critereInputs)
     if (language === "ar") {
       const newCritereInputsAr = [...critereInputsAr];
       newCritereInputsAr[index][field] = value;
@@ -457,19 +500,7 @@ const handleFileChange = (e) => {
                                   />
                                 </div>
                               </div>
-                              <div className="col-12">
-                                <label>{t("Galerie")}</label>
-                                <div className="form-group">
-                                  <input
-                                    onChange={handleGalerieChange}
-                                    type="file"
-                                    multiple
-                                    id="galerie"
-                                    className="form-control"
-                                    required
-                                  />
-                                </div>
-                              </div>
+                             
                               <div className="col-12">
                                 <label>{t("Ville")}</label>
                                 <fieldset className="form-group">
@@ -868,15 +899,28 @@ const handleFileChange = (e) => {
                                     />
                                   </div>
                                 </div>
+                                <div className="col-12">
+                                <label>{t("Galerie")}</label>
+                                <div className="form-group">
+                                  <input
+                                    onChange={handleGalerieChange}
+                                    type="file"
+                                    multiple
+                                    id="galerie"
+                                    className="form-control"
+                                    required
+                                  />
+                                </div>
+                              </div>
                                  <div className="col-12">
         <div className="form-group">
-          <label htmlFor="ContractEnchere">
+          <label htmlFor="contractEnchere">
             {t("Contrat")}
           </label>
           <input
             onChange={handleFileChange}
             type="file"
-            id="ContractEnchere" // Unique id for each input
+            id="contractEnchere" // Unique id for each input
             className="form-control"
             placeholder={t("Ecrire Ici")}
             required

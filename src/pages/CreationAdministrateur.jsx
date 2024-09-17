@@ -15,7 +15,7 @@ function CreationAdministrateur() {
     e.preventDefault();
     console.log(data)
     try {
-      const res = await axios.post('http://192.168.0.101:8081/admin/createAdmin', data , {headers : {Authorization: `Bearer ${token}`}})
+      const res = await axios.post('http://localhost:8081/admin/createAdmin', data , {headers : {Authorization: `Bearer ${token}`}})
       console.log(res)
       alert("admin is added successfully")
       window.location.href= '/ListeAdministrateur'

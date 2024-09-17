@@ -69,7 +69,7 @@ import DemandeEnchereAdmin from './pages/DemandeEnchereAdmin';
 import DemandeCatAdmin from './pages/DemandeCatAdmin';
 import { Echeance } from './pages/Echeance';
 import Winners from './pages/Winners';
-import Notification from './pages/Notification';
+import NotificationP from './pages/Notification';
 import { useTranslation } from "react-i18next";
 import DemandeAds from './pages/DemandeAds';
 
@@ -85,7 +85,7 @@ const App = () => {
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
           console.log("Notification permission granted.");
-          const token = await getToken(messaging, { vapidKey: "BMC_3k1w0G86uOFBONKFRwgalbKanTzJQh18IQs_qjsL6bkEWtw5bR8d59AUAaZrfuJ-HfzdJTWtUK0WnfnbbBA" });
+          const token = await getToken(messaging, { vapidKey: "BMTB_kTkKl544rId3s56ZMeqaOlsuD7v9roBH_H_y7Iedaa7OWSc7gshkSzv0U5GwjlzYGWUzJfxYZMRJIT6dNE" });
           console.log("FCM Token:", token);
           setToken(token);
           Cookies.set('fcmToken' , token)
@@ -190,7 +190,7 @@ const App = () => {
               <Route path='/DemandeCatAdmin' element={<DemandeCatAdmin />} />
               <Route path='/echeances' element={<Echeance/>}/>
               <Route path='/winners' element={<Winners/>}/>
-              <Route path='/notification' element={<Notification/>}/>
+              <Route path='/notification' element={<NotificationP/>}/>
               <Route path='/demandeAds' element={<DemandeAds/>}/>
             </Routes>
           </div>

@@ -31,7 +31,8 @@ function Configuration() {
     contractEnchere: "",          // French contract
     contractEnchereAr: "",       // Arabic contract
     contractEnchereEn: "",       // English contract
-    autoFinancement: 0
+    autoFinancement: 0,
+    galerie:[]
   });
 
   const [dateScheduled, setDateScheduled] = useState(Date.now());
@@ -39,7 +40,21 @@ function Configuration() {
   const handleCheckbox1Change = () => {
     setShowEmail1(!showEmail1);
   };
-
+  const handleGalerieChange = (e) => {
+    const files = Array.from(e.target.files); // Convert FileList to Array
+  
+    if (files.length === 0) {
+      console.error("No files selected");
+      return; // Exit early if no files
+    }
+  
+    setDataConfig((prevData) => ({
+      ...prevData,
+      galerie: files, // Store the files array directly in the state
+    }));
+  
+    console.log("Selected files:", files); // Log the selected files for debugging
+  };
   const handleCheckbox2Change = () => {
     setShowEmail2(!showEmail2);
     setShowFac(!showFac);
@@ -112,59 +127,80 @@ function Configuration() {
   };
 
   const addBidConfig = async () => {
-    console.log(dataConfig)
-    console.log(localStorage.getItem('idenchere'))
+    console.log(dataConfig);
+    console.log(valeurMajoration);
+    console.log(localStorage.getItem('idenchere'));
     try {
-      const formData = new FormData();
-      Object.keys(dataConfig).forEach(key => {
-        formData.append(key, dataConfig[key]);
-      });
+        const formData = new FormData();
+        Object.keys(dataConfig).forEach(key => {
+            formData.append(key, dataConfig[key]);
+        });
 
-      // Add IdEnchere to FormData
-      formData.append('IdEnchere', localStorage.getItem('idenchere'));
+        // Add IdEnchere to FormData
+        formData.append('IdEnchere', localStorage.getItem('idenchere'));
+        const valeurMajorationArray = String(valeurMajoration).split(',').map(Number);
+        valeurMajorationArray.forEach(value => {
+            formData.append('valeurMajoration', value);
+        });
 
-      // Add ContractEnchere file to FormData
-      if (dataConfig.contractEnchere) {
-        formData.append('ContractEnchere', dataConfig.contractEnchere);
-      } else {
-        console.error('ContractEnchere file is missing.');
-        return;
-      }
-
-      // Add ContractEnchereAr file to FormData
-      if (dataConfig.contractEnchereAr) {
-        formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
-      } else {
-        console.error('ContractEnchereAr file is missing.');
-        return;
-      }
-
-      // Add ContractEnchereEn file to FormData
-      if (dataConfig.contractEnchereEn) {
-        formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
-      } else {
-        console.error('ContractEnchereEn file is missing.');
-        return;
-      }
-
-      // Send the request with FormData
-      const res = await axios.post(
-        "http://192.168.0.101:8081/api/bid/publishBidNow",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+        // Add ContractEnchere file to FormData
+        if (dataConfig.contractEnchere) {
+            formData.append('ContractEnchere', dataConfig.contractEnchere);
+        } else {
+            console.error('ContractEnchere file is missing.');
+            return;
         }
-      );
 
-      console.log(res.data);
-      localStorage.removeItem('idenchere');
+        // Add ContractEnchereAr file to FormData
+        if (dataConfig.contractEnchereAr) {
+            formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
+        } else {
+            console.error('ContractEnchereAr file is missing.');
+            return;
+        }
+
+        // Add ContractEnchereEn file to FormData
+        if (dataConfig.contractEnchereEn) {
+            formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
+        } else {
+            console.error('ContractEnchereEn file is missing.');
+            return;
+        }
+
+        // Add ContractEnchereAr file to FormData
+        if (dataConfig.galerie) {
+            console.log("azaza", dataConfig.galerie);
+            for (const file of dataConfig.galerie) {
+              formData.append('galerie', file);
+            }
+        } else {
+            console.error('galerie file is missing.');
+            return;
+        }
+
+        // Console log FormData contents
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        // Send the request with FormData
+        const res = await axios.post(
+            "http://localhost:8081/api/bid/publishBidNow",
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
+
+        console.log(res.data);
+        localStorage.removeItem('idenchere');
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
 
   const addScheduledbid = async (e) => {
     e.preventDefault();
@@ -180,7 +216,7 @@ function Configuration() {
 
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.101:8081/api/bid/scheduleBidPublication",
+        "http://localhost:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {
@@ -329,6 +365,19 @@ function Configuration() {
                                 />
                               </div>
                             </div>
+                            <div className="col-12">
+                                <label>{t("Galerie")}</label>
+                                <div className="form-group">
+                                  <input
+                                    onChange={handleGalerieChange}
+                                    type="file"
+                                    multiple
+                                    id="galerie"
+                                    className="form-control"
+                                    required
+                                  />
+                                </div>
+                              </div>
                             <div className='col-12'>
                               <label htmlFor="valeur-majoration">{t("Valeur de majoration")}</label><br />
                               <input

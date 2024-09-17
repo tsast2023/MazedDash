@@ -222,7 +222,7 @@ const Tutoriel = () => {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.101:8081/api/tuto/deleteTuto?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://localhost:8081/api/tuto/deleteTuto?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -243,11 +243,11 @@ const Tutoriel = () => {
         // You may need to convert the base64 to a Blob if it's a Data URI
         const response = await fetch(tuto.file);
         const blob = await response.blob();
-        formData.append('file', blob, 'image.jpeg'); // Naming the file here is ideal
+        formData.append('file', blob, Math.random(1000)+`.jpeg`); // Naming the file here is ideal
     }
 
     try {
-        const res = await axios.post("http://192.168.0.101:8081/api/tuto/publishNow", formData, {
+        const res = await axios.post("http://localhost:8081/api/tuto/publishNow", formData, {
             headers: { 
                 Authorization: `Bearer ${token}`, 
                 'Content-Type': 'multipart/form-data' // Ensure to set the content type appropriately

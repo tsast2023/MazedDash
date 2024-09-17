@@ -40,13 +40,14 @@ const Notification = () => {
 
   const sendNotofication = async (e) => {
     e.preventDefault();
+    
     try {
       const res = await axios.post(
-        "http://192.168.0.101:8081/Notification/sendToAll",
+        "http://localhost:8081/Notification/sendToAll",
         Notification,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(res.data);
+      console.log("response:",res.data);
     } catch (error) {
       console.log(error);
     }
@@ -162,12 +163,13 @@ const Notification = () => {
                           <br />
                         </div>
                       </div>
-                    </form>
-                    <div className="col-12 d-flex justify-content-end">
+                      <div className="col-12 d-flex justify-content-end">
                       <Button type="submit" className="btn btn-primary me-1 mb-1">
                         {t("Envoyer a tous")}
                       </Button>
                     </div> 
+                    </form>
+                 
                   </div>
                 </div>
               </div>

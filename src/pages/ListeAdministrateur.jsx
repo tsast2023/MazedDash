@@ -10,7 +10,7 @@ function ListeAdministrateur() {
   const state = useContext(GlobalState);
   const admins = state.Admins;
   const roles = state.Roles;
-  const [data,setData] = useState({email:"" , numTel:"" , email:"" , identifiant:"" , roleName:(roles && roles[0].name) || "" , password:""});
+  const [data,setData] = useState({email:"" , numTel:"" , email:"" , identifiant:"" , roleName:(roles && roles[0]?.name) || "" , password:""});
   const [role , setRoles] = useState("");
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
@@ -93,7 +93,7 @@ function ListeAdministrateur() {
   };
 const block = async(id)=>{
 try {
-    const res = await axios.put(`http://192.168.0.101:8081/admin/block/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+    const res = await axios.put(`http://localhost:8081/admin/block/${id}` , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data) 
 } catch (error) {
   console.log(error)
@@ -101,7 +101,7 @@ try {
 }
 const unBlock = async(id)=>{
 try {
-  const res = await axios.put(`http://192.168.0.101:8081/admin/unblock/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+  const res = await axios.put(`http://localhost:8081/admin/unblock/${id}` , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data)
 } catch (error) {
   console.log(error)
@@ -111,7 +111,7 @@ const updateRole = async(id , e) =>{
   e.preventDefault();
   console.log(selectedAdmin)
   try {
-    const res = await axios.put(`http://192.168.0.101:8081/admin/${id}/${role}` , {headers : {Authorization: `Bearer ${token}`}});
+    const res = await axios.put(`http://localhost:8081/admin/${id}/${role}` , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data);
   } catch (error) {
     console.log(error)
@@ -147,7 +147,7 @@ const updateRole = async(id , e) =>{
                       </tr>
                       <tr>
                         <td>{t("Role")}</td>
-                        <td>{item.roleAdmin.name}</td>
+                        <td>{item.roleAdmin?.name}</td>
                       </tr>
                       <tr>
                         <td>{t("Status")}</td>
@@ -194,7 +194,7 @@ const updateRole = async(id , e) =>{
                         <tr>
                           <td>{item.email}</td>
                           <td>{item.identifiant}</td>
-                          <td>{item.roleAdmin.name}</td>
+                          <td>{item.roleAdmin?.name}</td>
                           <td>{item.status}</td>
                           <td>
                             <i className="fa-solid fa-pen-to-square" onClick={()=>openEditModal(item)}></i>
@@ -240,7 +240,7 @@ const updateRole = async(id , e) =>{
                                   <fieldset className="form-group mb-3">
                                     <select onChange={e=>setRoles(e.target.value)} className="form-select" id="role-id">
                                      {roles && roles.map((item=>(
-                                      <option value={item.name}>{item.name}</option>
+                                      <option value={item?.name}>{item?.name}</option>
                                      )))}
                                     </select>
                                   </fieldset>
