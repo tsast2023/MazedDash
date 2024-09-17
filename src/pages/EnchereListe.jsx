@@ -49,7 +49,7 @@ function EnchereListe() {
   };
   const deleteItem = async(id) => {
     try {
-      const res = await axios.delete(`http://localhost:8081/api/bid/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://192.168.0.101:8081/api/bid/${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error)
@@ -184,7 +184,14 @@ function EnchereListe() {
       }
     });
   };
-
+  const AnnulerBid = async(id)=>{
+    try {
+      const res = await axios.post(`http://192.168.0.101:8081/api/bid/annuler/${id}` ,{} ,  {headers : {Authorization: `Bearer ${token}`}})
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <>
     {steps===0 && (
@@ -305,6 +312,16 @@ function EnchereListe() {
                    </div>
                  </td>
                </tr>
+               <tr>
+                 <td>{t("Annuler")}</td>
+                 <td>
+                   <div className="buttons">
+                     <a className="btn">
+                       <i onClick={()=>AnnulerBid(item.id)} className="fa-solid fa-close"></i>
+                     </a>
+                   </div>
+                 </td>
+               </tr>
                  </>
                ))}
              </tbody>
@@ -323,6 +340,7 @@ function EnchereListe() {
                  <th>{t("Voir")}</th>
                  <th>{t("Modifier")}</th>
                  <th>{t("Supprimer")}</th>
+                 <td>{t("Annuler")}</td>
                </tr>
              </thead>
              <tbody>
@@ -379,6 +397,13 @@ function EnchereListe() {
                        </a>
                      </div>
                    </td>
+                   <td>
+                   <div className="buttons">
+                     <a className="btn">
+                       <i onClick={()=>AnnulerBid(item.id)} className="fa-solid fa-close"></i>
+                     </a>
+                   </div>
+                 </td>
                  </tr>
                ))}
                

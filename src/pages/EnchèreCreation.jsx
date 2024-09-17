@@ -163,7 +163,7 @@ const handleFileChange = (e) => {
 
 
       // Make the request
-      const res = await axios.post("http://localhost:8081/api/bid/createBrouillon", bidData, {
+      const res = await axios.post("http://192.168.0.101:8081/api/bid/createBrouillon", bidData, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -235,7 +235,7 @@ const handleFileChange = (e) => {
 
         // Send the request with FormData
         const res = await axios.post(
-            "http://localhost:8081/api/bid/publishBidNow",
+            "http://192.168.0.101:8081/api/bid/publishBidNow",
             formData,
             {
                 headers: {
@@ -293,7 +293,7 @@ const handleFileChange = (e) => {
       }
       // Send the request with FormData
       const res = await axios.post(
-        "http://localhost:8081/api/bid/scheduleBidPublication",
+        "http://192.168.0.101:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {
