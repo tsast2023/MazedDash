@@ -16,7 +16,6 @@ function AnnonceCreator() {
   const [description, setDescripton] = useState(); // To hold the uploaded file as Base64
   const [datePublication, setDatePublication] = useState();
   const [showPlanifierModal, setShowPlanifierModal] = useState(false);
-
   // Handle type change
   const handleTypeChange = (e) => {
     const selectedType = e.target.value;

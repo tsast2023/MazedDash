@@ -10,16 +10,25 @@ import { Modal, Button, Form } from "react-bootstrap";
 import DetailEnchere from "./DetailEnchere";
 import axios from "axios";
 import EnchèreEdit from "./EnchèreEdit";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 import Configuration from "./configuration";
+import { toast } from 'react-toastify';
+
+
+
 function EnchereListe() {
-  const token = Cookies.get('token')
-  const { t , i18n } = useTranslation();
+  const token = Cookies.get("token");
+  const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
-  const [steps , setSteps] = useState(0)
-  const [selectedItem , setSelectedItem] = useState();
+  const [steps, setSteps] = useState(0);
+  const [selectedItem, setSelectedItem] = useState();
   const state = useContext(GlobalState);
-  const encheres = state.Bids
+  const encheres = state.Bids;
+  const [showPlanifierModal, setShowPlanifierModal] = useState(false);
+  const [NumberMois, setNumberMois] = useState();
+
+
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -33,33 +42,41 @@ function EnchereListe() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  useEffect(()=>{
-
-  },[i18n.language])
+  useEffect(() => {}, [i18n.language]);
   const getEnchereName = (cat) => {
     switch (i18n.language) {
-      case 'ar':
-        return cat.nomProduitAr || '';
-      case 'en':
-        return cat.nomProduitEn || '';
-      case 'fr':
+      case "ar":
+        return cat.nomProduitAr || "";
+      case "en":
+        return cat.nomProduitEn || "";
+      case "fr":
       default:
-        return cat.nomProduit || '';
+        return cat.nomProduit || "";
     }
   };
-  const deleteItem = async(id) => {
+
+  const Désépingler = async () => {
+      toast.success("Success message!");
+      window.location.reload()
+  }
+  const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.112:8081/api/bid/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(
+        `http://192.168.0.112:8081/api/bid/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       console.log(res.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleDelete = (id) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
-      text: t("Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"),
+      text: t(
+        "Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"
+      ),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
@@ -70,20 +87,52 @@ function EnchereListe() {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteItem(id);
-        Swal.fire({   title: "Supprimer",
+        Swal.fire({
+          title: "Supprimer",
           text: "Votre élément est Supprimer:)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
-        });      } else {
-        Swal.fire({   title: "Annulé",
+        });
+      } else {
+        Swal.fire({
+          title: "Annulé",
           text: "Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e",
-        });      }
+        });
+      }
     });
   };
 
-
+  const handleDel = (id) => {
+    Swal.fire({
+      title: t("Êtes-vous sûr(e) ?"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: t("Oui"),
+      cancelButtonText: t("Non, annuler !"),
+      closeOnConfirm: false,
+      closeOnCancel: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteItem(id);
+        Swal.fire({
+          title: "Épingler",
+          text: "Votre élément est épingler",
+          icon: "Succes",
+          confirmButtonColor: "#b0210e",
+        });
+      } else {
+        Swal.fire({
+          title: "Annulé",
+          text: "Votre élément est en sécurité :)",
+          icon: "error",
+          confirmButtonColor: "#b0210e",
+        });
+      }
+    });
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [additionalTables, setAdditionalTables] = useState([]);
@@ -93,12 +142,6 @@ function EnchereListe() {
     montantRestant: "",
     montantChaqueMois: "",
   });
-
- 
-
-
-
- 
 
   useEffect(() => {
     const imgs = document.querySelectorAll(".img-select a");
@@ -184,252 +227,385 @@ function EnchereListe() {
       }
     });
   };
-  const AnnulerBid = async(id)=>{
+  const AnnulerBid = async (id) => {
     try {
-      const res = await axios.post(`http://192.168.0.112:8081/api/bid/annuler/${id}` ,{} ,  {headers : {Authorization: `Bearer ${token}`}})
-      console.log(res.data)
+      const res = await axios.post(
+        `http://192.168.0.112:8081/api/bid/annuler/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
     <>
-    {steps===0 && (
- <div className="content-container">
- <div id="main">
-   <header className="mb-3">
-     <a href="#" className="burger-btn d-block d-xl-none">
-       <i className="bi bi-justify fs-3" />
-     </a>
-   </header>
-   <section className="section">
-     <div className="card">
-       <div style={{ display: "flex", justifyContent: "space-between" }} className="card-header">
-         <h2 className="new-price">{t("Liste d'enchére")}</h2>
-       </div>
-       <div className="card-body">
-         <div className="row ">
-           <div className="col-6 form-group">
-             <h6>{t("Catégories")}</h6>
-             <select className="choices form-select">
-               <option value="square">Square</option>
-               <option value="rectangle">Rectangle</option>
-               <option value="rombo">Rombo</option>
-               <option value="romboid">Romboid</option>
-               <option value="trapeze">Trapeze</option>
-               <option value="traible">Triangle</option>
-               <option value="polygon">Polygon</option>
-             </select>
-           </div>
-           <div className="col-6 form-group">
-             <h6 htmlFor="basicInput">{t("Statut")}</h6>
-             <select className="choices form-select">
-               <option value="square">Square</option>
-               <option value="rectangle">Rectangle</option>
-             </select>
-           </div>
-         </div>
-         {isMobile ? (
-           <Table responsive="sm">
-             <tbody>
-               {encheres && encheres.map((item)=>(
-                 <>
-                 <tr>
-                 <td>{t("Produit")}</td>
-                 <td className="text-bold-500">{getEnchereName(item)}</td>
-               </tr>
-               <tr>
-                 <td>{t("Prix")}</td>
-                 <td>{item.prixMazedOnline}</td>
-               </tr>
-               <tr>
-                 <td>{t("Nb de Participant")}</td>
-                 <td className="text-bold-500">{item.nombreParticipantréel}</td>
-               </tr>
-               <tr>
-                 <td>{t("Date de Publication")}</td>
-                 <td className="text-bold-500">{item.createdAt.split('T')[0]}</td>
-               </tr>
-               <tr>
-                 <td>{t("Date de Déclenchement")}</td>
-                 <td>{item.datedeclenchement}</td>
-               </tr>
-               <tr>
-                 <td>{t("Statut")}</td>
-                 <td>
-                 <a
-                       href="#"
-                       className={
-                         item.status === "Brouillon"
-                           ? "btn btn-secondary"
-                           : item.status === "Ouverte"
-                             ? "btn btn-success"
-                             : item.status == "En_Cours"
-                             ?"btn btn-primary":"btn btn-dark"
-                       }
-                     >
-                       {t(item.status)}
-                     </a>
-                 </td>
-               </tr>
-               <tr>
-                 <td>{t("Configuration")}</td>
-                 <td>
-                   <div className="buttons">
-                     <Link to="/configuration" className="btn">
-                       <i className="fas fa-cog"></i>
-                     </Link>
-                   </div>
-                 </td>
-               </tr>
-               <tr>
-                 <td>{t("Voir")}</td>
-                 <td>
-                   <div className="buttons">
-                   <a onClick={()=>{setSelectedItem(item);setSteps(1)}} className="btn">
-                       <i className="fa-solid fa-eye"></i>
-                     </a>
-                   </div>
-                 </td>
-               </tr>
-               <tr>
-                 <td>{t("Modifier")}</td>
-                 <td>
-                   <div className="buttons">
-                     <a onClick={()=>{localStorage.setItem("idenchere" , item.id);setSteps(3)}} className="btn">
-                       <i className="fa-solid fa-pen-to-square"></i>
-                     </a>
-                   </div>
-                 </td>
-               </tr>
-               <tr>
-                 <td>{t("Supprimer")}</td>
-                 <td>
-                   <div className="buttons">
-                     <a className="btn">
-                       <i onClick={()=>handleDelete(item.id)} className="fa-solid fa-trash"></i>
-                     </a>
-                   </div>
-                 </td>
-               </tr>
-               <tr>
-                 <td>{t("Annuler")}</td>
-                 <td>
-                   <div className="buttons">
-                     <a className="btn">
-                       <i onClick={()=>AnnulerBid(item.id)} className="fa-solid fa-close"></i>
-                     </a>
-                   </div>
-                 </td>
-               </tr>
-                 </>
-               ))}
-             </tbody>
-           </Table>
-         ) : (
-           <Table responsive="sm">
-             <thead>
-               <tr>
-                 <th>{t("Produit")}</th>
-                 <th>{t("Prix")}</th>
-                 <th>{t("Nb de Participant")}</th>
-                 <th>{t("Date de Publication")}</th>
-                 <th>{t("Date de Déclenchement")}</th>
-                 <th>{t("Statut")}</th>
-                 <th>{t("Configuration")}</th>
-                 <th>{t("Voir")}</th>
-                 <th>{t("Modifier")}</th>
-                 <th>{t("Supprimer")}</th>
-                 <td>{t("Annuler")}</td>
-               </tr>
-             </thead>
-             <tbody>
-               {encheres && encheres.map((item)=>(
-                   <tr>
-                   <td className="text-bold-500">{getEnchereName(item)}</td>
-                   <td>{item.prixMazedOnline}</td>
-                   <td className="text-bold-500">{item.nombreParticipantréel}</td>
-                   <td className="text-bold-500">{item.createdAt.split('T')[0]}</td>
-                   <td>{item.datedeclenchement}</td>
-                   <td>
-                     <a
-                       href="#"
-                       className={
-                         item.status === "Brouillon"
-                           ? "btn btn-secondary"
-                           : item.status === "Ouverte"
-                             ? "btn btn-success"
-                             : item.status == "En_Cours"
-                             ?"btn btn-primary":"btn btn-dark"
-                       }
-                     >
-                       {t(item.status)}
-                     </a>
-                   </td>
-                   <td>
-                    {item.status === "Brouillon"?(
-                      <div className="buttons">
-                       <a onClick={()=>{localStorage.setItem("idenchere" , item.id);setSteps(3)}}className="btn">
-                         <i className="fas fa-cog"></i>
-                       </a>
-                     </div>
-                    ) : ( <i className="fas fa-check"></i>)}
-                     
-                   </td>
-                   <td>
-                     <div className="buttons">
-                     <a onClick={()=>{setSelectedItem(item);setSteps(1)}} className="btn">
-                         <i className="fa-solid fa-eye"></i>
-                       </a>
-                     </div>
-                   </td>
-                   <td>
-                   <div className="buttons">
-                   <a onClick={()=>{setSelectedItem(item);setSteps(2)}} className="btn">
-                         <i className="fa-solid fa-pen-to-square"></i>
-                       </a>
-                     </div>
-                   </td>
-                   <td>
-                     <div className="buttons">
-                       <a className="btn">
-                         <i onClick={()=>handleDelete(item.id)} className="fa-solid fa-trash"></i>
-                       </a>
-                     </div>
-                   </td>
-                   <td>
-                   <div className="buttons">
-                     <a className="btn">
-                       <i onClick={()=>AnnulerBid(item.id)} className="fa-solid fa-close"></i>
-                     </a>
-                   </div>
-                 </td>
-                 </tr>
-               ))}
-               
-              
-             </tbody>
-           </Table>
-         )}
-       </div>
-     </div>
-   </section>
- </div>
-</div>
-    )}
-   
+      {steps === 0 && (
+        <div className="content-container">
+          <div id="main">
+            <header className="mb-3">
+              <a href="#" className="burger-btn d-block d-xl-none">
+                <i className="bi bi-justify fs-3" />
+              </a>
+            </header>
+            <section className="section">
+              <div className="card">
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                  className="card-header"
+                >
+                  <h2 className="new-price">{t("Liste d'enchére")}</h2>
+                </div>
+                <div className="card-body">
+                  <div className="row ">
+                    <div className="col-6 form-group">
+                      <h6>{t("Catégories")}</h6>
+                      <select className="choices form-select">
+                        <option value="square">Square</option>
+                        <option value="rectangle">Rectangle</option>
+                        <option value="rombo">Rombo</option>
+                        <option value="romboid">Romboid</option>
+                        <option value="trapeze">Trapeze</option>
+                        <option value="traible">Triangle</option>
+                        <option value="polygon">Polygon</option>
+                      </select>
+                    </div>
+                    <div className="col-6 form-group">
+                      <h6 htmlFor="basicInput">{t("Statut")}</h6>
+                      <select className="choices form-select">
+                        <option value="square">Square</option>
+                        <option value="rectangle">Rectangle</option>
+                      </select>
+                    </div>
+                  </div>
+                  {isMobile ? (
+                    <Table responsive="sm">
+                      <tbody>
+                        {encheres &&
+                          encheres.map((item) => (
+                            <>
+                              <tr>
+                                <td>{t("Produit")}</td>
+                                <td className="text-bold-500">
+                                  {getEnchereName(item)}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Prix")}</td>
+                                <td>{item.prixMazedOnline}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Nb de Participant")}</td>
+                                <td className="text-bold-500">
+                                  {item.nombreParticipantréel}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Date de Publication")}</td>
+                                <td className="text-bold-500">
+                                  {item.createdAt.split("T")[0]}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Date de Déclenchement")}</td>
+                                <td>{item.datedeclenchement}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Statut")}</td>
+                                <td>
+                                  <a
+                                    href="#"
+                                    className={
+                                      item.status === "Brouillon"
+                                        ? "btn btn-secondary"
+                                        : item.status === "Ouverte"
+                                        ? "btn btn-success"
+                                        : item.status == "En_Cours"
+                                        ? "btn btn-primary"
+                                        : "btn btn-dark"
+                                    }
+                                  >
+                                    {t(item.status)}
+                                  </a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Configuration")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <Link to="/configuration" className="btn">
+                                      <i className="fas fa-cog"></i>
+                                    </Link>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Voir")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <a
+                                      onClick={() => {
+                                        setSelectedItem(item);
+                                        setSteps(1);
+                                      }}
+                                      className="btn"
+                                    >
+                                      <i className="fa-solid fa-eye"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Modifier")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <a
+                                      onClick={() => {
+                                        localStorage.setItem(
+                                          "idenchere",
+                                          item.id
+                                        );
+                                        setSteps(3);
+                                      }}
+                                      className="btn"
+                                    >
+                                      <i className="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Supprimer")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <a className="btn">
+                                      <i
+                                        onClick={() => handleDelete(item.id)}
+                                        className="fa-solid fa-trash"
+                                      ></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Annuler")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <a className="btn">
+                                      <i
+                                        onClick={() => AnnulerBid(item.id)}
+                                        className="fa-solid fa-close"
+                                      ></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Épingler")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <a className="btn">
+                                      <i className="fa-solid fa-thumbtack"></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Désépingler")}</td>
+                                <td>
+                                  <div className="buttons">
+                                    <a className="btn">
+                                      <i className="fa-solid fa-link-slash" onClick={setShowPlanifierModal}></i>
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                            </>
+                          ))}
+                      </tbody>
+                    </Table>
+                  ) : (
+                    <Table responsive="sm">
+                      <thead>
+                        <tr>
+                          <th>{t("Produit")}</th>
+                          <th>{t("Prix")}</th>
+                          <th>{t("Nb de Participant")}</th>
+                          <th>{t("Date de Publication")}</th>
+                          <th>{t("Date de Déclenchement")}</th>
+                          <th>{t("Statut")}</th>
+                          <th>{t("Configuration")}</th>
+                          <th>{t("Voir")}</th>
+                          <th>{t("Modifier")}</th>
+                          <th>{t("Supprimer")}</th>
+                          <th>{t("Annuler")}</th>
+                          <th>{t("Épingler")}</th>
+                          <th>{t("Désépingler")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {encheres &&
+                          encheres.map((item) => (
+                            <tr>
+                              <td className="text-bold-500">
+                                {getEnchereName(item)}
+                              </td>
+                              <td>{item.prixMazedOnline}</td>
+                              <td className="text-bold-500">
+                                {item.nombreParticipantréel}
+                              </td>
+                              <td className="text-bold-500">
+                                {item.createdAt.split("T")[0]}
+                              </td>
+                              <td>{item.datedeclenchement}</td>
+                              <td>
+                                <a
+                                  href="#"
+                                  className={
+                                    item.status === "Brouillon"
+                                      ? "btn btn-secondary"
+                                      : item.status === "Ouverte"
+                                      ? "btn btn-success"
+                                      : item.status == "En_Cours"
+                                      ? "btn btn-primary"
+                                      : "btn btn-dark"
+                                  }
+                                >
+                                  {t(item.status)}
+                                </a>
+                              </td>
+                              <td>
+                                {item.status === "Brouillon" ? (
+                                  <div className="buttons">
+                                    <a
+                                      onClick={() => {
+                                        localStorage.setItem(
+                                          "idenchere",
+                                          item.id
+                                        );
+                                        setSteps(3);
+                                      }}
+                                      className="btn"
+                                    >
+                                      <i className="fas fa-cog"></i>
+                                    </a>
+                                  </div>
+                                ) : (
+                                  <i className="fas fa-check"></i>
+                                )}
+                              </td>
+                              <td>
+                                <div className="buttons">
+                                  <a
+                                    onClick={() => {
+                                      setSelectedItem(item);
+                                      setSteps(1);
+                                    }}
+                                    className="btn"
+                                  >
+                                    <i className="fa-solid fa-eye"></i>
+                                  </a>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="buttons">
+                                  <a
+                                    onClick={() => {
+                                      setSelectedItem(item);
+                                      setSteps(2);
+                                    }}
+                                    className="btn"
+                                  >
+                                    <i className="fa-solid fa-pen-to-square"></i>
+                                  </a>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="buttons">
+                                  <a className="btn">
+                                    <i
+                                      onClick={() => handleDelete(item.id)}
+                                      className="fa-solid fa-trash"
+                                    ></i>
+                                  </a>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="buttons">
+                                  <a className="btn">
+                                    <i
+                                      onClick={() => AnnulerBid(item.id)}
+                                      className="fa-solid fa-close"
+                                    ></i>
+                                  </a>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="buttons">
+                                  <a className="btn">
+                                    <i
+                                      onClick={() => handleDel(item.id)}
+                                      className="fa-solid fa-thumbtack"
+                                    ></i>
+                                  </a>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="buttons">
+                                  <a className="btn">
+                                    <i className="fa-solid fa-link-slash" onClick={setShowPlanifierModal}></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </Table>
+                  )}
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      )}
 
+<Modal
+        show={showPlanifierModal}
+        onHide={() => setShowPlanifierModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t("Nombre de mois")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="form-group mb-3">
+            <label htmlFor="publicationDate">{t("Nombre de mois")}</label>
+            <input
+              type="number"
+              id="publicationDate"
+              className="form-control"
+              onChange={(e) => setNumberMois(e.target.value)}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="light"
+            onClick={() => setShowPlanifierModal(false)}
+          >
+            {t("Annuler")}
+          </Button>
+          <Button variant="secondary" onClick={Désépingler}>
+            {t("Planifier")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-{steps === 1 && (
-  <DetailEnchere selectedItem={selectedItem} />
-) }
-{steps === 2 && (
-  <EnchèreEdit selectedItem={selectedItem}/>
-)}
-{steps ===3 &&(
-  <Configuration selectedItem={selectedItem}/>
-)}
-</>
+      {steps === 1 && <DetailEnchere selectedItem={selectedItem} />}
+      {steps === 2 && <EnchèreEdit selectedItem={selectedItem} />}
+      {steps === 3 && <Configuration selectedItem={selectedItem} />}
+    </>
   );
 }
 

@@ -31,11 +31,13 @@ function AdsList() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
  const showDetail = (item) =>{
   console.log(item)
   setShowImageModal(true)
   setselectedItem(item)
  }
+ 
   const handleDelete = (id) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
@@ -156,14 +158,6 @@ function AdsList() {
                         </Button>
                       </td>
                     </tr>
-                    {/* <tr>
-                      <td>{t("Editer")}</td>
-                      <td>
-                        <Button className="btn" onClick={openEditModal}>
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </Button>
-                      </td>
-                    </tr> */}
                     <tr>
                       <td>{t("Supprimer")}</td>
                       <td>
