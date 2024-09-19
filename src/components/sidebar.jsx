@@ -507,14 +507,14 @@ const Playground = () => {
               >
                 {t("Echéances")}
               </MenuItem>
-              <MenuItem
+              {/* <MenuItem
                 component={<Link to="/winners" />}
                 icon={<i className="fa-solid fa-trophy"></i>}
                 onClick={() => setActiveLink("/winners")}
                 style={activeLink === "/winners" ? menuItemStyles.active : null}
               >
                 {t("Gagnants")}
-              </MenuItem>
+              </MenuItem> */}
               {/* <MenuItem
                 component={<Link to="/Commandes" />}
                 icon={<i className="fa-solid fa-bag-shopping"></i>}

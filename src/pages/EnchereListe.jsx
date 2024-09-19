@@ -12,9 +12,7 @@ import axios from "axios";
 import EnchèreEdit from "./EnchèreEdit";
 import Cookies from "js-cookie";
 import Configuration from "./configuration";
-import { toast } from 'react-toastify';
-
-
+import { toast } from "react-toastify";
 
 function EnchereListe() {
   const token = Cookies.get("token");
@@ -26,8 +24,6 @@ function EnchereListe() {
   const encheres = state.Bids;
   const [showPlanifierModal, setShowPlanifierModal] = useState(false);
   const [NumberMois, setNumberMois] = useState();
-
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -56,9 +52,9 @@ function EnchereListe() {
   };
 
   const Désépingler = async () => {
-      toast.success("Success message!");
-      window.location.reload()
-  }
+    toast.success("Success message!");
+    window.location.reload();
+  };
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
@@ -259,6 +255,22 @@ function EnchereListe() {
                 </div>
                 <div className="card-body">
                   <div className="row ">
+                    <div className="col-6">
+                      <div className="form-group">
+                        <label htmlFor="recherche">
+                          <h6>{t("Recherche")}</h6>
+                        </label>
+                        <input id="recherche" className="form-control" />
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-group">
+                        <label htmlFor="recherche">
+                          <h6>{t("Recherche")}</h6>
+                        </label>
+                        <input id="recherche" className="form-control" />
+                      </div>
+                    </div>
                     <div className="col-6 form-group">
                       <h6>{t("Catégories")}</h6>
                       <select className="choices form-select">
@@ -272,10 +284,15 @@ function EnchereListe() {
                       </select>
                     </div>
                     <div className="col-6 form-group">
-                      <h6 htmlFor="basicInput">{t("Statut")}</h6>
+                      <h6>{t("Catégories")}</h6>
                       <select className="choices form-select">
                         <option value="square">Square</option>
                         <option value="rectangle">Rectangle</option>
+                        <option value="rombo">Rombo</option>
+                        <option value="romboid">Romboid</option>
+                        <option value="trapeze">Trapeze</option>
+                        <option value="traible">Triangle</option>
+                        <option value="polygon">Polygon</option>
                       </select>
                     </div>
                   </div>
@@ -416,7 +433,10 @@ function EnchereListe() {
                                 <td>
                                   <div className="buttons">
                                     <a className="btn">
-                                      <i className="fa-solid fa-link-slash" onClick={setShowPlanifierModal}></i>
+                                      <i
+                                        className="fa-solid fa-link-slash"
+                                        onClick={setShowPlanifierModal}
+                                      ></i>
                                     </a>
                                   </div>
                                 </td>
@@ -554,7 +574,10 @@ function EnchereListe() {
                               <td>
                                 <div className="buttons">
                                   <a className="btn">
-                                    <i className="fa-solid fa-link-slash" onClick={setShowPlanifierModal}></i>
+                                    <i
+                                      className="fa-solid fa-link-slash"
+                                      onClick={setShowPlanifierModal}
+                                    ></i>
                                   </a>
                                 </div>
                               </td>
@@ -570,7 +593,7 @@ function EnchereListe() {
         </div>
       )}
 
-<Modal
+      <Modal
         show={showPlanifierModal}
         onHide={() => setShowPlanifierModal(false)}
         centered
@@ -590,10 +613,7 @@ function EnchereListe() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="light"
-            onClick={() => setShowPlanifierModal(false)}
-          >
+          <Button variant="light" onClick={() => setShowPlanifierModal(false)}>
             {t("Annuler")}
           </Button>
           <Button variant="secondary" onClick={Désépingler}>
