@@ -89,7 +89,7 @@ function CategoryList() {
   };
 const deleteC = async(id) =>{
   try {
-    const res = await axios.delete(`http://192.168.0.101:8081/api/categories/${id}` ,{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.delete(`http://192.168.0.112:8081/api/categories/${id}` ,{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
   } catch (error) {
     console.log(error)
@@ -218,14 +218,14 @@ const deleteC = async(id) =>{
   const banC = async(id) =>{
     if (user.roleAdmin.name === "Super admin") {
       try {
-        const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/deactivate` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/deactivate` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
       }
     }else{
       try {
-        const res = await axios.post(`http://192.168.0.101:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=DESACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.post(`http://192.168.0.112:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=DESACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
@@ -237,14 +237,14 @@ const deleteC = async(id) =>{
   const unbanC = async(id) =>{
     if (user.roleAdmin.name === "Super admin") {
       try {
-        const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/activate` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/activate` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
       }
     }else{
       try {
-        const res = await axios.post(`http://192.168.0.101:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=ACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.post(`http://192.168.0.112:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=ACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
@@ -256,7 +256,7 @@ const deleteC = async(id) =>{
 const alune = async(id)=>{
   try {
     console.log("done")
-    const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/set-al-une?alUne=true` ,{},{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/set-al-une?alUne=true` ,{},{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
     console.log("done true")
   } catch (error) {
@@ -265,7 +265,7 @@ const alune = async(id)=>{
 }
 const aluneFalse = async(id)=>{
   try {
-    const res = await axios.patch(`http://192.168.0.101:8081/api/categories/${id}/set-al-une?alUne=false` ,{},{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/set-al-une?alUne=false` ,{},{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
     console.log("done false")
   } catch (error) {
@@ -278,7 +278,7 @@ const updateCat = async (id, e) => {
   if (user.roleAdmin.name === "Super admin") {
     try {
       const res = await axios.put(
-        `http://192.168.0.101:8081/api/categories/${id}`, 
+        `http://192.168.0.112:8081/api/categories/${id}`, 
         category, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -290,7 +290,7 @@ const updateCat = async (id, e) => {
     try {
       console.log(category)
       const res = await axios.post(
-        `http://192.168.0.101:8081/api/demandes/createModificationCategoryRequest`, 
+        `http://192.168.0.112:8081/api/demandes/createModificationCategoryRequest`, 
         category, 
         { 
           params: { oldCategoryId: id },

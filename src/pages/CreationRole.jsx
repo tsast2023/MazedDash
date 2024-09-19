@@ -4,16 +4,23 @@ import Choices from "choices.js";
 import axios from "axios";
 import { GlobalState } from "../GlobalState";
 import { useTranslation } from "react-i18next";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+
 function CreationRole() {
   const token = Cookies.get('token');
   const [isEnabled, setIsEnabled] = useState(false);
-  const [data , setData] = useState({roleName:"" , permissionNames:[]})
+  const [data, setData] = useState({ roleName: "", permissionNames: [] });
   const [inputs, setInputs] = useState([]);
   const state = useContext(GlobalState);
   const permissions = state.Permissions;
-  console.log("ppp:" , permissions)
-  const { t, i18n } = useTranslation();
+  console.log("ppp:", permissions);
+  const { t } = useTranslation();
+
+  const goBack = () => {
+    window.history.back(); // Simulate a browser back button
+  };
+
   useEffect(() => {
     console.log("cat from here", permissions);
     const select = new Choices("#category-select", {
@@ -40,26 +47,31 @@ function CreationRole() {
       );
       select.destroy();
     };
-  }, [permissions]);
-  
+  }, [permissions, t]);
 
   const createRole = async (e) => {
     e.preventDefault();
     console.log(data);
     try {
       const res = await axios.post(
-        "http://192.168.0.101:8081/admin/role/create-role",
-        data ,{headers : {Authorization: `Bearer ${token}`} }
+        "http://192.168.0.112:8081/admin/role/create-role",
+        data, { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
+      toast.success(t("Action créée avec succès"));
     } catch (error) {
       console.log(error);
+      toast.error(t("Echec de création"));
     }
   };
 
   const handlePermissionChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
     setData({ ...data, permissionNames: selectedOptions });
+  };
+
+  const handleCancel = () => {
+    toast.error(t("Action annulée"));
   };
 
   return (
@@ -98,27 +110,28 @@ function CreationRole() {
                         </div>
                       </div>
                       <div className="form-group" style={{ marginBottom: "15px" }}>
-                <label htmlFor="category-select">{t("Permission")}</label>
-                <select
-                  id="category-select"
-                  className="choices form-select multiple-remove"
-                  multiple
-                  onChange={handlePermissionChange}
-                >
-                  <option disabled>default</option>
-                 {permissions&& permissions.map((item)=>(
-                  <option value={item.name}>{item.name}</option>
-                 ))}
-                </select>
-              </div>
+                        <label htmlFor="category-select">{t("Permission")}</label>
+                        <select
+                          id="category-select"
+                          className="choices form-select multiple-remove"
+                          multiple
+                          onChange={handlePermissionChange}
+                        >
+                          <option disabled>default</option>
+                          {permissions && permissions.map((item) => (
+                            <option key={item.name} value={item.name}>{item.name}</option>
+                          ))}
+                        </select>
+                      </div>
                       <br />
                       <br />
                       <br />
                       <br />
                       <div className="col-12 d-flex justify-content-end">
                         <button
-                          type="reset"
+                          type="button"
                           className="btn btn-secondary me-1 mb-1"
+                          onClick={goBack}
                         >
                           {t("Annuler")}
                         </button>

@@ -49,7 +49,7 @@ function EnchereListe() {
   };
   const deleteItem = async(id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.101:8081/api/bid/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://192.168.0.112:8081/api/bid/${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error)
@@ -186,7 +186,7 @@ function EnchereListe() {
   };
   const AnnulerBid = async(id)=>{
     try {
-      const res = await axios.post(`http://192.168.0.101:8081/api/bid/annuler/${id}` ,{} ,  {headers : {Authorization: `Bearer ${token}`}})
+      const res = await axios.post(`http://192.168.0.112:8081/api/bid/annuler/${id}` ,{} ,  {headers : {Authorization: `Bearer ${token}`}})
       console.log(res.data)
     } catch (error) {
       console.log(error)

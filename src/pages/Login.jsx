@@ -16,7 +16,7 @@ const Login = () => {
     try {
       
       console.log(data)
-      const res = await  axios.post('http://localhost:8090/api/auth/login' , data);
+      const res = await  axios.post('http://192.168.0.112:8090/api/auth/login' , data);
       console.log(res.data.refreshtoken)
       Cookies.set('token' , res.data.refreshtoken )
       window.location.href = "/"
@@ -27,8 +27,12 @@ const Login = () => {
   return (
     <div className="container-fluid">
       <div className="row">
+      <div className="col-lg-6 image-container">
+          <img src="./Mazed.png" alt="login" className="img-fluid" />
+        </div>
         <div className="col-lg-6 login-container">
           <div className="card-log">
+
             <div className="card-body">
               <h3 className="card-title">Bienvenue</h3>
               <form onSubmit={submitLogin}>
@@ -44,9 +48,6 @@ const Login = () => {
               </form>
             </div>
           </div>
-        </div>
-        <div className="col-lg-6 image-container">
-          <img src="./Mazed.jpg" alt="login" className="img-fluid" />
         </div>
       </div>
     </div>

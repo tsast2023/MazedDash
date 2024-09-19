@@ -31,11 +31,12 @@
     "react-scripts": "5.0.1",
     "react-sweetalert2": "^0.6.0",
     "react-table": "^7.8.0",
+    "react-toastify": "^10.0.5",
     "simple-datatables": "^9.0.3",
     "sweetalert2": "^11.10.8",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://192.168.0.101:8081",
+  "proxy": "http://192.168.0.112:8081",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

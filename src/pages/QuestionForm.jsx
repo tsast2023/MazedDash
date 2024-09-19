@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
+
+
 function QuestionForm() {
   const token = Cookies.get('token');
   const [question , setQuestion]= useState({question:"" ,questionAr:"",questionEn:"", reponse:"" , reponseAr:"" ,reponseEn:"" })
@@ -9,12 +12,17 @@ function QuestionForm() {
   const addQuestion = async(e)=>{
     e.preventDefault();
     try {
-      const res = await axios.post("http://192.168.0.101:8081/api/questions/create", question , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.post("http://192.168.0.112:8081/api/questions/create", question , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
     }
   }
+
+  const notify = () => {
+    toast.success(t("Action créée avec succès"));
+  };
+  
   return (
     <div className="content-container">
       <div id="main">
@@ -104,7 +112,7 @@ function QuestionForm() {
                           {t("Annuler")}
                         </button>
 
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary" onClick={notify}>
                           {t("Enregistrer")}
                         </button>
                       </div>

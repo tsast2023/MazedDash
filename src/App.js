@@ -72,6 +72,7 @@ import Winners from './pages/Winners';
 import NotificationP from './pages/Notification';
 import { useTranslation } from "react-i18next";
 import DemandeAds from './pages/DemandeAds';
+import ToastNotifications from './components/ToastNotifications';
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -193,6 +194,7 @@ const App = () => {
               <Route path='/notification' element={<NotificationP/>}/>
               <Route path='/demandeAds' element={<DemandeAds/>}/>
             </Routes>
+            <ToastNotifications />
           </div>
         )}
         </div>

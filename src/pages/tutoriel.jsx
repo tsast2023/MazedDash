@@ -4,7 +4,16 @@ import { GlobalState } from "../GlobalState";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
+
+
+
 const Modal = ({ t, handleImageChange, tuto, setTuto, addTuto }) => {
+
+  const notify = () => {
+    toast.success(t("Action créée avec succès"));
+  };
+  
   return (
     <div
       className="modal fade text-left"
@@ -80,7 +89,7 @@ const Modal = ({ t, handleImageChange, tuto, setTuto, addTuto }) => {
               </button>
               <button className="btn btn-primary" data-bs-dismiss="modal" type="submit">
                 <i className="bx bx-check d-block d-sm-none"></i>
-                <span className="btn btn-primary">{t("Enregistrer")}</span>
+                <span className="btn btn-primary" onClick={notify}>{t("Enregistrer")}</span>
               </button>
             </div>
           </form>
@@ -222,7 +231,7 @@ const Tutoriel = () => {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.101:8081/api/tuto/deleteTuto?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://192.168.0.112:8081/api/tuto/deleteTuto?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -247,7 +256,7 @@ const Tutoriel = () => {
     }
 
     try {
-        const res = await axios.post("http://192.168.0.101:8081/api/tuto/publishNow", formData, {
+        const res = await axios.post("http://192.168.0.112:8081/api/tuto/publishNow", formData, {
             headers: { 
                 Authorization: `Bearer ${token}`, 
                 'Content-Type': 'multipart/form-data' // Ensure to set the content type appropriately

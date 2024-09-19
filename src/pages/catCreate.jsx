@@ -5,6 +5,8 @@ import { GlobalState } from "../GlobalState";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
+
 const CatCreate = () => {
   const token = Cookies.get('token')
   const [isEnabled, setIsEnabled] = useState(false);
@@ -15,6 +17,10 @@ const CatCreate = () => {
 
   const goBack = () => {
     window.history.back(); // Simulate a browser back button
+  };
+
+  const notify = () => {
+    toast.success(t("Action créée avec succès"));
   };
 
 
@@ -45,7 +51,7 @@ const submitCat = async (e) => {
 
   try {
       const res = await axios.post(
-          "http://192.168.0.101:8081/api/categories/addCategorie",
+          "http://192.168.0.112:8081/api/categories/addCategorie",
           formData, // Send FormData
           {
               headers: {
@@ -60,13 +66,6 @@ const submitCat = async (e) => {
       console.error("Error creating category:", error.response?.data || error.message);
   }
 };
-
-
-        
- 
-
-
-
 
   return (
     <div className="content-container">
@@ -126,7 +125,7 @@ const submitCat = async (e) => {
           <button type="button" className="btn btn-secondary me-3" onClick={goBack}>
             {t("Annuler")}
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" onClick={notify}>
             {t("Enregistrer")}
           </button>
         </div>

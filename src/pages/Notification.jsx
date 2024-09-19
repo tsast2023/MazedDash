@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { toast } from 'react-toastify';
 
 const Notification = () => {
   const token = Cookies.get("token");
@@ -43,7 +44,7 @@ const Notification = () => {
     
     try {
       const res = await axios.post(
-        "http://192.168.0.101:8081/Notification/sendToAll",
+        "http://192.168.0.112:8081/Notification/sendToAll",
         Notification,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -51,6 +52,10 @@ const Notification = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  
+  const notify = () => {
+    toast.success(t("Action créée avec succès"));
   };
 
   return (
@@ -164,12 +169,11 @@ const Notification = () => {
                         </div>
                       </div>
                       <div className="col-12 d-flex justify-content-end">
-                      <Button type="submit" className="btn btn-primary me-1 mb-1">
+                      <Button type="submit" className="btn btn-primary me-1 mb-1" onClick={notify}>
                         {t("Envoyer a tous")}
                       </Button>
                     </div> 
                     </form>
-                 
                   </div>
                 </div>
               </div>

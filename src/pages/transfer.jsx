@@ -66,7 +66,7 @@ function TableRow({ userData, onAccept }) {
   const { t, i18n } = useTranslation();
   const downloadFile = async (fileId, token) => {
     try {
-      const res = await axios.get(`http://192.168.0.101:8081/api/demandeTransfert/file/${fileId}`, {
+      const res = await axios.get(`http://192.168.0.112:8081/api/demandeTransfert/file/${fileId}`, {
         responseType: 'blob', // This is important for downloading binary data
         headers: { Authorization: `Bearer ${token}` } // Assuming you need authorization
       });
@@ -89,7 +89,7 @@ function TableRow({ userData, onAccept }) {
       console.log(id, status, cause);
       
       const res = await axios.post(
-        `http://192.168.0.101:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`, 
+        `http://192.168.0.112:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`, 
         {}, // Empty body
         {
           headers: { 
@@ -191,6 +191,28 @@ function ResponsiveTable({ data, headers, isMobile }) {
 
   return (
     <div className="table-responsive datatable-minimal">
+                    <div className="row ">
+                <div className="col-6">
+                  <div className="form-group">
+                    <label htmlFor="recherche">
+                      <h6>{t("Recherche")}</h6>
+                    </label>
+                    <input id="recherche" className="form-control" />
+                  </div>
+                </div>
+                <div className="col-6 form-group">
+                  <h6>{t("Catégories")}</h6>
+                  <select className="choices form-select">
+                    <option value="square">Square</option>
+                    <option value="rectangle">Rectangle</option>
+                    <option value="rombo">Rombo</option>
+                    <option value="romboid">Romboid</option>
+                    <option value="trapeze">Trapeze</option>
+                    <option value="traible">Triangle</option>
+                    <option value="polygon">Polygon</option>
+                  </select>
+                </div>
+              </div>
       {isMobile ? (
         <table className="table" id="table2">
           <tbody>

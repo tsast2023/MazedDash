@@ -653,7 +653,6 @@ const handleFileChange = (e) => {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={t("Valeur")}
                                       value={critere.value}
                                       onChange={(e) =>
                                         handleCritereChange(
@@ -685,7 +684,6 @@ const handleFileChange = (e) => {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={t("Label Arabe")}
                                       value={critere.label}
                                       onChange={(e) =>
                                         handleCritereChange(
@@ -699,7 +697,6 @@ const handleFileChange = (e) => {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={t("Valeur Arabe")}
                                       value={critere.value}
                                       onChange={(e) =>
                                         handleCritereChange(
@@ -731,7 +728,6 @@ const handleFileChange = (e) => {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={t("Label Anglais")}
                                       value={critere.label}
                                       onChange={(e) =>
                                         handleCritereChange(
@@ -745,7 +741,6 @@ const handleFileChange = (e) => {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={t("Valeur Anglais")}
                                       value={critere.value}
                                       onChange={(e) =>
                                         handleCritereChange(
@@ -834,7 +829,6 @@ const handleFileChange = (e) => {
                                       type="number"
                                       id="participation-cost"
                                       className="form-control"
-                                      placeholder={t("Ecrire Ici")}
                                       required
                                     />
                                   </div>
@@ -854,7 +848,6 @@ const handleFileChange = (e) => {
                                       type="number"
                                       id="click-cost"
                                       className="form-control"
-                                      placeholder={t("Ecrire Ici")}
                                       required
                                     />
                                   </div>
@@ -874,7 +867,6 @@ const handleFileChange = (e) => {
                                       type="number"
                                       id="extension-time"
                                       className="form-control"
-                                      placeholder={t("Ecrire Ici")}
                                       required
                                     />
                                   </div>
@@ -894,7 +886,6 @@ const handleFileChange = (e) => {
                                       type="number"
                                       id="auto-financement"
                                       className="form-control"
-                                      placeholder={t("Ecrire Ici")}
                                       required
                                     />
                                   </div>
@@ -922,7 +913,6 @@ const handleFileChange = (e) => {
             type="file"
             id="contractEnchere" // Unique id for each input
             className="form-control"
-            placeholder={t("Ecrire Ici")}
             required
           />
         </div>
@@ -937,7 +927,6 @@ const handleFileChange = (e) => {
             type="file"
             id="contractEnchereAr" // Unique id for Arabic contract
             className="form-control"
-            placeholder={t("Ecrire Ici")}
             required
           />
         </div>
@@ -945,14 +934,13 @@ const handleFileChange = (e) => {
       <div className="col-12">
         <div className="form-group">
           <label htmlFor="contractEnchereEn">
-            {t("Contrat (Anglais)")} // Fix the label typo
+            {t("Contrat (Anglais)")}
           </label>
           <input
             onChange={handleFileChange}
             type="file"
             id="contractEnchereEn" // Unique id for English contract
             className="form-control"
-            placeholder={t("Ecrire Ici")}
             required
           />
         </div>
@@ -966,7 +954,6 @@ const handleFileChange = (e) => {
                                     type="number"
                                     value={newValue}
                                     onChange={handleInputChange}
-                                    placeholder="Add valeurMajoration"
                                   />
                                   <button
                                     className="btn btn-primary ms-1"
@@ -1016,7 +1003,6 @@ const handleFileChange = (e) => {
                                         type="number"
                                         id="email-id-vertical2"
                                         className="col-6 form-control"
-                                        placeholder="Ecrire Ici"
                                         required
                                       />
                                     </div>
@@ -1060,7 +1046,6 @@ const handleFileChange = (e) => {
                                       type="number"
                                       id="expected-participants"
                                       className="form-control"
-                                      placeholder={t("Écrivez ici")}
                                       maxLength={25}
                                       required
                                     />
@@ -1079,7 +1064,6 @@ const handleFileChange = (e) => {
                                       type="datetime-local"
                                       id="launch-date"
                                       className="form-control"
-                                      placeholder={t("Écrivez ici")}
                                       required
                                     />
                                   </div>
@@ -1097,7 +1081,6 @@ const handleFileChange = (e) => {
                                       type="datetime-local"
                                       id="closing-date"
                                       className="form-control"
-                                      placeholder={t("Écrivez ici")}
                                       required
                                     />
                                   </div>

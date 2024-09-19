@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from 'react-toastify';
+
 
 function AnnonceCreator() {
   const token = Cookies.get('token');
@@ -56,7 +58,7 @@ const publishNow = async () => {
 
   try {
       const res = await axios.post(
-          "http://192.168.0.101:8081/api/annonce/createAnnonce",
+          "http://192.168.0.112:8081/api/annonce/createAnnonce",
           formData, // Send the FormData
           {
               headers: {
@@ -65,7 +67,9 @@ const publishNow = async () => {
               }
           }
       );
-      console.log(res.data); // Log the response
+      console.log(res.data);
+      toast.success(t("Action créée avec succès"));
+      // Log the response
   } catch (error) {
       console.error("Error creating announcement:", error);
   }
@@ -73,7 +77,7 @@ const publishNow = async () => {
   const scheduledAds = async () => {
     try {
       const res = await axios.post(
-        `http://192.168.0.101:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,
+        `http://192.168.0.112:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -41,7 +41,7 @@ const Navbar = ({ username }) => {
     i18n.changeLanguage(lng);
     setIsLangMenuOpen(false);
     try {
-      const res = await axios.put(`http://192.168.0.101:8081/admin/language?newLanguage=${lng.toUpperCase()}` , {} , { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.put(`http://192.168.0.112:8081/admin/language?newLanguage=${lng.toUpperCase()}` , {} , { headers: { Authorization: `Bearer ${token}` } });
       console.log(res.data)
       window.location.reload();
     } catch (error) {
@@ -62,8 +62,11 @@ const Navbar = ({ username }) => {
     <div className="navbar">
       <div className="navbar-content">
         <div className="icons-right">
-          <div className="settings-icon" onClick={handleSettingsToggle}>
+          {/* <div className="settings-icon" onClick={handleSettingsToggle}>
             <i className="fas fa-cog"></i>
+          </div> */}
+                    <div className="settings-icon" onClick={handleLanguageToggle}>
+            <i className="fas fa-globe me-2"></i> 
           </div>
           <div className="notification-icon" onClick={handleNotificationToggle}>
             <i className="fas fa-bell"></i>
@@ -149,16 +152,14 @@ const Navbar = ({ username }) => {
       >
         <div className="notification-content">
           <div className="notification-item">
-            <Link to="/Profile">
+            {/* <Link to="/Profile">
               <i className="fas fa-user-circle me-2"></i> {t("Profile")}
-            </Link>
+            </Link> */}
           </div>
-          <div className="notification-item" onClick={handleLanguageToggle}>
-            <i className="fas fa-globe me-2"></i> {t("Languages")}
-          </div>
-          <div className="notification-item">
+
+          {/* <div className="notification-item">
             <i className="fas fa-sign-out-alt me-2"></i> {t("Déconnexion")}
-          </div>
+          </div> */}
         </div>
         <div className="close-button" onClick={handleSettingsToggle}>
           <i className="fas fa-times"></i>

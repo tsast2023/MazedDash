@@ -5,6 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
+      "Recherche": "Search",
       "Tableau de bord": "Dashboard",
       "Super Admin": "Super Admin",
       "Catégories": "Categories",
@@ -424,11 +425,15 @@ const resources = {
       "Montant restant": "Remaining amount",
       "Montant à payer chaque mois": "Amount to be paid each month",
       "Echéances": "Due date",
-      "Mettre à jour la photo de profil": "Update profile picture"
+      "Mettre à jour la photo de profil": "Update profile picture",
+      "Valeur Bonus": "Bonus Value",
+      "Action annulée": "Action canceled",
     }
   },
   fr: {
     translation: {
+      "Action annulée": "Action annulée",
+      "Recherche": "Recherche",
       "Mettre à jour la photo de profil": "Mettre à jour la photo de profil",
       "Montant à payer chaque mois": "Montant à payer chaque mois",
       "Montant à payer": "Montant à payer",
@@ -857,11 +862,13 @@ const resources = {
         "Date de Naissance": "Date de Naissance",
         "Montant restant": "Montant restant",
         "Echéances": "Echéances",
-        "Liste echéance": "Liste echéance"
+        "Liste echéance": "Liste echéance",
+        "Valeur Bonus": "Valeur Bonus"
     }
   },
   ar: {
     translation: {
+      "Action annulée": "تم إلغاء الإجراء",
       "Mettre à jour la photo de profil": "تحديث صورة الملف الشخصي",
       "Liste echéance": "قائمة المواعيد النهائية",
       "Echéances": "المواعيد النهائية",
@@ -1308,7 +1315,9 @@ const resources = {
       "body(englais)": "المحتوى بالانجليزية",
       "title(arabe)": "العنوان بالعربية",
       "body(arabe)": "المحتوى بالعربية",
-      "Envoyer a tous": "الارسال"
+      "Envoyer a tous": "الارسال",
+      "Recherche": "بحث",
+      "Valeur Bonus": "قيمة المكافأة"
     }
   }
 };
