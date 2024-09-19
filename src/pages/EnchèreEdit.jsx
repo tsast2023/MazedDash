@@ -13,7 +13,7 @@ function EnchèreEdit(props) {
   const state = useContext(GlobalState);
   const categories = state.Categories;
   const { t, i18n } = useTranslation();
-  
+  console.log(props)
   const [steps, setSteps] = useState(0);
   const fileInputRef = React.createRef();
   console.log(props.selectedItem)
@@ -21,24 +21,24 @@ function EnchèreEdit(props) {
       ville:props.selectedItem.ville,
       ref: props.selectedItem.ref,
       prixMazedOnline: props.selectedItem.prixMazedOnline,
-      libProduct: props.selectedItem.libProduct,
+      nomProduit: props.selectedItem.nomProduit,
       avocat: props.selectedItem.avocat,
       notaire:props.selectedItem.notaire,
       galerie: [],
       description:props.selectedItem.description,
-      categoryName: categories ? categories[0].nomCategorie : "", // Default value if exists
+      categoryName: props.selectedItem.categoryName , // Default value if exists
       // New fields
       villeArabe:props.selectedItem.villeArabe,
       descriptionAr: props.selectedItem.descriptionAr,
       descriptionEn:props.selectedItem.descriptionEn,
-      libProduitAr: props.selectedItem.libProduitAr,
-      libProduitEn: props.selectedItem.libProduitEn,
-      critére: [], // Main criteria
-      critéreAr: [], // Arabic criteria
-      critéreEn: [], // English criteria
+      nomProduitAr: props.selectedItem.nomProduitAr,
+      nomProduitEn: props.selectedItem.nomProduitEn,
+      critére: props.selectedItem.critére, // Main criteria
+      critéreAr: props.selectedItem.critéreAr, // Arabic criteria
+      critéreEn: props.selectedItem.critéreEn, // English criteria
       coutClic: props.selectedItem.coutClic,
       coutParticipation: props.selectedItem.coutParticipation,
-      valeurMajoration: [],
+      valeurMajoration: props.selectedItem.valeurMajoration,
       facilité: props.selectedItem.facilité,
       valeurFacilité: props.selectedItem.valeurFacilité,
       datedeclenchement: props.selectedItem.datedeclenchement,
@@ -47,14 +47,16 @@ function EnchèreEdit(props) {
       nombreParticipantAttendu: props.selectedItem.nombreParticipantAttendu,
       nombreMois: props.selectedItem.nombreMois,
       extensionTime: props.selectedItem.extensionTime,
-      ContractEnchere: "",
+      contractEnchereid: "",
+      contractEnchereEnid:"",
+      contractEnchereArid:"",
       autoFinancement: props.selectedItem.autoFinancement
     
   });
 
 
 
-  const [showEmail2, setShowEmail2] = useState(false);
+  const [showEmail2, setShowEmail2] = useState(props.selectedItem.facilité);
   const [showFac, setShowFac] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [critereInputs, setCritereInputs] = useState([{ label: "", value: "" }]); // Main criteria
@@ -104,11 +106,15 @@ function EnchèreEdit(props) {
   };
 
   const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      setData(prevState => ({
-          ...prevState,
-          ContractEnchere: file
-      }));
+    const { id, files } = e.target;  // Destructure id and files
+    const file = files[0];
+
+    // Update state based on input id
+    setData((prevState) => ({
+      ...prevState,
+      [id]: file, // Use the id of the input as the key in state
+    }));
+    console.log(data)
   };
 
   const handleCheckbox2Change = () => {
@@ -126,144 +132,183 @@ function EnchèreEdit(props) {
       }
   }, [categories]);
 
-  const addBid = async () => {
+  const updateBid = async (id) => {
       try {
-          // Convert criteria inputs to maps
-          const critéreMap = critereInputs.reduce((acc, input) => {
-              if (input.label && input.value) {
-                  acc[input.label] = input.value;
-              }
-              return acc;
-          }, {});
+         
+        const formData = new FormData();
 
-          const critéreMapAr = critereInputsAr.reduce((acc, input) => {
-              if (input.label && input.value) {
-                  acc[input.label] = input.value;
-              }
-              return acc;
-          }, {});
+    // Append regular data fields
+    formData.append('ville', data.ville);
+    formData.append('ref', data.ref);
+    formData.append('prixMazedOnline', data.prixMazedOnline);
+    formData.append('nomProduit', data.nomProduit);
+    formData.append('avocat', data.avocat);
+    formData.append('notaire', data.notaire);
+    formData.append('description', data.description);
+    formData.append('categoryName', data.categoryName);
+    formData.append('villeArabe', data.villeArabe);
+    formData.append('descriptionAr', data.descriptionAr);
+    formData.append('descriptionEn', data.descriptionEn);
+    formData.append('nomProduitAr', data.nomProduitAr);
+    formData.append('nomProduitEn', data.nomProduitEn);
+    formData.append('coutClic', data.coutClic);
+    formData.append('coutParticipation', data.coutParticipation);
+    console.log('valeur de majoration :' , valeurMajoration)
+    const valeurMajorationArray = String(valeurMajoration).split(',').map(Number);
+        valeurMajorationArray.forEach(value => {
+            formData.append('valeurMajoration', value);
+        });
+    formData.append('facilité', data.facilité);
+    formData.append('valeurFacilité', data.valeurFacilité);
+    formData.append('datedeclenchement', data.datedeclenchement);
+    formData.append('datefermeture', data.datefermeture);
+    formData.append('unité', data.unité);
+    formData.append('nombreParticipantAttendu', data.nombreParticipantAttendu);
+    formData.append('nombreMois', data.nombreMois);
+    formData.append('extensionTime', data.extensionTime);
+    formData.append('autoFinancement', data.autoFinancement);
 
-          const critéreMapEn = critereInputsEn.reduce((acc, input) => {
-              if (input.label && input.value) {
-                  acc[input.label] = input.value;
-              }
-              return acc;
-          }, {});
+    // Append criteria maps
+    if (data.critére) {
+      Object.keys(data.critére).forEach(key => {
+        formData.append(`critere[${key}]`, data.critére[key]);
+      });
+    }
+    if (data.critéreAr) {
+      Object.keys(data.critéreAr).forEach(key => {
+        formData.append(`critereAr[${key}]`, data.critéreAr[key]);
+      });
+    }
+    if (data.critéreEn) {
+      Object.keys(data.critéreEn).forEach(key => {
+        formData.append(`critereEn[${key}]`, data.critéreEn[key]);
+      });
+    }
 
-          const updatedData = { 
-              ...data, 
-              critére: critéreMap, 
-              critéreAr: critéreMapAr, 
-              critéreEn: critéreMapEn 
-          };
-          console.log(updatedData);
+    // Append gallery files (if any)
+    if (data.galerie && data.galerie.length > 0) {
+      data.galerie.forEach((file, index) => {
+        formData.append(`galerie`, file);
+      });
+    }
 
-          const res = await axios.post("http://192.168.0.112:8081/api/bid/createBrouillon", updatedData, {
-              headers: { Authorization: `Bearer ${token}` }
+    // Append contract files
+    if (data.contractEnchereid) {
+      formData.append('ContractEnchere', data.contractEnchereid);
+    }
+    if (data.contractEnchereArid) {
+      formData.append('contractEnchereArid', data.contractEnchereArid);
+    }
+    if (data.contractEnchereEnid) {
+      formData.append('contractEnchereEnid', data.contractEnchereEnid);
+    }
+
+          const res = await axios.put(`http://192.168.0.101:8081/api/bid/${id}`, formData, {
+              headers: { Authorization: `Bearer ${token}` },
+              'Content-Type': 'multipart/form-data',
           });
           console.log(res.data);
-          localStorage.setItem("idenchere", res.data.id);
-          setSteps(steps + 1);
+          
       } catch (error) {
           console.error("Error adding bid:", error);
       }
   };
 
-  const addBidConfig = async () => {
-      try {
-          const formData = new FormData();
-          Object.keys(data).forEach(key => {
-              formData.append(key, data[key]);
-          });
+//   const addBidConfig = async () => {
+//       try {
+//           const formData = new FormData();
+//           Object.keys(data).forEach(key => {
+//               formData.append(key, data[key]);
+//           });
 
-          // Add IdEnchere to FormData
-          formData.append('IdEnchere', localStorage.getItem('idenchere'));
+//           // Add IdEnchere to FormData
+//           formData.append('IdEnchere', localStorage.getItem('idenchere'));
 
-          // Add ContractEnchere file to FormData
-          if (data.ContractEnchere) {
-              formData.append('ContractEnchere', data.ContractEnchere);
-          } else {
-              console.error('ContractEnchere file is missing.');
-              return;
-          }
+//           // Add ContractEnchere file to FormData
+//           if (data.ContractEnchere) {
+//               formData.append('ContractEnchere', data.ContractEnchere);
+//           } else {
+//               console.error('ContractEnchere file is missing.');
+//               return;
+//           }
 
-          // Send the request with FormData
-          const res = await axios.post(
-              "http://192.168.0.112:8081/api/bid/publishBidNow",
-              formData,
-              {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                      'Content-Type': 'multipart/form-data',
-                  },
-              }
-          );
+//           // Send the request with FormData
+//           const res = await axios.post(
+//               "http://192.168.0.101:8081/api/bid/publishBidNow",
+//               formData,
+//               {
+//                   headers: {
+//                       Authorization: `Bearer ${token}`,
+//                       'Content-Type': 'multipart/form-data',
+//                   },
+//               }
+//           );
 
-          console.log(res);
-          localStorage.removeItem('idenchere');
-      } catch (error) {
-          console.log(error);
-      }
-  };
+//           console.log(res);
+//           localStorage.removeItem('idenchere');
+//       } catch (error) {
+//           console.log(error);
+//       }
+//   };
 
-  const addScheduledbid = async (e) => {
-      e.preventDefault();
-      try {
-          const formData = new FormData();
-          Object.keys(data).forEach(key => {
-              formData.append(key, data[key]);
-          });
+//   const addScheduledbid = async (e) => {
+//       e.preventDefault();
+//       try {
+//           const formData = new FormData();
+//           Object.keys(data).forEach(key => {
+//               formData.append(key, data[key]);
+//           });
 
-          // Add IdEnchere and publicationDate to FormData
-          formData.append('IdEnchere', localStorage.getItem('idenchere'));
-          formData.append('publicationDate', dateScheduled);
+//           // Add IdEnchere and publicationDate to FormData
+//           formData.append('IdEnchere', localStorage.getItem('idenchere'));
+//           formData.append('publicationDate', dateScheduled);
 
-          // Send the request with FormData
-          const res = await axios.post(
-              "http://192.168.0.112:8081/api/bid/scheduleBidPublication",
-              formData,
-              {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                      'Content-Type': 'multipart/form-data',
-                  },
-              }
-          );
+//           // Send the request with FormData
+//           const res = await axios.post(
+//               "http://192.168.0.101:8081/api/bid/scheduleBidPublication",
+//               formData,
+//               {
+//                   headers: {
+//                       Authorization: `Bearer ${token}`,
+//                       'Content-Type': 'multipart/form-data',
+//                   },
+//               }
+//           );
 
-          console.log(res.data);
-      } catch (error) {
-          console.error("Error scheduling bid:", error);
-      }
-  };
+//           console.log(res.data);
+//       } catch (error) {
+//           console.error("Error scheduling bid:", error);
+//       }
+//   };
 
-  const handleCritereChange = (index, field, value, language) => {
-      if (language === 'ar') {
-          const newCritereInputsAr = [...critereInputsAr];
-          newCritereInputsAr[index][field] = value;
-          setCritereInputsAr(newCritereInputsAr);
-      } else if (language === 'en') {
-          const newCritereInputsEn = [...critereInputsEn];
-          newCritereInputsEn[index][field] = value;
-          setCritereInputsEn(newCritereInputsEn);
-      } else {
-          const newCritereInputs = [...critereInputs];
-          newCritereInputs[index][field] = value;
-          setCritereInputs(newCritereInputs);
-      }
-  };
+//   const handleCritereChange = (index, field, value, language) => {
+//       if (language === 'ar') {
+//           const newCritereInputsAr = [...critereInputsAr];
+//           newCritereInputsAr[index][field] = value;
+//           setCritereInputsAr(newCritereInputsAr);
+//       } else if (language === 'en') {
+//           const newCritereInputsEn = [...critereInputsEn];
+//           newCritereInputsEn[index][field] = value;
+//           setCritereInputsEn(newCritereInputsEn);
+//       } else {
+//           const newCritereInputs = [...critereInputs];
+//           newCritereInputs[index][field] = value;
+//           setCritereInputs(newCritereInputs);
+//       }
+//   };
 
-  const addCritereInput = (language) => {
-      if (language === 'ar') {
-          setCritereInputsAr([...critereInputsAr, { label: "", value: "" }]);
-      } else if (language === 'en') {
-          setCritereInputsEn([...critereInputsEn, { label: "", value: "" }]);
-      } else {
-          setCritereInputs([...critereInputs, { label: "", value: "" }]);
-      }
-  };
+//   const addCritereInput = (language) => {
+//       if (language === 'ar') {
+//           setCritereInputsAr([...critereInputsAr, { label: "", value: "" }]);
+//       } else if (language === 'en') {
+//           setCritereInputsEn([...critereInputsEn, { label: "", value: "" }]);
+//       } else {
+//           setCritereInputs([...critereInputs, { label: "", value: "" }]);
+//       }
+//   };
 
   // State for valeurMajoration
-  const [valeurMajoration, setValeurMajoration] = useState([]);
+  const [valeurMajoration, setValeurMajoration] = useState(props.selectedItem.valeurMajoration);
   const [newValue, setNewValue] = useState('');
 
   const handleAddValue = () => {
@@ -282,6 +327,15 @@ function EnchèreEdit(props) {
       setValeurMajoration(valeurMajoration.filter((_, i) => i !== index));
   };
 
+
+    const demandeEnchereEdit = async()=>{
+        try {
+            const res = await axios.put(`http://192.168.0.101:8081/api/demandes/createModificationEnchereRequest` , {});
+            console.log(res.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
   return (
       <>
           {steps === 0 && (
@@ -374,10 +428,10 @@ function EnchèreEdit(props) {
                                                               <label>{t("Produit")}</label>
                                                               <div className="form-group">
                                                                   <input
-                                                                      onChange={e => setData({ ...data, libProduct: e.target.value })}
-                                                                      value={data.libProduct}
+                                                                      onChange={e => setData({ ...data, nomProduit: e.target.value })}
+                                                                      value={data.nomProduit}
                                                                       type="text" 
-                                                                      id="libProduct" 
+                                                                      id="nomProduit" 
                                                                       className="form-control" 
                                                                       placeholder={t("Produits")} 
                                                                       required 
@@ -487,12 +541,12 @@ function EnchèreEdit(props) {
                                                           </div>
                                                           <div className="col-12">
                                                               <div className="form-group">
-                                                                  <label htmlFor="libProduitAr">{t("Produit Arabe")}</label>
+                                                                  <label htmlFor="nomProduitAr">{t("Produit Arabe")}</label>
                                                                   <input
-                                                                      onChange={e => setData({ ...data, libProduitAr: e.target.value })}
-                                                                      value={data.libProduitAr}
+                                                                      onChange={e => setData({ ...data, nomProduitAr: e.target.value })}
+                                                                      value={data.nomProduitAr}
                                                                       type="text"
-                                                                      id="libProduitAr"
+                                                                      id="nomProduitAr"
                                                                       className="form-control"
                                                                       placeholder={t("Produit Arabe")}
                                                                   />
@@ -500,11 +554,11 @@ function EnchèreEdit(props) {
                                                           </div>
                                                           <div className="col-12">
                                                               <div className="form-group">
-                                                                  <label htmlFor="libProduitEn">{t("Produit Anglais")}</label>
+                                                                  <label htmlFor="nomProduitEn">{t("Produit Anglais")}</label>
                                                                   <input
-                                                                      onChange={e => setData({ ...data, libProduitEn: e.target.value })}
-                                                                      value={data.libProduitEn}                                                                      type="text"
-                                                                      id="libProduitEn"
+                                                                      onChange={e => setData({ ...data, nomProduitEn: e.target.value })}
+                                                                      value={data.nomProduitEn}                                                                      type="text"
+                                                                      id="nomProduitEn"
                                                                       className="form-control"
                                                                       placeholder={t("Produit Anglais")}
                                                                   />
@@ -512,7 +566,7 @@ function EnchèreEdit(props) {
                                                           </div>
                                                           
                                                           {/* Inputs for Main Criteria */}
-                                                          <div className="col-12">
+                                                          {/* <div className="col-12">
                                                               <h5>{t("Critères")}</h5>
                                                               {critereInputs.map((critere, index) => (
                                                                   <div key={index} className="form-group">
@@ -536,10 +590,10 @@ function EnchèreEdit(props) {
                                                               <button type="button" className="btn btn-secondary" onClick={() => addCritereInput('fr')}>
                                                                   {t("Ajouter un critère")}
                                                               </button>
-                                                          </div>
+                                                          </div> */}
 
                                                           {/* Inputs for Arabic Criteria */}
-                                                          <div className="col-12">
+                                                          {/* <div className="col-12">
                                                               <h5>{t("Critères Arabe")}</h5>
                                                               {critereInputsAr.map((critere, index) => (
                                                                   <div key={index} className="form-group">
@@ -562,10 +616,10 @@ function EnchèreEdit(props) {
                                                               <button type="button" className="btn btn-secondary" onClick={() => addCritereInput('ar')}>
                                                                   {t("Ajouter un critère en Arabe")}
                                                               </button>
-                                                          </div>
+                                                          </div> */}
 
                                                           {/* Inputs for English Criteria */}
-                                                          <div className="col-12">
+                                                          {/* <div className="col-12">
                                                               <h5>{t("Critères Anglais")}</h5>
                                                               {critereInputsEn.map((critere, index) => (
                                                                   <div key={index} className="form-group">
@@ -588,7 +642,7 @@ function EnchèreEdit(props) {
                                                               <button type="button" className="btn btn-secondary" onClick={() => addCritereInput('en')}>
                                                                   {t("Ajouter un critère en Anglais")}
                                                               </button>
-                                                          </div>
+                                                          </div> */}
 
                                                           <br />
                                                           <div className="col-12 d-flex justify-content-end">
@@ -690,19 +744,50 @@ function EnchèreEdit(props) {
                                                                   </div>
                                                               </div>
                                                               <div className="col-12">
-                                                                  <div className="form-group">
-                                                                      <label htmlFor="contract">{t("Contrat")}</label>
-                                                                      <input
-                                                                          ref={fileInputRef}
-                                                                          onChange={handleFileChange}
-                                                                          type="file"
-                                                                          id="contract"
-                                                                          className="form-control"
-                                                                          placeholder={t("Ecrire Ici")}
-                                                                          required
-                                                                      />
-                                                                  </div>
-                                                              </div>
+        <div className="form-group">
+          <label htmlFor="contractEnchere">
+            {t("Contrat")}
+          </label>
+          <input
+            onChange={handleFileChange}
+            type="file"
+            id="contractEnchere" // Unique id for each input
+            className="form-control"
+            placeholder={t("Ecrire Ici")}
+            required
+          />
+        </div>
+      </div>
+      <div className="col-12">
+        <div className="form-group">
+          <label htmlFor="contractEnchereAr">
+            {t("Contrat (Arabe)")}
+          </label>
+          <input
+            onChange={handleFileChange}
+            type="file"
+            id="contractEnchereAr" // Unique id for Arabic contract
+            className="form-control"
+            placeholder={t("Ecrire Ici")}
+            required
+          />
+        </div>
+      </div>
+      <div className="col-12">
+        <div className="form-group">
+          <label htmlFor="contractEnchereEn">
+            {t("Contrat (Anglais)")} 
+          </label>
+          <input
+            onChange={handleFileChange}
+            type="file"
+            id="contractEnchereEn" // Unique id for English contract
+            className="form-control"
+            placeholder={t("Ecrire Ici")}
+            required
+          />
+        </div>
+      </div>
                                                               <div className='col-12'>
                                                                   <label htmlFor="valeur-majoration">{t("Valeur de majoration")}</label><br />
                                                                   <input
@@ -748,7 +833,7 @@ function EnchèreEdit(props) {
                                                                           />
                                                                       </div>
                                                                   )}
-                                                                  {showFac && (
+                                                                  {showEmail2 && (
                                                                       <fieldset
                                                                           style={{ padding: "0px", margin: "0px" }}
                                                                           id="fac"
@@ -810,7 +895,7 @@ function EnchèreEdit(props) {
                                                       </div>
                                                   </form>
                                               </div>
-                                              <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                                              {/* <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                                                   <Modal.Header closeButton>
                                                       <Modal.Title>{t("Planifier")}</Modal.Title>
                                                   </Modal.Header>
@@ -826,18 +911,18 @@ function EnchèreEdit(props) {
                                                           </Button>
                                                       </form>
                                                   </Modal.Body>
-                                              </Modal>
+                                              </Modal> */}
                                               <br />
                                               <div className="modal-footer">
-                                                  <button
+                                                  {/* <button
                                                       type="button"
                                                       className="btn btn-primary ms-1"
                                                       onClick={() => setShowModal(true)}
                                                   >
                                                       <span className="d-none d-sm-block">{t("Planifier")}</span>
-                                                  </button>
+                                                  </button> */}
                                                   <button
-                                                      onClick={addBidConfig}
+                                                      onClick={()=>updateBid(props.selectedItem.id)}
                                                       type="button"
                                                       className="btn btn-primary ms-1"
                                                   >

@@ -189,6 +189,7 @@ const handleFileChange = (e) => {
         // Add IdEnchere to FormData
         formData.append('IdEnchere', localStorage.getItem('idenchere'));
         const valeurMajorationArray = String(valeurMajoration).split(',').map(Number);
+        console.log(valeurMajorationArray)
         valeurMajorationArray.forEach(value => {
             formData.append('valeurMajoration', value);
         });
