@@ -4,7 +4,10 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+
+
+
 function AdsList() {
   const token = Cookies.get('token')
   const { t, i18n } = useTranslation();
@@ -37,7 +40,7 @@ function AdsList() {
   setShowImageModal(true)
   setselectedItem(item)
  }
- 
+
   const handleDelete = (id) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),

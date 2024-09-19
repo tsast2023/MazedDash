@@ -3,11 +3,11 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
-import Cookies from 'js-cookie'
-import '../css/Download.css'
+import Cookies from "js-cookie";
+import "../css/Download.css";
 // Modal component
-function Modal({ t  , id , traiterDemande}) {
-  const [cause , setCause] = useState();
+function Modal({ t, id, traiterDemande }) {
+  const [cause, setCause] = useState();
   return (
     <div
       className="modal fade text-left"
@@ -36,7 +36,7 @@ function Modal({ t  , id , traiterDemande}) {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 rows="3"
-                onChange={e=>setCause(e.target.value)}
+                onChange={(e) => setCause(e.target.value)}
               ></textarea>
             </div>
           </div>
@@ -48,8 +48,8 @@ function Modal({ t  , id , traiterDemande}) {
             <button
               type="button"
               className="btn btn-primary ms-1"
-              
-            onClick={()=>traiterDemande(id , "REFUSER" ,cause )}>
+              onClick={() => traiterDemande(id, "REFUSER", cause)}
+            >
               <i className="bx bx-check d-block d-sm-none"></i>
               <span className="d-none d-sm-block">{t("Envoyer")}</span>
             </button>
@@ -62,20 +62,23 @@ function Modal({ t  , id , traiterDemande}) {
 
 // TableRow component
 function TableRow({ userData, onAccept }) {
-  const token = Cookies.get('token')
+  const token = Cookies.get("token");
   const { t, i18n } = useTranslation();
   const downloadFile = async (fileId, token) => {
     try {
-      const res = await axios.get(`http://192.168.0.112:8081/api/demandeTransfert/file/${fileId}`, {
-        responseType: 'blob', // This is important for downloading binary data
-        headers: { Authorization: `Bearer ${token}` } // Assuming you need authorization
-      });
-  
+      const res = await axios.get(
+        `http://192.168.0.112:8081/api/demandeTransfert/file/${fileId}`,
+        {
+          responseType: "blob",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
       // Create a URL for the file blob and trigger a download
       const url = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', `file_${fileId}.png`); // Replace 'ext' with the appropriate file extension if known
+      link.setAttribute("download", `file_${fileId}.png`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -87,17 +90,17 @@ function TableRow({ userData, onAccept }) {
   const traiterDemande = async (id, status, cause) => {
     try {
       console.log(id, status, cause);
-      
+
       const res = await axios.post(
-        `http://192.168.0.112:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`, 
+        `http://192.168.0.112:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
         {}, // Empty body
         {
-          headers: { 
-            Authorization: `Bearer ${token}`
-          }
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      
+
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -116,66 +119,101 @@ function TableRow({ userData, onAccept }) {
     }).then((result) => {
       if (result.isConfirmed) {
         onAccept();
-        Swal.fire({   title: "Accepter",
+        Swal.fire({
+          title: "Accepter",
           text: "Votre élément est Accepter :)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
-        });       } else {
-        Swal.fire({   title: "Annulé",
+        });
+      } else {
+        Swal.fire({
+          title: "Annulé",
           text: "Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e",
-        });       }
+        });
+      }
     });
   };
 
   return (
     <tr>
       <td>
-      <div class="custom-button" >
-  <div class="custom-button-wrapper">
-    <a  class="custom-text">Download</a>
-    <a onClick={() => downloadFile(userData.fileId, token)} class="custom-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path>
-      </svg>
-    </a>
-  </div>
-</div>
+        <div class="custom-button">
+          <div class="custom-button-wrapper">
+            <a class="custom-text">Download</a>
+            <a
+              onClick={() => downloadFile(userData.fileId, token)}
+              class="custom-icon"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                width="2em"
+                height="2em"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
       </td>
       <td>{userData.montant}Dt</td>
       <td>{userData.acheteur.pseudo}</td>
-      
+
       <td>{userData.createdAt?.split("T")[0]}</td>
       <td>{userData.typeRecharge}</td>
       <td>
-        <span className={userData.statusDemande==="EN_ATTENTE"?'badge bg-info':userData.statusDemande==="REFUSER"?"badge bg-danger":"badge bg-success"}>{userData.statusDemande}</span>
+        <span
+          className={
+            userData.statusDemande === "EN_ATTENTE"
+              ? "badge bg-info"
+              : userData.statusDemande === "REFUSER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {userData.statusDemande}
+        </span>
       </td>
-      {userData && userData.statusDemande==="EN_ATTENTE"?(
+      {userData && userData.statusDemande === "EN_ATTENTE" ? (
         <>
-        <td>
-        <i className="fa-solid fa-circle-check text-success" onClick={()=>traiterDemande(userData.id , "APPROUVER")}></i>
-      </td>
-      <td>
-      
-        <section id="basic-modals">
-          <button
-            type="button"
-            className="btn btn-outline block"
-            data-bs-toggle="modal"
-            data-bs-target="#default"
-          >
-            <i className="fa-solid fa-circle-xmark text-danger"></i>
-          </button>
-          <Modal t={t} id ={userData.id} traiterDemande={traiterDemande} />
-        </section>
-      </td>
-      </>
-      ):(<>
-      <td>-</td>
-      <td>-</td>
-      </>)}
-      
+          <td>
+            <i
+              className="fa-solid fa-circle-check text-success"
+              onClick={() => traiterDemande(userData.id, "APPROUVER")}
+            ></i>
+          </td>
+          <td>
+            <section id="basic-modals">
+              <button
+                type="button"
+                className="btn btn-outline block"
+                data-bs-toggle="modal"
+                data-bs-target="#default"
+              >
+                <i className="fa-solid fa-circle-xmark text-danger"></i>
+              </button>
+              <Modal t={t} id={userData.id} traiterDemande={traiterDemande} />
+            </section>
+          </td>
+        </>
+      ) : (
+        <>
+          <td>-</td>
+          <td>-</td>
+        </>
+      )}
     </tr>
   );
 }
@@ -191,38 +229,34 @@ function ResponsiveTable({ data, headers, isMobile }) {
 
   return (
     <div className="table-responsive datatable-minimal">
-                    <div className="row ">
-                <div className="col-6">
-                  <div className="form-group">
-                    <label htmlFor="recherche">
-                      <h6>{t("Recherche")}</h6>
-                    </label>
-                    <input id="recherche" className="form-control" />
-                  </div>
-                </div>
-                <div className="col-6 form-group">
-                  <h6>{t("Catégories")}</h6>
-                  <select className="choices form-select">
-                    <option value="square">Square</option>
-                    <option value="rectangle">Rectangle</option>
-                    <option value="rombo">Rombo</option>
-                    <option value="romboid">Romboid</option>
-                    <option value="trapeze">Trapeze</option>
-                    <option value="traible">Triangle</option>
-                    <option value="polygon">Polygon</option>
-                  </select>
-                </div>
-              </div>
+      <div className="row ">
+        <div className="col-6">
+          <div className="form-group">
+            <label htmlFor="recherche">
+              <h6>{t("Recherche")}</h6>
+            </label>
+            <input id="recherche" className="form-control" />
+          </div>
+        </div>
+        <div className="col-6 form-group">
+          <h6>{t("Catégories")}</h6>
+          <select className="choices form-select">
+            <option value="square">Square</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="rombo">Rombo</option>
+            <option value="romboid">Romboid</option>
+            <option value="trapeze">Trapeze</option>
+            <option value="traible">Triangle</option>
+            <option value="polygon">Polygon</option>
+          </select>
+        </div>
+      </div>
       {isMobile ? (
         <table className="table" id="table2">
           <tbody>
             {data.map((item, index) => (
               <React.Fragment key={index}>
-                <TableRow
-                  userData={item}
-                  
-                  onAccept={handleAccept}
-                />
+                <TableRow userData={item} onAccept={handleAccept} />
                 <tr>
                   <td colSpan="2">
                     <hr />
@@ -262,7 +296,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
 // Transfer component
 function Transfer() {
   const state = useContext(GlobalState);
-  const demandesTransfert = state.demandesT || []
+  const demandesTransfert = state.demandesT || [];
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 

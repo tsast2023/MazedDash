@@ -6,6 +6,11 @@ export function Echeance() {
 
   const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    date: '',
+    amount: ''
+  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -20,6 +25,27 @@ export function Echeance() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    // This ensures that the modal is visible when the button is clicked.
+    const modal = new window.bootstrap.Modal(document.getElementById("editModal"));
+    modal.show();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Updated data:", formData);
+    // Here you can handle form submission, update the state or make an API call
+    // Hide the modal after submission
+    const modal = window.bootstrap.Modal.getInstance(document.getElementById("editModal"));
+    modal.hide();
+  };
 
   return (
     <div className="content-container">
@@ -133,7 +159,7 @@ export function Echeance() {
                             <td>Lorem Lorem</td>
                             <td>
                               <button className="btn">
-                                <i className="fa-solid fa-pen-to-square"></i>
+                                <i className="fa-solid fa-pen-to-square" onClick={handleModalOpen}></i>
                               </button>
                             </td>
                           </tr>
@@ -146,7 +172,50 @@ export function Echeance() {
             </div>
           </div>
         </section>
+        <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="editModalLabel">{t("Modifier Echéance")}</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label className="form-label">{t("Date de paiement")}</label>
+                    <input
+                      type="datetime-local"
+                      name="datetime"
+                      value={formData.datetime}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">{t("Montant à payer")}</label>
+                    <input
+                      type="number"
+                      name="amount"
+                      value={formData.amount}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="modal-footer">
+                    <button type="submit" className="btn btn-primary">
+                      {t("Enregistrer")}
+                    </button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                      {t("Fermer")}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
