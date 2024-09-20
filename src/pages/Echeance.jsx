@@ -66,8 +66,8 @@ export function Echeance() {
                   <h2 className="new-price">{t("Liste echéance")}</h2>
                 </div>
                 <div className="card-content">
-                  <div className="table-responsive">
-                    <div className="row ">
+                <div className="card-body">
+                  <div className="row ">
                       <div className="col-6">
                         <div className="form-group">
                           <label htmlFor="recherche">
@@ -85,6 +85,8 @@ export function Echeance() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div className="table-responsive">
                     {isMobile ? (
                       <table className="table">
                         <tbody>
