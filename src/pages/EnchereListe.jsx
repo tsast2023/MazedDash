@@ -27,7 +27,7 @@ function EnchereListe() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1212);
+      setIsMobile(window.innerWidth < 1400);
     };
 
     window.addEventListener("resize", handleResize);
@@ -58,7 +58,7 @@ function EnchereListe() {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://192.168.0.112:8081/api/bid/${id}`,
+        `http://192.168.0.102:8081/api/bid/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -226,7 +226,7 @@ function EnchereListe() {
   const AnnulerBid = async (id) => {
     try {
       const res = await axios.post(
-        `http://192.168.0.112:8081/api/bid/annuler/${id}`,
+        `http://192.168.0.102:8081/api/bid/annuler/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -272,7 +272,7 @@ function EnchereListe() {
                       </div>
                     </div>
                     <div className="col-6 form-group">
-                      <h6>{t("Catégories")}</h6>
+                      <h6>{t("Ville")}</h6>
                       <select className="choices form-select">
                         <option value="square">Square</option>
                         <option value="rectangle">Rectangle</option>
@@ -284,7 +284,7 @@ function EnchereListe() {
                       </select>
                     </div>
                     <div className="col-6 form-group">
-                      <h6>{t("Catégories")}</h6>
+                      <h6>{t("Statut")}</h6>
                       <select className="choices form-select">
                         <option value="square">Square</option>
                         <option value="rectangle">Rectangle</option>

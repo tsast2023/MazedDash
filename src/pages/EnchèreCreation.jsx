@@ -33,7 +33,6 @@ function EnchèreCreation() {
     descriptionEn: "",
     libProduitAr: "",
     libProduitEn: "",
- 
   });
 
   const [dataConfig, setDataConfig] = useState({
@@ -50,8 +49,8 @@ function EnchèreCreation() {
     nombreMois: 0,
     extensionTime: 0,
     contractEnchere: null,
-    contractEnchereAr:null,
-    contractEnchereEn:null,
+    contractEnchereAr: null,
+    contractEnchereEn: null,
     autoFinancement: 0,
   });
 
@@ -87,23 +86,22 @@ function EnchèreCreation() {
 
   const handleGalerieChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to Array
-  
+
     if (files.length === 0) {
       console.error("No files selected");
       return; // Exit early if no files
     }
-  
+
     setDataConfig((prevData) => ({
       ...prevData,
       galerie: files, // Store the files array directly in the state
     }));
-  
+
     console.log("Selected files:", files); // Log the selected files for debugging
   };
-  
 
-const handleFileChange = (e) => {
-    const { id, files } = e.target;  // Destructure id and files
+  const handleFileChange = (e) => {
+    const { id, files } = e.target; // Destructure id and files
     const file = files[0];
 
     // Update state based on input id
@@ -111,7 +109,7 @@ const handleFileChange = (e) => {
       ...prevState,
       [id]: file, // Use the id of the input as the key in state
     }));
-    console.log(dataConfig)
+    console.log(dataConfig);
   };
 
   const handleCheckbox2Change = () => {
@@ -130,7 +128,6 @@ const handleFileChange = (e) => {
   }, [categories]);
 
   const addBid = async () => {
-   
     try {
       const bidData = {
         ...data,
@@ -151,22 +148,20 @@ const handleFileChange = (e) => {
             acc[input.label] = input.value;
           }
           return acc;
-        }, {})
-       
+        }, {}),
       };
-      
-      console.log(bidData)
 
-
-
-
-
+      console.log(bidData);
 
       // Make the request
-      const res = await axios.post("http://192.168.0.101:8081/api/bid/createBrouillon", bidData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
+      const res = await axios.post(
+        "http://192.168.0.102:8081/api/bid/createBrouillon",
+        bidData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
       console.log(res.data);
       localStorage.setItem("idenchere", res.data.id);
       setSteps(steps + 1);
@@ -174,85 +169,85 @@ const handleFileChange = (e) => {
       console.error("Error adding bid:", error);
     }
   };
-  
 
   const addBidConfig = async () => {
     console.log(dataConfig);
     console.log(valeurMajoration);
-    console.log(localStorage.getItem('idenchere'));
+    console.log(localStorage.getItem("idenchere"));
     try {
-        const formData = new FormData();
-        Object.keys(dataConfig).forEach(key => {
-            formData.append(key, dataConfig[key]);
-        });
+      const formData = new FormData();
+      Object.keys(dataConfig).forEach((key) => {
+        formData.append(key, dataConfig[key]);
+      });
 
-        // Add IdEnchere to FormData
-        formData.append('IdEnchere', localStorage.getItem('idenchere'));
-        const valeurMajorationArray = String(valeurMajoration).split(',').map(Number);
-        console.log(valeurMajorationArray)
-        valeurMajorationArray.forEach(value => {
-            formData.append('valeurMajoration', value);
-        });
+      // Add IdEnchere to FormData
+      formData.append("IdEnchere", localStorage.getItem("idenchere"));
+      const valeurMajorationArray = String(valeurMajoration)
+        .split(",")
+        .map(Number);
+      console.log(valeurMajorationArray);
+      valeurMajorationArray.forEach((value) => {
+        formData.append("valeurMajoration", value);
+      });
 
-        // Add ContractEnchere file to FormData
-        if (dataConfig.contractEnchere) {
-            formData.append('ContractEnchere', dataConfig.contractEnchere);
-        } else {
-            console.error('ContractEnchere file is missing.');
-            return;
+      // Add ContractEnchere file to FormData
+      if (dataConfig.contractEnchere) {
+        formData.append("ContractEnchere", dataConfig.contractEnchere);
+      } else {
+        console.error("ContractEnchere file is missing.");
+        return;
+      }
+
+      // Add ContractEnchereAr file to FormData
+      if (dataConfig.contractEnchereAr) {
+        formData.append("ContractEnchereAr", dataConfig.contractEnchereAr);
+      } else {
+        console.error("ContractEnchereAr file is missing.");
+        return;
+      }
+
+      // Add ContractEnchereEn file to FormData
+      if (dataConfig.contractEnchereEn) {
+        formData.append("ContractEnchereEn", dataConfig.contractEnchereEn);
+      } else {
+        console.error("ContractEnchereEn file is missing.");
+        return;
+      }
+
+      // Add ContractEnchereAr file to FormData
+      if (dataConfig.galerie) {
+        console.log("azaza", dataConfig.galerie);
+        for (const file of dataConfig.galerie) {
+          formData.append("galerie", file);
         }
+      } else {
+        console.error("galerie file is missing.");
+        return;
+      }
 
-        // Add ContractEnchereAr file to FormData
-        if (dataConfig.contractEnchereAr) {
-            formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
-        } else {
-            console.error('ContractEnchereAr file is missing.');
-            return;
+      // Console log FormData contents
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      // Send the request with FormData
+      const res = await axios.post(
+        "http://192.168.0.102:8081/api/bid/publishBidNow",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
+      );
 
-        // Add ContractEnchereEn file to FormData
-        if (dataConfig.contractEnchereEn) {
-            formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
-        } else {
-            console.error('ContractEnchereEn file is missing.');
-            return;
-        }
-
-        // Add ContractEnchereAr file to FormData
-        if (dataConfig.galerie) {
-            console.log("azaza", dataConfig.galerie);
-            for (const file of dataConfig.galerie) {
-              formData.append('galerie', file);
-            }
-        } else {
-            console.error('galerie file is missing.');
-            return;
-        }
-
-        // Console log FormData contents
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-        // Send the request with FormData
-        const res = await axios.post(
-            "http://192.168.0.101:8081/api/bid/publishBidNow",
-            formData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            }
-        );
-
-        console.log(res.data);
-        localStorage.removeItem('idenchere');
+      console.log(res.data);
+      localStorage.removeItem("idenchere");
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-};
-  
+  };
 
   const addScheduledbid = async (e) => {
     e.preventDefault();
@@ -265,32 +260,32 @@ const handleFileChange = (e) => {
       // Add IdEnchere and publicationDate to FormData
       formData.append("IdEnchere", localStorage.getItem("idenchere"));
       formData.append("publicationDate", dateScheduled);
-      formData.append('valeurMajoration' , valeurMajoration)
-       // Add ContractEnchere file to FormData
-       if (dataConfig.contractEnchere) {
-        formData.append('ContractEnchere', dataConfig.contractEnchere);
+      formData.append("valeurMajoration", valeurMajoration);
+      // Add ContractEnchere file to FormData
+      if (dataConfig.contractEnchere) {
+        formData.append("ContractEnchere", dataConfig.contractEnchere);
       } else {
-        console.error('ContractEnchere file is missing.');
+        console.error("ContractEnchere file is missing.");
         return;
       }
 
       // Add ContractEnchereAr file to FormData
       if (dataConfig.contractEnchereAr) {
-        formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
+        formData.append("ContractEnchereAr", dataConfig.contractEnchereAr);
       } else {
-        console.error('ContractEnchereAr file is missing.');
+        console.error("ContractEnchereAr file is missing.");
         return;
       }
 
       // Add ContractEnchereEn file to FormData
       if (dataConfig.contractEnchereEn) {
-        formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
+        formData.append("ContractEnchereEn", dataConfig.contractEnchereEn);
       } else {
-        console.error('ContractEnchereEn file is missing.');
+        console.error("ContractEnchereEn file is missing.");
         return;
       }
       for (const file of dataConfig.galerie) {
-        formData.append('galerie', file);
+        formData.append("galerie", file);
       }
       // Send the request with FormData
       const res = await axios.post(
@@ -311,7 +306,7 @@ const handleFileChange = (e) => {
   };
 
   const handleCritereChange = (index, field, value, language) => {
-    console.log(critereInputs)
+    console.log(critereInputs);
     if (language === "ar") {
       const newCritereInputsAr = [...critereInputsAr];
       newCritereInputsAr[index][field] = value;
@@ -501,7 +496,7 @@ const handleFileChange = (e) => {
                                   />
                                 </div>
                               </div>
-                             
+
                               <div className="col-12">
                                 <label>{t("Ville")}</label>
                                 <fieldset className="form-group">
@@ -892,94 +887,104 @@ const handleFileChange = (e) => {
                                   </div>
                                 </div>
                                 <div className="col-12">
-                                <label>{t("Galerie")}</label>
-                                <div className="form-group">
-                                  <input
-                                    onChange={handleGalerieChange}
-                                    type="file"
-                                    multiple
-                                    id="galerie"
-                                    className="form-control"
-                                    required
-                                  />
+                                  <label>{t("Galerie")}</label>
+                                  <div className="form-group">
+                                    <input
+                                      onChange={handleGalerieChange}
+                                      type="file"
+                                      multiple
+                                      id="galerie"
+                                      className="form-control"
+                                      required
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                                 <div className="col-12">
-        <div className="form-group">
-          <label htmlFor="contractEnchere">
-            {t("Contrat")}
-          </label>
-          <input
-            onChange={handleFileChange}
-            type="file"
-            id="contractEnchere" // Unique id for each input
-            className="form-control"
-            required
-          />
-        </div>
-      </div>
-      <div className="col-12">
-        <div className="form-group">
-          <label htmlFor="contractEnchereAr">
-            {t("Contrat (Arabe)")}
-          </label>
-          <input
-            onChange={handleFileChange}
-            type="file"
-            id="contractEnchereAr" // Unique id for Arabic contract
-            className="form-control"
-            required
-          />
-        </div>
-      </div>
-      <div className="col-12">
-        <div className="form-group">
-          <label htmlFor="contractEnchereEn">
-            {t("Contrat (Anglais)")}
-          </label>
-          <input
-            onChange={handleFileChange}
-            type="file"
-            id="contractEnchereEn" // Unique id for English contract
-            className="form-control"
-            required
-          />
-        </div>
-      </div>
                                 <div className="col-12">
-                                  <label htmlFor="valeur-majoration">
-                                    {t("Valeur de majoration")}
-                                  </label>
-                                  <br />
-                                  <input
-                                    type="number"
-                                    value={newValue}
-                                    onChange={handleInputChange}
-                                  />
-                                  <button
-                                    className="btn btn-primary ms-1"
-                                    type="button"
-                                    onClick={handleAddValue}
-                                  >
-                                    Add
-                                  </button>
-                                  {/* Display the list */}
-                                  <ul>
-                                    {valeurMajoration.map((value, index) => (
-                                      <li key={index}>
-                                        {value}
-                                        <button
-                                          className="btn btn-secondary ms-3"
-                                          type="button"
-                                          onClick={() =>
-                                            handleDeleteValue(index)
-                                          }
+                                  <div className="form-group">
+                                    <label htmlFor="contractEnchere">
+                                      {t("Contrat")}
+                                    </label>
+                                    <input
+                                      onChange={handleFileChange}
+                                      type="file"
+                                      id="contractEnchere" // Unique id for each input
+                                      className="form-control"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-12">
+                                  <div className="form-group">
+                                    <label htmlFor="contractEnchereAr">
+                                      {t("Contrat (Arabe)")}
+                                    </label>
+                                    <input
+                                      onChange={handleFileChange}
+                                      type="file"
+                                      id="contractEnchereAr" // Unique id for Arabic contract
+                                      className="form-control"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-12">
+                                  <div className="form-group">
+                                    <label htmlFor="contractEnchereEn">
+                                      {t("Contrat (Anglais)")}
+                                    </label>
+                                    <input
+                                      onChange={handleFileChange}
+                                      type="file"
+                                      id="contractEnchereEn" // Unique id for English contract
+                                      className="form-control"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-12">
+                                  <div className="form-group">
+                                    <label htmlFor="valeur-majoration">
+                                      {t("Valeur de majoration")}
+                                    </label>
+                                    <div className="input-group">
+                                      <input
+                                        type="number"
+                                        value={newValue}
+                                        onChange={handleInputChange}
+                                        className="form-control"
+                                        id="valeur-majoration"
+                                        required
+                                      />
+                                      <button
+                                        className="btn btn-primary ms-1"
+                                        type="button"
+                                        onClick={handleAddValue}
+                                      >
+                                        Add
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div className="form-group">
+                                    <ul className="list-group">
+                                      {valeurMajoration.map((value, index) => (
+                                        <li
+                                          key={index}
+                                          className="list-group-item d-flex justify-content-between align-items-center"
                                         >
-                                          X
-                                        </button>
-                                      </li>
-                                    ))}
-                                  </ul>
+                                          {value}
+                                          <button
+                                            className="btn btn-secondary ms-3"
+                                            type="button"
+                                            onClick={() =>
+                                              handleDeleteValue(index)
+                                            }
+                                          >
+                                            X
+                                          </button>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
                                 </div>
                                 <div className="row">
                                   <div className="col-12 checkbox">
@@ -1156,6 +1161,7 @@ const handleFileChange = (e) => {
                             </span>
                           </button>
                         </div>
+                        <br />
                       </div>
                     </div>
                   </div>

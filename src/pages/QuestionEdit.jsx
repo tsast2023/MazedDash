@@ -8,7 +8,7 @@ function QuestionEdit() {
   const { t, i18n } = useTranslation();
   const editQuestion = async(id)=>{
     try {
-      const res = await axios.put(`http://192.168.0.112:8081/api/questions/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.put(`http://192.168.0.102:8081/api/questions/${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
