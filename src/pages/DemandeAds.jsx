@@ -222,6 +222,10 @@ function DemandeAds() {
                     <td>{item.type}</td>
                     </tr>
                     <tr>
+                    <th>{t("Action")}</th>
+                    <td>{item.action}</td>
+                    </tr>
+                    <tr>
                       <td>{t("Voir")}</td>
                       <td>
                         <Button
@@ -270,6 +274,7 @@ function DemandeAds() {
                       <th>{t("Pseudo")}</th>
                       <th>{t("Numéro de téléphone")}</th>
                       <th>{t("Type")}</th>
+                      <th>{t("Action")}</th>
                       <th>{t("Voir")}</th>
                       <th>{t("Accepter")}</th>
                       <th>{t("Refuser")}</th>
@@ -285,7 +290,7 @@ function DemandeAds() {
                           <td>{item.user.pseudo}</td>
                           <td>{item.user.numTel}</td>
                           <td>{item.type}</td>
-                          
+                          <td>{item.action}</td>
                           <td>
                             <Button
                               className="btn"

@@ -181,99 +181,81 @@ function DetailEnchere(props) {
   return (
     <div className="content-container">
       <div id="main">
-        <section className="section">
-          <div className="card-wrap">
-            <div className="card">
-              <div className="product-detail">
-                <div className="product-images">
-                  <div className="main-image">
-                    <img src={mainImage} alt="Product" />
-                  </div>
-                  <div className="thumbnail-images">
-                    {props.selectedItem.galerie.map((image, index) => (
-                      <img
-                        key={image}
-                        src={image}
-                        alt={`Thumbnail ${index + 1}`}
-                        onClick={() => setMainImage(image)}
-                      />
-                    ))}
-                  </div>
+      <section className="product-section">
+  <div className="card-container">
+    <div className="product-card">
+      <div className="product-detail">
+        {/* Product Images */}
+        <div className="product-images">
+          <div className="main-image">
+            <img src={mainImage} alt="Product" className="main-product-img" />
+          </div>
+          <div className="thumbnail-images">
+            {props.selectedItem.galerie.map((image, index) => (
+              <img
+                key={image}
+                src={image}
+                alt={`Thumbnail ${index + 1}`}
+                onClick={() => setMainImage(image)}
+                className="thumbnail-img"
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Product Info */}
+        <div className="product-info">
+          <div className="product-price-info">
+            <div className="status-container">
+              {/* Dynamic Content Based on Status */}
+              {props.selectedItem.status === "En_Cours" ? (
+                <div className="status-content in-progress">
+                  <h2 className="status-label">{t("En cours")}</h2>
+                  <p className="price-text">
+                    {t("Prix Mazed online")} : {props.selectedItem.prixMazedOnline}DT
+                  </p>
+                  <p className="remaining-time">{t("Temps restant")}</p>
+                  <p className="majoration">
+                    {t("Majoration")} :{" "}
+                    {props.selectedItem.valeurMajoration.map(
+                      (item, i) => `${item}${i !== props.selectedItem.valeurMajoration.length - 1 ? "/" : ""}`
+                    )}{" "}
+                    DT
+                  </p>
                 </div>
-                <div className="product-info">
-                  <div className="product-price">
-                    <div className="col-md-12  mb-4">
-                      <div
-                        style={{
-                          margin: 0,
-                          backgroundColor: "white",
-                          justifyContent: "center",
-                          padding: 20,
-                        }}
-                        className="row form-group"
-                      >
-                        <h2 className="new-price">{t("Etat")} :</h2>
-                        {props.selectedItem.status === "En_Cours" ? (
-                          <div className="col-12">
-                            <p>{t("En cours")} : </p>
-                            <p>
-                              {t("Prix Mazed online")} :
-                              {props.selectedItem.prixMazedOnline}DT
-                            </p>
-                            <p>{t("Temps restant")}</p>
-                            <p>
-                              {t("Majoration")}:
-                              {props.selectedItem.valeurMajoration.map(
-                                (item) => item + "/"
-                              )}
-                              DT{" "}
-                            </p>
-                            {/* <p>{t("Prix lors de la majoration")}</p> */}
-                          </div>
-                        ) : props.selectedItem.status === "Ouverte" ? (
-                          <div className="col-12">
-                            <p>{t("Ouverte")}</p>
-                            <p>
-                              {t("Prix Mazed online final")}:
-                              {props.selectedItem.prixMazedOnline}DT
-                            </p>
-                            <p>
-                              {t("Date/Heure")}:{" "}
-                              {props.selectedItem.datedeclenchement}
-                            </p>
-                            <button
-                              type="button"
-                              className="btn btn-outline-secondary"
-                            >
-                              {t("Publier")}
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="col-12">
-                            <p>{t("Terminer")}</p>
-                            <p>
-                              {t("Prix Mazed online final")}:
-                              {props.selectedItem.prixMazedOnline}DT
-                            </p>
-                            <p>{t("Date/Heure")}</p>
-                            <p>{t("Nom et Prénom")}</p>
-                            <p>{t("Pseudo")}</p>
-                            <p>{t("Numéro du téléphone")}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+              ) : props.selectedItem.status === "Ouverte" ? (
+                <div className="status-content open">
+                  <h2 className="status-label">{t("Ouverte")}</h2>
+                  <p className="price-text">
+                    {t("Prix Mazed online final")} : {props.selectedItem.prixMazedOnline}DT
+                  </p>
+                  <p className="date-time">
+                    {t("Date/Heure")} : {props.selectedItem.datedeclenchement}
+                  </p>
+                  <button type="button" className="publish-btn">
+                    {t("Publier")}
+                  </button>
                 </div>
-              </div>
-              <br />
-              <br />
-              <div className="product-price">
-                <br />
-              </div>
+              ) : (
+                <div className="status-content closed">
+                  <p className="status-label">{t("Terminer")}</p>
+                  <p className="price-text">
+                    {t("Prix Mazed online final")} : {props.selectedItem.prixMazedOnline}DT
+                  </p>
+                  <p className="date-time">{t("Date/Heure")}</p>
+                  <p>{t("Nom et Prénom")}</p>
+                  <p>{t("Pseudo")}</p>
+                  <p>{t("Numéro du téléphone")}</p>
+                </div>
+              )}
             </div>
           </div>
-        </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
         <br />
         <br />
         <section className="section">

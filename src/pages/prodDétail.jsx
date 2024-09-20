@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../css/prod-detail.css";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
