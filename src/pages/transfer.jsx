@@ -233,21 +233,35 @@ function ResponsiveTable({ data, headers, isMobile }) {
         <div className="col-6">
           <div className="form-group">
             <label htmlFor="recherche">
-              <h6>{t("Recherche")}</h6>
+              <h6>{t("Numéro de téléphone")}</h6>
+            </label>
+            <input id="recherche" className="form-control" />
+          </div>
+        </div>
+        <div className="col-6">
+          <div className="form-group">
+            <label htmlFor="recherche">
+              <h6>{t("Pseudo")}</h6>
             </label>
             <input id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6 form-group">
-          <h6>{t("Catégories")}</h6>
+          <h6>{t("Statut")}</h6>
           <select className="choices form-select">
-            <option value="square">Square</option>
-            <option value="rectangle">Rectangle</option>
-            <option value="rombo">Rombo</option>
-            <option value="romboid">Romboid</option>
-            <option value="trapeze">Trapeze</option>
-            <option value="traible">Triangle</option>
-            <option value="polygon">Polygon</option>
+            <option value="" disabled selected></option>
+            <option value="square">{t("Approuver")}</option>
+            <option value="rectangle">{t("En attente")}</option>
+            <option value="rectangle">{t("Refuser")}</option>
+          </select>
+        </div>
+        <div className="col-6 form-group">
+          <h6>{t("Type de recharge")}</h6>
+          <select className="choices form-select">
+            <option value="" disabled selected></option>
+            <option value="square">{t("Versement")}</option>
+            <option value="rectangle">{t("Virement Bancaire")}</option>
+            <option value="rectangle">{t("Cheque")}</option>
           </select>
         </div>
       </div>

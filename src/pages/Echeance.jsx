@@ -3,13 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export function Echeance() {
-
   const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    date: '',
-    amount: ''
+    date: "",
+    amount: "",
   });
 
   useEffect(() => {
@@ -29,7 +28,9 @@ export function Echeance() {
   const handleModalOpen = () => {
     setIsModalOpen(true);
     // This ensures that the modal is visible when the button is clicked.
-    const modal = new window.bootstrap.Modal(document.getElementById("editModal"));
+    const modal = new window.bootstrap.Modal(
+      document.getElementById("editModal")
+    );
     modal.show();
   };
 
@@ -43,7 +44,9 @@ export function Echeance() {
     console.log("Updated data:", formData);
     // Here you can handle form submission, update the state or make an API call
     // Hide the modal after submission
-    const modal = window.bootstrap.Modal.getInstance(document.getElementById("editModal"));
+    const modal = window.bootstrap.Modal.getInstance(
+      document.getElementById("editModal")
+    );
     modal.hide();
   };
 
@@ -64,13 +67,36 @@ export function Echeance() {
                 </div>
                 <div className="card-content">
                   <div className="table-responsive">
+                    <div className="row ">
+                      <div className="col-6">
+                        <div className="form-group">
+                          <label htmlFor="recherche">
+                            <h6>{t("Numéro de téléphone")}</h6>
+                          </label>
+                          <input id="recherche" className="form-control" />
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <div className="form-group">
+                          <label htmlFor="recherche">
+                            <h6>{t("Pseudo")}</h6>
+                          </label>
+                          <input id="recherche" className="form-control" />
+                        </div>
+                      </div>
+                    </div>
                     {isMobile ? (
                       <table className="table">
                         <tbody>
                           <tr>
                             <td>{t("Photo de Profile")}</td>
                             <td>
-                              <img style={{borderRadius:"50px"}} className="imgtable" src="./Mazed.jpg" alt="img" />
+                              <img
+                                style={{ borderRadius: "50px" }}
+                                className="imgtable"
+                                src="./Mazed.jpg"
+                                alt="img"
+                              />
                             </td>
                           </tr>
                           <tr>
@@ -144,7 +170,12 @@ export function Echeance() {
                         <tbody>
                           <tr>
                             <td>
-                              <img style={{borderRadius:"50px"}} className="imgtable" src="./Mazed.jpg" alt="img" />
+                              <img
+                                style={{ borderRadius: "50px" }}
+                                className="imgtable"
+                                src="./Mazed.jpg"
+                                alt="img"
+                              />
                             </td>
                             <td>fdfdf</td>
                             <td>Lorem</td>
@@ -159,7 +190,10 @@ export function Echeance() {
                             <td>Lorem Lorem</td>
                             <td>
                               <button className="btn">
-                                <i className="fa-solid fa-pen-to-square" onClick={handleModalOpen}></i>
+                                <i
+                                  className="fa-solid fa-pen-to-square"
+                                  onClick={handleModalOpen}
+                                ></i>
                               </button>
                             </td>
                           </tr>
@@ -172,17 +206,32 @@ export function Echeance() {
             </div>
           </div>
         </section>
-        <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div
+          className="modal fade"
+          id="editModal"
+          tabIndex="-1"
+          aria-labelledby="editModalLabel"
+          aria-hidden="true"
+        >
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="editModalLabel">{t("Modifier Echéance")}</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 className="modal-title" id="editModalLabel">
+                  {t("Modifier Echéance")}
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
               <div className="modal-body">
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label className="form-label">{t("Date de paiement")}</label>
+                    <label className="form-label">
+                      {t("Date de paiement")}
+                    </label>
                     <input
                       type="datetime-local"
                       name="datetime"
@@ -205,7 +254,11 @@ export function Echeance() {
                     <button type="submit" className="btn btn-primary">
                       {t("Enregistrer")}
                     </button>
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
                       {t("Fermer")}
                     </button>
                   </div>
@@ -218,4 +271,3 @@ export function Echeance() {
     </div>
   );
 }
-

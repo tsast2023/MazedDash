@@ -452,10 +452,20 @@ const resources = {
       "Tataouine":"Tataouine",
       "Tozeur":"Tozeur",
       "Zaghouan":"Zagouan",
+      "Cachée": "Hidden",
+      "Nom Catégorie":"Category Name",
+      "Nom Produit":"Product Name",
+      "Annulée": "Cancelled",
+      "Approuver": "Accepted",
+      "Modification": "Modification",
+      "Création": "Creation",
     }
   },
   fr: {
     translation: {
+      "Création": "Création",
+      "Approuver": "Approuver",
+      "Cachée":"Cachée",
       "Action annulée": "Action annulée",
       "Recherche": "Recherche",
       "Mettre à jour la photo de profil": "Mettre à jour la photo de profil",
@@ -912,10 +922,20 @@ const resources = {
         "Tataouine":"Tataouine",
         "Tozeur":"Tozeur",
         "Zaghouan":"Zagouan",
+        "Nom Catégorie":"Nom Catégorie",
+        "Nom Produit":"Nom Produit",
+        "Annulée":"Annulée",
+        "Modification": "Modification",
     }
   },
   ar: {
     translation: {
+      "Création": "صنع",
+      "Modification": "تعديل",
+      "Approuver": "مقبول",
+      "Nom Catégorie":"اسم الفئة",
+      "Nom Produit": "اسم المنتج",
+      "Cachée": "مخفي",
       "Sousse":"سوسة",
       "Gafsa":"قفصة",
       "Tunis":"تونس",

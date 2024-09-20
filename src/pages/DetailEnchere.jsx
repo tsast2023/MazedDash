@@ -7,29 +7,32 @@ import Swal from "sweetalert2";
 import { Modal, Button, Form } from "react-bootstrap";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 function DetailEnchere(props) {
-  const token = Cookies.get('token')
+  const token = Cookies.get("token");
   const state = useContext(GlobalState);
-  const users = state.Users
-  const participants = [...props.selectedItem.participantNonSignéIds , ...props.selectedItem.participantSignéIds]
-  const filteredUsers = users.filter(user => participants.includes(user.id));
+  const users = state.Users;
+  const participants = [
+    ...props.selectedItem.participantNonSignéIds,
+    ...props.selectedItem.participantSignéIds,
+  ];
+  const filteredUsers = users.filter((user) => participants.includes(user.id));
   const [isMobile, setIsMobile] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedGan , setselectedGan] = useState();
-  const [selectedEnch , setselectedEnch] = useState();
+  const [selectedGan, setselectedGan] = useState();
+  const [selectedEnch, setselectedEnch] = useState();
   const [additionalTables, setAdditionalTables] = useState([]);
   const [newTableData, setNewTableData] = useState({
     datePayement: "",
     montantPayer: 0,
-    enchereId:props.selectedItem.id,
-    encherissementId:"",
-    typepaiement:"CASH"
+    enchereId: props.selectedItem.id,
+    encherissementId: "",
+    typepaiement: "CASH",
   });
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    console.log(participants , filteredUsers)
+    console.log(participants, filteredUsers);
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
     };
@@ -46,25 +49,26 @@ function DetailEnchere(props) {
   const deleteItem = () => {
     // Implement your delete logic here
   };
-  const funModal = (user , enchere , encherissmentId) =>{
+  const funModal = (user, enchere, encherissmentId) => {
     setselectedGan(user);
-    setShowModal(true)
-    setselectedEnch(enchere)
-    console.log(encherissmentId)
-    setNewTableData({...newTableData , encherissementId : encherissmentId })
-  }
+    setShowModal(true);
+    setselectedEnch(enchere);
+    console.log(encherissmentId);
+    setNewTableData({ ...newTableData, encherissementId: encherissmentId });
+  };
 
-    const approverUser = async(enchereId , userId) =>{
-      try {
-        const res = await axios.post(`http://192.168.0.102:8081/api/bid/approve/${enchereId}/${userId}`, {} , {headers:{Authorization: `Bearer ${token}`}})
-        console.log(res.data)
-      } catch (error) {
-        console.log(error)
-      }
+  const approverUser = async (enchereId, userId) => {
+    try {
+      const res = await axios.post(
+        `http://192.168.0.102:8081/api/bid/approve/${enchereId}/${userId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
     }
-
-
-    
+  };
 
   const handleAddTable = () => {
     setAdditionalTables([
@@ -159,18 +163,21 @@ function DetailEnchere(props) {
     };
   }, []);
 
-
   const [mainImage, setMainImage] = useState(props.selectedItem.galerie[0]);
-const addEcheance = async(e) =>{
-  console.log(newTableData)
-  e.preventDefault();
-  try {
-    const res = await axios.post(`http://192.168.0.102:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`, {} , {headers:{Authorization: `Bearer ${token}`}})
-    console.log(res.data)
-  } catch (error) {
-    console.log(error)
-  }
-}
+  const addEcheance = async (e) => {
+    console.log(newTableData);
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `http://192.168.0.102:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="content-container">
       <div id="main">
@@ -206,39 +213,54 @@ const addEcheance = async(e) =>{
                         className="row form-group"
                       >
                         <h2 className="new-price">{t("Etat")} :</h2>
-                        {props.selectedItem.status==="En_Cours" ?(
-                            <div className="col-12">
+                        {props.selectedItem.status === "En_Cours" ? (
+                          <div className="col-12">
                             <p>{t("En cours")} : </p>
-                            <p>{t("Prix Mazed online")} :{props.selectedItem.prixMazedOnline}DT</p>
+                            <p>
+                              {t("Prix Mazed online")} :
+                              {props.selectedItem.prixMazedOnline}DT
+                            </p>
                             <p>{t("Temps restant")}</p>
-                            <p>{t("Majoration")}:{props.selectedItem.valeurMajoration.map((item)=>item + "/")}DT </p>
+                            <p>
+                              {t("Majoration")}:
+                              {props.selectedItem.valeurMajoration.map(
+                                (item) => item + "/"
+                              )}
+                              DT{" "}
+                            </p>
                             {/* <p>{t("Prix lors de la majoration")}</p> */}
                           </div>
-                        ):props.selectedItem.status==="Ouverte" ?(
+                        ) : props.selectedItem.status === "Ouverte" ? (
                           <div className="col-12">
-                          <p>{t("Ouverte")}</p>
-                          <p>{t("Prix Mazed online final")}:{props.selectedItem.prixMazedOnline}DT</p>
-                          <p>{t("Date/Heure")}: {props.selectedItem.datedeclenchement}</p>
-                          <button
-                            type="button"
-                            className="btn btn-outline-secondary"
-                          >
-                            {t("Publier")}
-                          </button>
-                        </div>
-                        ):(
+                            <p>{t("Ouverte")}</p>
+                            <p>
+                              {t("Prix Mazed online final")}:
+                              {props.selectedItem.prixMazedOnline}DT
+                            </p>
+                            <p>
+                              {t("Date/Heure")}:{" "}
+                              {props.selectedItem.datedeclenchement}
+                            </p>
+                            <button
+                              type="button"
+                              className="btn btn-outline-secondary"
+                            >
+                              {t("Publier")}
+                            </button>
+                          </div>
+                        ) : (
                           <div className="col-12">
-                          <p>{t("Terminer")}</p>
-                          <p>{t("Prix Mazed online final")}:{props.selectedItem.prixMazedOnline}DT</p>
-                          <p>{t("Date/Heure")}</p>
-                          <p>{t("Nom et Prénom")}</p>
-                          <p>{t("Pseudo")}</p>
-                          <p>{t("Numéro du téléphone")}</p>
-                         
-                        </div>
+                            <p>{t("Terminer")}</p>
+                            <p>
+                              {t("Prix Mazed online final")}:
+                              {props.selectedItem.prixMazedOnline}DT
+                            </p>
+                            <p>{t("Date/Heure")}</p>
+                            <p>{t("Nom et Prénom")}</p>
+                            <p>{t("Pseudo")}</p>
+                            <p>{t("Numéro du téléphone")}</p>
+                          </div>
                         )}
-                      
-                        
                       </div>
                     </div>
                   </div>
@@ -264,36 +286,36 @@ const addEcheance = async(e) =>{
                 {isMobile ? (
                   <table className="table" id="table2">
                     <tbody>
-                      {filteredUsers && filteredUsers.map((item=>(
-                        <>
-                        <tr>
-                        <td>{t("Nom de famille")}</td>
-                        <td>Thamer</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Prénom")}</td>
-                        <td>Seif</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Pseudo")}</td>
-                        <td>Clubisty</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Numéro du téléphone")}</td>
-                        <td>(+1) 613 820 8838</td>
-                      </tr>
-                     
-                      <tr>
-                        <td>{t("Nombre d'encheres y liées")}</td>
-                        <td>69</td>
-                      </tr>
-                      <tr>
-                        <td>{t("Lien Page Details")}</td>
-                        <td>Lien</td>
-                      </tr>
-                        </>
-                      )))}
-                      
+                      {filteredUsers &&
+                        filteredUsers.map((item) => (
+                          <>
+                            <tr>
+                              <td>{t("Nom de famille")}</td>
+                              <td>Thamer</td>
+                            </tr>
+                            <tr>
+                              <td>{t("Prénom")}</td>
+                              <td>Seif</td>
+                            </tr>
+                            <tr>
+                              <td>{t("Pseudo")}</td>
+                              <td>Clubisty</td>
+                            </tr>
+                            <tr>
+                              <td>{t("Numéro du téléphone")}</td>
+                              <td>(+1) 613 820 8838</td>
+                            </tr>
+
+                            <tr>
+                              <td>{t("Nombre d'encheres y liées")}</td>
+                              <td>69</td>
+                            </tr>
+                            <tr>
+                              <td>{t("Lien Page Details")}</td>
+                              <td>Lien</td>
+                            </tr>
+                          </>
+                        ))}
                     </tbody>
                   </table>
                 ) : (
@@ -310,25 +332,33 @@ const addEcheance = async(e) =>{
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers && filteredUsers.map((item)=>(
-                        <tr>
-                          <td>{item.nomFamille}</td>
-                          <td>{item.prenom}</td>
-                          <td>{item.pseudo}</td>
-                          <td>{item.numTel}</td>
-                          <td>{item.mesEnchere?.length}</td>
-                          <td>
-                            <i className="fa-solid fa-eye font-medium-1"></i>
-                          </td>
-                          {!props.selectedItem.participantSignéIds.includes(item.id)?(
+                      {filteredUsers &&
+                        filteredUsers.map((item) => (
+                          <tr>
+                            <td>{item.nomFamille}</td>
+                            <td>{item.prenom}</td>
+                            <td>{item.pseudo}</td>
+                            <td>{item.numTel}</td>
+                            <td>{item.mesEnchere?.length}</td>
                             <td>
-                            <i onClick={()=>approverUser(props.selectedItem.id,item.id)} className="fa-solid fa-check font-medium-1"></i>
-                          </td>
-                          ):(<td>-</td>)}
-                          
-                        </tr>
-                      ))}
-                     
+                              <i className="fa-solid fa-eye font-medium-1"></i>
+                            </td>
+                            {!props.selectedItem.participantSignéIds.includes(
+                              item.id
+                            ) ? (
+                              <td>
+                                <i
+                                  onClick={() =>
+                                    approverUser(props.selectedItem.id, item.id)
+                                  }
+                                  className="fa-solid fa-check font-medium-1"
+                                ></i>
+                              </td>
+                            ) : (
+                              <td>-</td>
+                            )}
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 )}
@@ -349,57 +379,72 @@ const addEcheance = async(e) =>{
                 {isMobile ? (
                   <table className="table" id="table2">
                     <tbody>
-                    {props.selectedItem && props.selectedItem.enchérissement?.length > 0 && 
-  props.selectedItem.enchérissement
-    .sort((a, b) => new Date(b.heureMajoration) - new Date(a.heureMajoration)) // Sort by heureMajoration, newest first
-    .map((item) => (
-      <React.Fragment key={item.id || item.participant.pseudo}> {/* Use React.Fragment with a unique key */}
-        <tr>
-          <td>{t("User")}</td>
-          <td>
-            <img
-              style={{ borderRadius: "50px" }}
-              className="imgtable"
-              src="./Mazed.jpg"
-              alt="img"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>{t("Nom")}</td>
-          <td>{item.participant.nomFamille}</td>
-        </tr>
-        <tr>
-          <td>{t("Prénom")}</td>
-          <td>{item.participant.prenom}</td>
-        </tr>
-        <tr>
-          <td>{t("Pseudo")}</td>
-          <td>{item.participant.pseudo}</td>
-        </tr>
-        <tr>
-          <td>{t("Heure de majoration")}</td>
-          <td>{item.heureMajoration}</td>
-        </tr>
-        <tr>
-          <td>{t("Valeur Majoration")}</td>
-          <td>{item.valeurMajorationUser}</td>
-        </tr>
-        <tr>
-          <td>{t("Montant total")}</td>
-          <td>{item.montantTot}</td>
-        </tr>
-        <tr>
-          <td>{t("Gagnant")}</td>
-          <td>
-            <i className="fa-solid fa-trophy" onClick={() => funModal(item.participant , item.enchere , item.id)}></i>
-          </td>
-        </tr>
-      </React.Fragment>
-    ))
-}
-
-                     
+                      {props.selectedItem &&
+                        props.selectedItem.enchérissement?.length > 0 &&
+                        props.selectedItem.enchérissement
+                          .sort(
+                            (a, b) =>
+                              new Date(b.heureMajoration) -
+                              new Date(a.heureMajoration)
+                          ) // Sort by heureMajoration, newest first
+                          .map((item) => (
+                            <React.Fragment
+                              key={item.id || item.participant.pseudo}
+                            >
+                              {" "}
+                              {/* Use React.Fragment with a unique key */}
+                              <tr>
+                                <td>{t("User")}</td>
+                                <td>
+                                  <img
+                                    style={{ borderRadius: "50px" }}
+                                    className="imgtable"
+                                    src="./Mazed.jpg"
+                                    alt="img"
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>{t("Nom")}</td>
+                                <td>{item.participant.nomFamille}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Prénom")}</td>
+                                <td>{item.participant.prenom}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Pseudo")}</td>
+                                <td>{item.participant.pseudo}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Heure de majoration")}</td>
+                                <td>{item.heureMajoration}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Valeur Majoration")}</td>
+                                <td>{item.valeurMajorationUser}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Montant total")}</td>
+                                <td>{item.montantTot}</td>
+                              </tr>
+                              <tr>
+                                <td>{t("Gagnant")}</td>
+                                <td>
+                                  <i
+                                    className="fa-solid fa-trophy"
+                                    onClick={() =>
+                                      funModal(
+                                        item.participant,
+                                        item.enchere,
+                                        item.id
+                                      )
+                                    }
+                                  ></i>
+                                </td>
+                              </tr>
+                            </React.Fragment>
+                          ))}
                     </tbody>
                   </table>
                 ) : (
@@ -417,33 +462,46 @@ const addEcheance = async(e) =>{
                       </tr>
                     </thead>
                     <tbody>
-                    {props.selectedItem && props.selectedItem.enchérissement?.length > 0 && 
-  props.selectedItem.enchérissement
-    .sort((a, b) => new Date(b.heureMajoration) - new Date(a.heureMajoration)) // Sort by heureMajoration, newest first
-    .map((item) => (
-      <tr key={item.id || item.participant.pseudo}> {/* Add a unique key prop */}
-        <td>
-          <img
-            style={{ borderRadius: "50px" }}
-            className="imgtable"
-            src="./Mazed.jpg"
-            alt="img"
-          />
-        </td>
-        <td>{item.participant.nomFamille}</td>
-        <td>{item.participant.prenom}</td>
-        <td>{item.participant.pseudo}</td>
-        <td>{item.heureMajoration}</td>
-        <td>{item.valeurMajorationUser}</td>
-        <td>{item.montantTot}</td>
-        <td>
-          <i className="fa-solid fa-trophy" onClick={() => funModal(item.participant , item.enchere , item.id)}></i>
-        </td>
-      </tr>
-    ))
-}
-
-                      
+                      {props.selectedItem &&
+                        props.selectedItem.enchérissement?.length > 0 &&
+                        props.selectedItem.enchérissement
+                          .sort(
+                            (a, b) =>
+                              new Date(b.heureMajoration) -
+                              new Date(a.heureMajoration)
+                          ) // Sort by heureMajoration, newest first
+                          .map((item) => (
+                            <tr key={item.id || item.participant.pseudo}>
+                              {" "}
+                              {/* Add a unique key prop */}
+                              <td>
+                                <img
+                                  style={{ borderRadius: "50px" }}
+                                  className="imgtable"
+                                  src="./Mazed.jpg"
+                                  alt="img"
+                                />
+                              </td>
+                              <td>{item.participant.nomFamille}</td>
+                              <td>{item.participant.prenom}</td>
+                              <td>{item.participant.pseudo}</td>
+                              <td>{item.heureMajoration}</td>
+                              <td>{item.valeurMajorationUser}</td>
+                              <td>{item.montantTot}</td>
+                              <td>
+                                <i
+                                  className="fa-solid fa-trophy"
+                                  onClick={() =>
+                                    funModal(
+                                      item.participant,
+                                      item.enchere,
+                                      item.id
+                                    )
+                                  }
+                                ></i>
+                              </td>
+                            </tr>
+                          ))}
                     </tbody>
                   </table>
                 )}
@@ -452,14 +510,14 @@ const addEcheance = async(e) =>{
           </div>
         </section>
       </div>
-       {/* Modal */}
-       <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>{t("Ajouter Echéance")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={addEcheance}>
-          <Form.Group>
+            <Form.Group>
               <Form.Label>{t("Type de payement")}</Form.Label>
               <Form.Control
                 as="select"
@@ -489,18 +547,17 @@ const addEcheance = async(e) =>{
                 onChange={handleInputChange}
               />
             </Form.Group>
-           
+
             <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            {t("Annuler")}
-          </Button>
-          <Button type="submit" variant="primary" >
-            {t("Ajouter")}
-          </Button>
-        </Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                {t("Annuler")}
+              </Button>
+              <Button type="submit" variant="primary">
+                {t("Ajouter")}
+              </Button>
+            </Modal.Footer>
           </Form>
         </Modal.Body>
-       
       </Modal>
     </div>
   );

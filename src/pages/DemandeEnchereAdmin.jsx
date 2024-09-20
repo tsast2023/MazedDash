@@ -99,23 +99,47 @@ const DemandeEnchereAdmin = () => {
             <h2 className="new-price">{t("Demande Enchére")}</h2>
           </div>
           <div className="card-body">
+            <div className="row ">
+              <div className="col-6">
+                <div className="form-group">
+                  <label htmlFor="recherche">
+                    <h6>{t("Recherche")}</h6>
+                  </label>
+                  <input id="recherche" className="form-control" />
+                </div>
+              </div>
+              <div className="col-6 form-group">
+                <h6>{t("Statut")}</h6>
+                <select className="choices form-select">
+                <option value="" disabled selected></option>
+                  <option value="square">{t("Approuver")}</option>
+                  <option value="rectangle">{t("En attente")}</option>
+                  <option value="rectangle">{t("Refuser")}</option>
+                </select>
+              </div>
+            </div>
             {isMobile ? (
               <Table responsive="sm">
                 <tbody>
-                    <tr>
+                  <tr>
                     <td>{t("Photo de Profile")}</td>
                     <td>
-                      <img style={{borderRadius:"50px"}} className="imgtable" src="./Mazed.jpg" alt="img" />
+                      <img
+                        style={{ borderRadius: "50px" }}
+                        className="imgtable"
+                        src="./Mazed.jpg"
+                        alt="img"
+                      />
                     </td>
-                    </tr>
-                    <tr>
+                  </tr>
+                  <tr>
                     <td>{t("Nom")}</td>
                     <td>Lorem</td>
-                    </tr>
-                    <tr>
-                        <td>{t("Prénom")}</td>
-                        <td>Lorem</td>
-                    </tr>
+                  </tr>
+                  <tr>
+                    <td>{t("Prénom")}</td>
+                    <td>Lorem</td>
+                  </tr>
                   <tr>
                     <td>{t("Ancien produit")}</td>
                     <td>
@@ -160,9 +184,9 @@ const DemandeEnchereAdmin = () => {
               <Table responsive="sm">
                 <thead>
                   <tr>
-                  <th>{t("Photo de Profile")}</th>
-                  <th>{t("Nom")}</th>
-                  <th>{t("Prénom")}</th>
+                    <th>{t("Photo de Profile")}</th>
+                    <th>{t("Nom")}</th>
+                    <th>{t("Prénom")}</th>
                     <th>{t("Ancien Enchére")}</th>
                     <th>{t("Nouveau Enchére")}</th>
                     <th>{t("Statut")}</th>
@@ -173,8 +197,13 @@ const DemandeEnchereAdmin = () => {
                 </thead>
                 <tbody>
                   <tr>
-                  <td>
-                      <img style={{borderRadius:"50px"}} className="imgtable" src="./Mazed.jpg" alt="img" />
+                    <td>
+                      <img
+                        style={{ borderRadius: "50px" }}
+                        className="imgtable"
+                        src="./Mazed.jpg"
+                        alt="img"
+                      />
                     </td>
                     <td>lorem</td>
                     <td>Lorem</td>

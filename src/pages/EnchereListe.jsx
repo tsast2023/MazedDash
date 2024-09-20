@@ -258,7 +258,7 @@ function EnchereListe() {
                     <div className="col-6">
                       <div className="form-group">
                         <label htmlFor="recherche">
-                          <h6>{t("Recherche")}</h6>
+                          <h6>{t("Nom Produit")}</h6>
                         </label>
                         <input id="recherche" className="form-control" />
                       </div>
@@ -266,7 +266,7 @@ function EnchereListe() {
                     <div className="col-6">
                       <div className="form-group">
                         <label htmlFor="recherche">
-                          <h6>{t("Recherche")}</h6>
+                          <h6>{t("Nom Catégorie")}</h6>
                         </label>
                         <input id="recherche" className="form-control" />
                       </div>
@@ -274,25 +274,42 @@ function EnchereListe() {
                     <div className="col-6 form-group">
                       <h6>{t("Ville")}</h6>
                       <select className="choices form-select">
-                        <option value="square">Square</option>
-                        <option value="rectangle">Rectangle</option>
-                        <option value="rombo">Rombo</option>
-                        <option value="romboid">Romboid</option>
-                        <option value="trapeze">Trapeze</option>
-                        <option value="traible">Triangle</option>
-                        <option value="polygon">Polygon</option>
+                      <option value="" disabled selected></option>
+                        <option>{t("Sousse")}</option>
+                        <option>{t("Gafsa")}</option>
+                        <option>{t("Tunis")}</option>
+                        <option>{t("Ariana")}</option>
+                        <option>{t("Béja")}</option>
+                        <option>{t("Ben Arous")}</option>
+                        <option>{t("Bizerte")}</option>
+                        <option>{t("Gabes")}</option>
+                        <option>{t("Jendouba")}</option>
+                        <option>{t("Kairouan")}</option>
+                        <option>{t("Kasserine")}</option>
+                        <option>{t("Kebili")}</option>
+                        <option>{t("La Manouba")}</option>
+                        <option>{t("Le Kef")}</option>
+                        <option>{t("Mahdia")}</option>
+                        <option>{t("Médenine")}</option>
+                        <option>{t("Monastir")}</option>
+                        <option>{t("Nabeul")}</option>
+                        <option>{t("Sfax")}</option>
+                        <option>{t("Sidi Bouzid")}</option>
+                        <option>{t("Siliana")}</option>
+                        <option>{t("Tataouine")}</option>
+                        <option>{t("Tozeur")}</option>
+                        <option>{t("Zaghouan")}</option>
                       </select>
                     </div>
                     <div className="col-6 form-group">
                       <h6>{t("Statut")}</h6>
                       <select className="choices form-select">
-                        <option value="square">Square</option>
-                        <option value="rectangle">Rectangle</option>
-                        <option value="rombo">Rombo</option>
-                        <option value="romboid">Romboid</option>
-                        <option value="trapeze">Trapeze</option>
-                        <option value="traible">Triangle</option>
-                        <option value="polygon">Polygon</option>
+                      <option value="" disabled selected></option>
+                        <option value="square">{t("Brouillon")}</option>
+                        <option value="rectangle">{t("Ouverte")}</option>
+                        <option value="rombo">{t("En cours")}</option>
+                        <option value="romboid">{t("Cachée")}</option>
+                        <option value="trapeze">{t("Annulée")}</option>
                       </select>
                     </div>
                   </div>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "choices.js/public/assets/styles/choices.css";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
 import axios from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 function Configuration() {
-  const token = Cookies.get('token');
+  const token = Cookies.get("token");
   const { t, i18n } = useTranslation();
   const [showEmail1, setShowEmail1] = useState(true);
   const [showEmail2, setShowEmail2] = useState(true);
@@ -28,11 +28,11 @@ function Configuration() {
     nombreParticipantAttendu: 0,
     nombreMois: 0,
     extensionTime: 0,
-    contractEnchere: "",          // French contract
-    contractEnchereAr: "",       // Arabic contract
-    contractEnchereEn: "",       // English contract
+    contractEnchere: "", // French contract
+    contractEnchereAr: "", // Arabic contract
+    contractEnchereEn: "", // English contract
     autoFinancement: 0,
-    galerie:[]
+    galerie: [],
   });
 
   const [dateScheduled, setDateScheduled] = useState(Date.now());
@@ -42,17 +42,17 @@ function Configuration() {
   };
   const handleGalerieChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to Array
-  
+
     if (files.length === 0) {
       console.error("No files selected");
       return; // Exit early if no files
     }
-  
+
     setDataConfig((prevData) => ({
       ...prevData,
       galerie: files, // Store the files array directly in the state
     }));
-  
+
     console.log("Selected files:", files); // Log the selected files for debugging
   };
   const handleCheckbox2Change = () => {
@@ -84,7 +84,7 @@ function Configuration() {
           icon: "success",
           iconColor: "black",
           confirmButtonColor: "#b0210e", // Change to your desired color
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       } else {
         Swal.fire({
@@ -92,7 +92,7 @@ function Configuration() {
           text: "Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e", // Change to your desired color
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       }
     });
@@ -104,115 +104,117 @@ function Configuration() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setDataConfig(prevState => ({
+    setDataConfig((prevState) => ({
       ...prevState,
-      contractEnchere: file // French contract
+      contractEnchere: file, // French contract
     }));
   };
 
   const handleArabicFileChange = (e) => {
     const file = e.target.files[0];
-    setDataConfig(prevState => ({
+    setDataConfig((prevState) => ({
       ...prevState,
-      contractEnchereAr: file // Arabic contract
+      contractEnchereAr: file, // Arabic contract
     }));
   };
 
   const handleEnglishFileChange = (e) => {
     const file = e.target.files[0];
-    setDataConfig(prevState => ({
+    setDataConfig((prevState) => ({
       ...prevState,
-      contractEnchereEn: file // English contract
+      contractEnchereEn: file, // English contract
     }));
   };
 
   const addBidConfig = async () => {
     console.log(dataConfig);
     console.log(valeurMajoration);
-    console.log(localStorage.getItem('idenchere'));
+    console.log(localStorage.getItem("idenchere"));
     try {
-        const formData = new FormData();
-        Object.keys(dataConfig).forEach(key => {
-            formData.append(key, dataConfig[key]);
-        });
+      const formData = new FormData();
+      Object.keys(dataConfig).forEach((key) => {
+        formData.append(key, dataConfig[key]);
+      });
 
-        // Add IdEnchere to FormData
-        formData.append('IdEnchere', localStorage.getItem('idenchere'));
-        const valeurMajorationArray = String(valeurMajoration).split(',').map(Number);
-        valeurMajorationArray.forEach(value => {
-            formData.append('valeurMajoration', value);
-        });
+      // Add IdEnchere to FormData
+      formData.append("IdEnchere", localStorage.getItem("idenchere"));
+      const valeurMajorationArray = String(valeurMajoration)
+        .split(",")
+        .map(Number);
+      valeurMajorationArray.forEach((value) => {
+        formData.append("valeurMajoration", value);
+      });
 
-        // Add ContractEnchere file to FormData
-        if (dataConfig.contractEnchere) {
-            formData.append('ContractEnchere', dataConfig.contractEnchere);
-        } else {
-            console.error('ContractEnchere file is missing.');
-            return;
+      // Add ContractEnchere file to FormData
+      if (dataConfig.contractEnchere) {
+        formData.append("ContractEnchere", dataConfig.contractEnchere);
+      } else {
+        console.error("ContractEnchere file is missing.");
+        return;
+      }
+
+      // Add ContractEnchereAr file to FormData
+      if (dataConfig.contractEnchereAr) {
+        formData.append("ContractEnchereAr", dataConfig.contractEnchereAr);
+      } else {
+        console.error("ContractEnchereAr file is missing.");
+        return;
+      }
+
+      // Add ContractEnchereEn file to FormData
+      if (dataConfig.contractEnchereEn) {
+        formData.append("ContractEnchereEn", dataConfig.contractEnchereEn);
+      } else {
+        console.error("ContractEnchereEn file is missing.");
+        return;
+      }
+
+      // Add ContractEnchereAr file to FormData
+      if (dataConfig.galerie) {
+        console.log("azaza", dataConfig.galerie);
+        for (const file of dataConfig.galerie) {
+          formData.append("galerie", file);
         }
+      } else {
+        console.error("galerie file is missing.");
+        return;
+      }
 
-        // Add ContractEnchereAr file to FormData
-        if (dataConfig.contractEnchereAr) {
-            formData.append('ContractEnchereAr', dataConfig.contractEnchereAr);
-        } else {
-            console.error('ContractEnchereAr file is missing.');
-            return;
+      // Console log FormData contents
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      // Send the request with FormData
+      const res = await axios.post(
+        "http://192.168.0.102:8081/api/bid/publishBidNow",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
+      );
 
-        // Add ContractEnchereEn file to FormData
-        if (dataConfig.contractEnchereEn) {
-            formData.append('ContractEnchereEn', dataConfig.contractEnchereEn);
-        } else {
-            console.error('ContractEnchereEn file is missing.');
-            return;
-        }
-
-        // Add ContractEnchereAr file to FormData
-        if (dataConfig.galerie) {
-            console.log("azaza", dataConfig.galerie);
-            for (const file of dataConfig.galerie) {
-              formData.append('galerie', file);
-            }
-        } else {
-            console.error('galerie file is missing.');
-            return;
-        }
-
-        // Console log FormData contents
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-        // Send the request with FormData
-        const res = await axios.post(
-            "http://192.168.0.102:8081/api/bid/publishBidNow",
-            formData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            }
-        );
-
-        console.log(res.data);
-        localStorage.removeItem('idenchere');
+      console.log(res.data);
+      localStorage.removeItem("idenchere");
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-};
+  };
 
   const addScheduledbid = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      Object.keys(dataConfig).forEach(key => {
+      Object.keys(dataConfig).forEach((key) => {
         formData.append(key, dataConfig[key]);
       });
 
       // Add IdEnchere and publicationDate to FormData
-      formData.append('IdEnchere', localStorage.getItem('idenchere'));
-      formData.append('publicationDate', dateScheduled);
+      formData.append("IdEnchere", localStorage.getItem("idenchere"));
+      formData.append("publicationDate", dateScheduled);
 
       // Send the request with FormData
       const res = await axios.post(
@@ -221,13 +223,13 @@ function Configuration() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
       console.log(res.data);
-      localStorage.removeItem('idenchere');
+      localStorage.removeItem("idenchere");
     } catch (error) {
       console.error("Error scheduling bid:", error);
     }
@@ -235,12 +237,12 @@ function Configuration() {
 
   // State for valeurMajoration
   const [valeurMajoration, setValeurMajoration] = useState([]);
-  const [newValue, setNewValue] = useState('');
+  const [newValue, setNewValue] = useState("");
 
   const handleAddValue = () => {
     if (newValue) {
       setValeurMajoration([...valeurMajoration, parseInt(newValue)]);
-      setNewValue(''); // Clear input field after adding
+      setNewValue(""); // Clear input field after adding
     }
   };
 
@@ -278,9 +280,16 @@ function Configuration() {
                           <div className="row">
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="participation-cost">{t("Cout Du Participation")}</label>
+                                <label htmlFor="participation-cost">
+                                  {t("Cout Du Participation")}
+                                </label>
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, coutParticipation: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      coutParticipation: e.target.value,
+                                    })
+                                  }
                                   type="number"
                                   id="participation-cost"
                                   className="form-control"
@@ -291,9 +300,16 @@ function Configuration() {
                             </div>
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="click-cost">{t("Cout Du Clic")}</label>
+                                <label htmlFor="click-cost">
+                                  {t("Cout Du Clic")}
+                                </label>
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, coutClic: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      coutClic: e.target.value,
+                                    })
+                                  }
                                   type="number"
                                   id="click-cost"
                                   className="form-control"
@@ -304,9 +320,16 @@ function Configuration() {
                             </div>
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="extension-time">{t("Extension Time")}</label>
+                                <label htmlFor="extension-time">
+                                  {t("Extension Time")}
+                                </label>
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, extensionTime: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      extensionTime: e.target.value,
+                                    })
+                                  }
                                   type="number"
                                   id="extension-time"
                                   className="form-control"
@@ -317,9 +340,16 @@ function Configuration() {
                             </div>
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="auto-financement">{t("Auto Financement")}</label>
+                                <label htmlFor="auto-financement">
+                                  {t("Auto Financement")}
+                                </label>
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, autoFinancement: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      autoFinancement: e.target.value,
+                                    })
+                                  }
                                   type="number"
                                   id="auto-financement"
                                   className="form-control"
@@ -330,7 +360,9 @@ function Configuration() {
                             </div>
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="contract">{t("Contrat (Français)")}</label>
+                                <label htmlFor="contract">
+                                  {t("Contrat (Français)")}
+                                </label>
                                 <input
                                   ref={fileInputRef}
                                   onChange={handleFileChange}
@@ -343,7 +375,9 @@ function Configuration() {
                             </div>
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="contractAr">{t("Contrat (Arabe)")}</label>
+                                <label htmlFor="contractAr">
+                                  {t("Contrat (Arabe)")}
+                                </label>
                                 <input
                                   type="file"
                                   onChange={handleArabicFileChange}
@@ -355,7 +389,9 @@ function Configuration() {
                             </div>
                             <div className="col-12">
                               <div className="form-group">
-                                <label htmlFor="contractEn">{t("Contrat (Anglais)")}</label>
+                                <label htmlFor="contractEn">
+                                  {t("Contrat (Anglais)")}
+                                </label>
                                 <input
                                   type="file"
                                   onChange={handleEnglishFileChange}
@@ -366,33 +402,46 @@ function Configuration() {
                               </div>
                             </div>
                             <div className="col-12">
-                                <label>{t("Galerie")}</label>
-                                <div className="form-group">
-                                  <input
-                                    onChange={handleGalerieChange}
-                                    type="file"
-                                    multiple
-                                    id="galerie"
-                                    className="form-control"
-                                    required
-                                  />
-                                </div>
+                              <label>{t("Galerie")}</label>
+                              <div className="form-group">
+                                <input
+                                  onChange={handleGalerieChange}
+                                  type="file"
+                                  multiple
+                                  id="galerie"
+                                  className="form-control"
+                                  required
+                                />
                               </div>
-                            <div className='col-12'>
-                              <label htmlFor="valeur-majoration">{t("Valeur de majoration")}</label><br />
+                            </div>
+                            <div className="col-12">
+                              <label htmlFor="valeur-majoration">
+                                {t("Valeur de majoration")}
+                              </label>
+                              <br />
                               <input
                                 type="number"
                                 value={newValue}
                                 onChange={handleInputChange}
                                 placeholder="Add valeurMajoration"
                               />
-                              <button className="btn btn-primary ms-1" type="button" onClick={handleAddValue}>Add</button>
+                              <button
+                                className="btn btn-primary ms-1"
+                                type="button"
+                                onClick={handleAddValue}
+                              >
+                                Add
+                              </button>
                               {/* Display the list */}
                               <ul>
                                 {valeurMajoration.map((value, index) => (
                                   <li key={index}>
                                     {value}
-                                    <button className="btn btn-secondary ms-3" type="button" onClick={() => handleDeleteValue(index)}>
+                                    <button
+                                      className="btn btn-secondary ms-3"
+                                      type="button"
+                                      onClick={() => handleDeleteValue(index)}
+                                    >
                                       X
                                     </button>
                                   </li>
@@ -413,7 +462,12 @@ function Configuration() {
                               {showEmail2 && (
                                 <div className="col-6">
                                   <input
-                                    onChange={e => setDataConfig({ ...dataConfig, valeurFacilité: e.target.value })}
+                                    onChange={(e) =>
+                                      setDataConfig({
+                                        ...dataConfig,
+                                        valeurFacilité: e.target.value,
+                                      })
+                                    }
                                     type="number"
                                     id="email-id-vertical2"
                                     className="col-6 form-control"
@@ -429,7 +483,12 @@ function Configuration() {
                                   className="col-6 form-group"
                                 >
                                   <select
-                                    onChange={e => setDataConfig({ ...dataConfig, unité: e.target.value })}
+                                    onChange={(e) =>
+                                      setDataConfig({
+                                        ...dataConfig,
+                                        unité: e.target.value,
+                                      })
+                                    }
                                     className="form-select"
                                     id="basicSelect"
                                     required
@@ -441,10 +500,17 @@ function Configuration() {
                               )}
                             </div>
                             <div className="col-12">
-                              <label htmlFor="expected-participants">{t("Nb attendu des participants")}</label>
+                              <label htmlFor="expected-participants">
+                                {t("Nb attendu des participants")}
+                              </label>
                               <div className="form-group">
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, nombreParticipantAttendu: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      nombreParticipantAttendu: e.target.value,
+                                    })
+                                  }
                                   type="number"
                                   id="expected-participants"
                                   className="form-control"
@@ -453,10 +519,17 @@ function Configuration() {
                                   required
                                 />
                               </div>
-                              <label htmlFor="launch-date">{t("Date de Lancement")}</label>
+                              <label htmlFor="launch-date">
+                                {t("Date de Lancement")}
+                              </label>
                               <div className="form-group">
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, datedeclenchement: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      datedeclenchement: e.target.value,
+                                    })
+                                  }
                                   type="datetime-local"
                                   id="launch-date"
                                   className="form-control"
@@ -464,10 +537,17 @@ function Configuration() {
                                   required
                                 />
                               </div>
-                              <label htmlFor="closing-date">{t("Date de Fermeture")}</label>
+                              <label htmlFor="closing-date">
+                                {t("Date de Fermeture")}
+                              </label>
                               <div className="form-group">
                                 <input
-                                  onChange={e => setDataConfig({ ...dataConfig, datefermeture: e.target.value })}
+                                  onChange={(e) =>
+                                    setDataConfig({
+                                      ...dataConfig,
+                                      datefermeture: e.target.value,
+                                    })
+                                  }
                                   type="datetime-local"
                                   id="closing-date"
                                   className="form-control"
@@ -480,18 +560,35 @@ function Configuration() {
                         </div>
                       </form>
                     </div>
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal
+                      show={showModal}
+                      onHide={() => setShowModal(false)}
+                      centered
+                    >
                       <Modal.Header closeButton>
                         <Modal.Title>{t("Planifier")}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        <form onSubmit={e => addScheduledbid(e)} className="mb-3">
-                          <label htmlFor="dateInput" className="form-label">{t("Date")}</label>
-                          <input onChange={e => setDateScheduled(e.target.value)} type="datetime-local" className="form-control" id="dateInput" />
-                          <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        <form
+                          onSubmit={(e) => addScheduledbid(e)}
+                          className="mb-3"
+                        >
+                          <label htmlFor="dateInput" className="form-label">
+                            {t("Date")}
+                          </label>
+                          <input
+                            onChange={(e) => setDateScheduled(e.target.value)}
+                            type="datetime-local"
+                            className="form-control"
+                            id="dateInput"
+                          />
+                          <Button
+                            variant="secondary"
+                            onClick={() => setShowModal(false)}
+                          >
                             {t("Fermer")}
                           </Button>
-                          <Button type='submit' variant="primary">
+                          <Button type="submit" variant="primary">
                             {t("Planifier")}
                           </Button>
                         </form>
@@ -504,21 +601,27 @@ function Configuration() {
                         className="btn btn-primary ms-1"
                         onClick={() => setShowModal(true)}
                       >
-                        <span className="d-none d-sm-block">{t("Planifier")}</span>
+                        <span className="d-none d-sm-block">
+                          {t("Planifier")}
+                        </span>
                       </button>
                       <button
                         onClick={addBidConfig}
                         type="button"
                         className="btn btn-primary ms-1"
                       >
-                        <span className="d-none d-sm-block">{t("Publier")}</span>
+                        <span className="d-none d-sm-block">
+                          {t("Publier")}
+                        </span>
                       </button>
                       <button
                         type="button"
                         className="btn btn-primary ms-1"
                         onClick={() => handleCloseModal()}
                       >
-                        <span className="d-none d-sm-block">{t("Annuler")}</span>
+                        <span className="d-none d-sm-block">
+                          {t("Annuler")}
+                        </span>
                       </button>
                     </div>
                   </div>

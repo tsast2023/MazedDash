@@ -4,16 +4,19 @@ import { GlobalState } from "../GlobalState";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Table } from "react-bootstrap";
-import Cookies from 'js-cookie'
-import { toast } from 'react-toastify';
-
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 function Recharges() {
-  const token = Cookies.get('token');
+  const token = Cookies.get("token");
   const { t, i18n } = useTranslation();
   const state = useContext(GlobalState);
   const cartes = state.cartes;
-  const [carteRech, setCarteRech] = useState({ numSérie: "", valeur: ""  , valeurBonusRecharge:""});
+  const [carteRech, setCarteRech] = useState({
+    numSérie: "",
+    valeur: "",
+    valeurBonusRecharge: "",
+  });
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -33,7 +36,9 @@ function Recharges() {
   const handleDelete = (id) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
-      text: t("Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"),
+      text: t(
+        "Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"
+      ),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
@@ -44,25 +49,31 @@ function Recharges() {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteItem(id);
-        Swal.fire({   title: "Supprimer",
+        Swal.fire({
+          title: "Supprimer",
           text: "Votre élément est Supprimer:)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
         }).then(() => {
           window.location.reload(); // Reload after the alert is confirmed
-        });        // window.location.reload();
+        }); // window.location.reload();
       } else {
-        Swal.fire({   title: "Annulé",
+        Swal.fire({
+          title: "Annulé",
           text: "Votre élément est en sécurité :)",
           icon: "error",
           confirmButtonColor: "#b0210e",
-        });       }
+        });
+      }
     });
   };
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.102:8081/api/carte/deleteCarte?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(
+        `http://192.168.0.102:8081/api/carte/deleteCarte?id=${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -72,11 +83,15 @@ function Recharges() {
   const addCarte = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://192.168.0.102:8081/api/carte/publishNow', carteRech , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.post(
+        "http://192.168.0.102:8081/api/carte/publishNow",
+        carteRech,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       console.log(res.data);
       window.location.reload();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
   const notify = () => {
@@ -146,7 +161,12 @@ function Recharges() {
                                   placeholder={t("Écrivez ici")}
                                   className="form-control"
                                   maxLength="25"
-                                  onChange={e => setCarteRech({ ...carteRech, numSérie: e.target.value })}
+                                  onChange={(e) =>
+                                    setCarteRech({
+                                      ...carteRech,
+                                      numSérie: e.target.value,
+                                    })
+                                  }
                                 />
                               </div>
                               <label htmlFor="serialNumber">
@@ -159,7 +179,12 @@ function Recharges() {
                                   placeholder={t("Écrivez ici")}
                                   className="form-control"
                                   maxLength="25"
-                                  onChange={e => setCarteRech({ ...carteRech, valeurBonusRecharge: e.target.value })}
+                                  onChange={(e) =>
+                                    setCarteRech({
+                                      ...carteRech,
+                                      valeurBonusRecharge: e.target.value,
+                                    })
+                                  }
                                 />
                               </div>
                               <label htmlFor="value">{t("Valeur")}</label>
@@ -170,7 +195,12 @@ function Recharges() {
                                   placeholder={t("Écrivez ici")}
                                   className="form-control"
                                   maxLength="25"
-                                  onChange={e => setCarteRech({ ...carteRech, valeur: e.target.value })}
+                                  onChange={(e) =>
+                                    setCarteRech({
+                                      ...carteRech,
+                                      valeur: e.target.value,
+                                    })
+                                  }
                                 />
                               </div>
                             </div>
@@ -191,7 +221,10 @@ function Recharges() {
                                 data-bs-dismiss="modal"
                               >
                                 <i className="bx bx-check d-block d-sm-none"></i>
-                                <span className="btn btn-primary" onClick={notify}>
+                                <span
+                                  className="btn btn-primary"
+                                  onClick={notify}
+                                >
                                   {t("Enregistrer")}
                                 </span>
                               </button>
@@ -215,40 +248,72 @@ function Recharges() {
           </div>
           <div className="card-content">
             <div className="card-body">
+            <div className="row ">
+        <div className="col-6">
+          <div className="form-group">
+            <label htmlFor="recherche">
+              <h6>{t("Numéro de série")}</h6>
+            </label>
+            <input id="recherche" className="form-control" />
+          </div>
+        </div>
+        <div className="col-6 form-group">
+          <h6>{t("Statut")}</h6>
+          <select className="choices form-select">
+            <option value="" disabled selected></option>
+            <option value="square">{t("Utiliser")}</option>
+            <option value="rectangle">{t("Non Utiliser")}</option>
+          </select>
+        </div>
+      </div>
               {isMobile ? (
                 <Table responsive="sm">
                   <tbody>
-                    {cartes ? cartes.map((item) => (
-                      <React.Fragment key={item.id}>
-                        <tr>
-                          <td>{t("Numéro de série")}</td>
-                          <td className="text-bold-500">{item.numSérie}</td>
-                        </tr>
-                        <tr>
-                          <td>{t("Valeur")}</td>
-                          <td>{item.valeur}</td>
-                        </tr>
-                        <tr>
-                          <td>{t("Valeur Bonus")}</td>
-                          <td>{item.valeurBonusRecharge}</td>
-                        </tr>
-                        <tr>
-                        <tr>
-                          <td>{t("Statut")}</td>
-                          <td>
-                            <span className={item.statuscarte === "NONUTILISER" ? "badge bg-success" : "badge bg-danger"}>{item.statuscarte}</span>
-                          </td>
-                        </tr>
-                          <td>{t("Supprimer")}</td>
-                          <td>
-                            <i
-                              className="fa-solid fa-trash deleteIcon"
-                              onClick={() => handleDelete(item.id)}
-                            ></i>
-                          </td>
-                        </tr>
-                      </React.Fragment>
-                    )) : <tr><td colSpan="2">loading</td></tr>}
+                    {cartes ? (
+                      cartes.map((item) => (
+                        <React.Fragment key={item.id}>
+                          <tr>
+                            <td>{t("Numéro de série")}</td>
+                            <td className="text-bold-500">{item.numSérie}</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Valeur")}</td>
+                            <td>{item.valeur}</td>
+                          </tr>
+                          <tr>
+                            <td>{t("Valeur Bonus")}</td>
+                            <td>{item.valeurBonusRecharge}</td>
+                          </tr>
+                          <tr>
+                            <tr>
+                              <td>{t("Statut")}</td>
+                              <td>
+                                <span
+                                  className={
+                                    item.statuscarte === "NONUTILISER"
+                                      ? "badge bg-success"
+                                      : "badge bg-danger"
+                                  }
+                                >
+                                  {item.statuscarte}
+                                </span>
+                              </td>
+                            </tr>
+                            <td>{t("Supprimer")}</td>
+                            <td>
+                              <i
+                                className="fa-solid fa-trash deleteIcon"
+                                onClick={() => handleDelete(item.id)}
+                              ></i>
+                            </td>
+                          </tr>
+                        </React.Fragment>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="2">loading</td>
+                      </tr>
+                    )}
                   </tbody>
                 </Table>
               ) : (
@@ -264,23 +329,37 @@ function Recharges() {
                       </tr>
                     </thead>
                     <tbody>
-                      {cartes ? cartes.map((item) => (
-                        <tr key={item.id}>
-                          <td className="text-bold-500">{item.numSérie}</td>
-                          <td>{item.valeur}</td>
-                          <td>{item.valeurBonusRecharge}</td>
-                          <td>
-                            <span className={item.statuscarte === "NONUTILISER" ? "badge bg-success" : "badge bg-danger"}>{item.statuscarte}</span>
-                          </td>
-                  
-                          <td>
-                            <i
-                              className="fa-solid fa-trash deleteIcon"
-                              onClick={() => handleDelete(item.id)}
-                            ></i>
-                          </td>
+                      {cartes ? (
+                        cartes.map((item) => (
+                          <tr key={item.id}>
+                            <td className="text-bold-500">{item.numSérie}</td>
+                            <td>{item.valeur}</td>
+                            <td>{item.valeurBonusRecharge}</td>
+                            <td>
+                              <span
+                                className={
+                                  item.statuscarte === "NONUTILISER"
+                                    ? "badge bg-success"
+                                    : "badge bg-danger"
+                                }
+                              >
+                                {item.statuscarte}
+                              </span>
+                            </td>
+
+                            <td>
+                              <i
+                                className="fa-solid fa-trash deleteIcon"
+                                onClick={() => handleDelete(item.id)}
+                              ></i>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="4">loading</td>
                         </tr>
-                      )) : <tr><td colSpan="4">loading</td></tr>}
+                      )}
                     </tbody>
                   </Table>
                 </div>

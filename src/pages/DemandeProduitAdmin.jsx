@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 const DemandeProduitAdmin = () => {
-  const token = Cookies.get('token')
+  const token = Cookies.get("token");
   const state = useContext(GlobalState);
-  const demandes = state.demandes
+  const demandes = state.demandes;
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [starClicked, setStarClicked] = useState(false);
@@ -20,7 +20,7 @@ const DemandeProduitAdmin = () => {
   const [currentStock, setCurrentStock] = useState("");
   const [color, setColor] = useState("#ffffff");
   const [description, setDescription] = useState("");
-  const [category , setCategory] = useState();
+  const [category, setCategory] = useState();
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -33,8 +33,8 @@ const DemandeProduitAdmin = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleValidation = (action , status , id) => {
-    console.log(action , status , id)
+  const handleValidation = (action, status, id) => {
+    console.log(action, status, id);
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
       icon: "warning",
@@ -44,10 +44,10 @@ const DemandeProduitAdmin = () => {
       cancelButtonText: t("Non, annuler !"),
       closeOnConfirm: false,
       closeOnCancel: false,
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         if (action === "valider") {
-          await traiterDemandeCategory(id , status);
+          await traiterDemandeCategory(id, status);
           Swal.fire({
             title: "Valider",
             text: "Votre élément est validé :)",
@@ -72,24 +72,25 @@ const DemandeProduitAdmin = () => {
       }
     });
   };
-const traiterDemandeCategory = async(demandeId , status)=>{
-  try {
-    console.log(token , demandeId ,status )
-    const res = await axios.post(`http://192.168.0.102:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,{}, {headers : {Authorization: `Bearer ${token}`}})
-    console.log(res.data)
-  } catch (error) {
-    console.log(error)
-  }
-}
- 
-  const showModal = (item) =>{
+  const traiterDemandeCategory = async (demandeId, status) => {
+    try {
+      console.log(token, demandeId, status);
+      const res = await axios.post(
+        `http://192.168.0.102:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const showModal = (item) => {
     setShowEditModal(true);
-    console.log(item)
-    setCategory(item)
-  }
-
-
-
+    console.log(item);
+    setCategory(item);
+  };
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
@@ -103,81 +104,121 @@ const traiterDemandeCategory = async(demandeId , status)=>{
             <h2 className="new-price">{t("Demande Categorie")}</h2>
           </div>
           <div className="card-body">
+            <div className="row ">
+              <div className="col-6">
+                <div className="form-group">
+                  <label htmlFor="recherche">
+                    <h6>{t("Recherche")}</h6>
+                  </label>
+                  <input id="recherche" className="form-control" />
+                </div>
+              </div>
+              <div className="col-6 form-group">
+                <h6>{t("Statut")}</h6>
+                <select className="choices form-select">
+                <option value="" disabled selected></option>
+                  <option value="square">{t("Approuver")}</option>
+                  <option value="rectangle">{t("En attente")}</option>
+                  <option value="rectangle">{t("Refuser")}</option>
+                </select>
+              </div>
+            </div>
             {isMobile ? (
               <Table responsive="sm">
                 <tbody>
-                  {demandes&& demandes.map((item)=>(
-                    <>
-                      <tr>
-                    <td>{t("Admin")}</td>
-                    <td>
-                    <h6>{item.administrateur.identifiant}</h6>
-                    </td>
-                    </tr>
-                   
-                    <tr>
-                        <td>{t("type demande ")}</td>
-                        <td>{item.typeDemandeAdmin}</td>
-                    </tr>
-                  <tr>
-                    <td>{t("Ancien categorie")}</td>
-                    <td>
-                      <button onClick={()=>showModal(item.oldCategorie)} class="btn btn-primary">View</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{t("Nouveau categorie")}</td>
-                    <td>
-                      <button onClick={()=>showModal(item.newCategorie)} class="btn btn-primary">View</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{t("Statut")}</td>
-                    <td>
-                      <button className="btn btn-secondary">
-                      {item.status}
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{t("Valider")}</td>
-                    <td>
-                      {item.status==="EN_ATTENTE"?(
- <i
- className="fa-solid fa-circle-check text-success"
- onClick={() => handleValidation("valider" , "APPROUVER" , item.id)}
-></i>
-                      ):(
-                        <h6>-</h6>
-                      )}
-                     
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{t("Refuser")}</td>
-                    <td>
-                      {item.status==="EN_ATTENTE"?(
-                        <i
-                        className="fa-solid fa-circle-xmark text-danger"
-                        onClick={() => handleValidation("refuser" , "REFUSER", item.id)}
-                      ></i>
-                      ):(
-                        <h6>-</h6>
-                      )}
-                      
-                    </td>
-                  </tr>
-                    </>
-                  ))}
+                  {demandes &&
+                    demandes.map((item) => (
+                      <>
+                        <tr>
+                          <td>{t("Admin")}</td>
+                          <td>
+                            <h6>{item.administrateur.identifiant}</h6>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>{t("type demande ")}</td>
+                          <td>{item.typeDemandeAdmin}</td>
+                        </tr>
+                        <tr>
+                          <td>{t("Ancien categorie")}</td>
+                          <td>
+                            <button
+                              onClick={() => showModal(item.oldCategorie)}
+                              class="btn btn-primary"
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{t("Nouveau categorie")}</td>
+                          <td>
+                            <button
+                              onClick={() => showModal(item.newCategorie)}
+                              class="btn btn-primary"
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{t("Statut")}</td>
+                          <td>
+                            <button className="btn btn-secondary">
+                              {item.status}
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{t("Valider")}</td>
+                          <td>
+                            {item.status === "EN_ATTENTE" ? (
+                              <i
+                                className="fa-solid fa-circle-check text-success"
+                                onClick={() =>
+                                  handleValidation(
+                                    "valider",
+                                    "APPROUVER",
+                                    item.id
+                                  )
+                                }
+                              ></i>
+                            ) : (
+                              <h6>-</h6>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{t("Refuser")}</td>
+                          <td>
+                            {item.status === "EN_ATTENTE" ? (
+                              <i
+                                className="fa-solid fa-circle-xmark text-danger"
+                                onClick={() =>
+                                  handleValidation(
+                                    "refuser",
+                                    "REFUSER",
+                                    item.id
+                                  )
+                                }
+                              ></i>
+                            ) : (
+                              <h6>-</h6>
+                            )}
+                          </td>
+                        </tr>
+                      </>
+                    ))}
                 </tbody>
               </Table>
             ) : (
               <Table responsive="sm">
                 <thead>
                   <tr>
-                  <th>{t("Admin")}</th>
-                  
-                  <th>{t("type demande")}</th>
+                    <th>{t("Admin")}</th>
+
+                    <th>{t("type demande")}</th>
                     <th>{t("Ancien categorie")}</th>
                     <th>{t("Nouveau categorie")}</th>
                     <th>{t("Statut")}</th>
@@ -187,50 +228,66 @@ const traiterDemandeCategory = async(demandeId , status)=>{
                   </tr>
                 </thead>
                 <tbody>
-                  {demandes && demandes.map((item)=>(
-                    <tr>
-                  <td>
-                      <h6>{item.administrateur.identifiant}</h6>
-                    </td>
-                   
-                    <td>{item.typeDemandeAdmin}</td>
-                    <td>
-                      <button onClick={()=>showModal(item.oldCategorie)}  class="btn btn-primary">View</button>
-                    </td>
-                    <td>
-                      <button onClick={()=>showModal(item.newCategorie)}  class="btn btn-primary">View</button>
-                    </td>
-                    <td>
-                      <button className="btn btn-secondary">
-                        {item.status}
-                      </button>
-                    </td>
-                    <td>{item.action}</td>
-                    <td>
-                      {item.status==="EN_ATTENTE"?(
-                        <i
-                        className="fa-solid fa-circle-check text-success"
-                        onClick={() => handleValidation("valider" , "APPROUVER" , item.id)}
-                      ></i>
-                      ):(
-                        <h6>-</h6>
-                      )}
-                      
-                    </td>
-                    <td>
-                      {item.status==="EN_ATTENTE"?(
-                        <i
-                        className="fa-solid fa-circle-xmark text-danger"
-                        onClick={() => handleValidation("valider" , "REFUSER", item.id)}
-                      ></i>
-                      ):(
-                        <h6>-</h6>
-                      )}
-                      
-                    </td>
-                  </tr>
-                  ))}
-                  
+                  {demandes &&
+                    demandes.map((item) => (
+                      <tr>
+                        <td>
+                          <h6>{item.administrateur.identifiant}</h6>
+                        </td>
+
+                        <td>{item.typeDemandeAdmin}</td>
+                        <td>
+                          <button
+                            onClick={() => showModal(item.oldCategorie)}
+                            class="btn btn-primary"
+                          >
+                            View
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            onClick={() => showModal(item.newCategorie)}
+                            class="btn btn-primary"
+                          >
+                            View
+                          </button>
+                        </td>
+                        <td>
+                          <button className="btn btn-secondary">
+                            {item.status}
+                          </button>
+                        </td>
+                        <td>{item.action}</td>
+                        <td>
+                          {item.status === "EN_ATTENTE" ? (
+                            <i
+                              className="fa-solid fa-circle-check text-success"
+                              onClick={() =>
+                                handleValidation(
+                                  "valider",
+                                  "APPROUVER",
+                                  item.id
+                                )
+                              }
+                            ></i>
+                          ) : (
+                            <h6>-</h6>
+                          )}
+                        </td>
+                        <td>
+                          {item.status === "EN_ATTENTE" ? (
+                            <i
+                              className="fa-solid fa-circle-xmark text-danger"
+                              onClick={() =>
+                                handleValidation("valider", "REFUSER", item.id)
+                              }
+                            ></i>
+                          ) : (
+                            <h6>-</h6>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </Table>
             )}
@@ -248,7 +305,7 @@ const traiterDemandeCategory = async(demandeId , status)=>{
           <Modal.Title>{t("Categorie")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className="form form-vertical" >
+          <form className="form form-vertical">
             <div className="form-body">
               <div className="row">
                 <div className="col-12">
@@ -259,8 +316,7 @@ const traiterDemandeCategory = async(demandeId , status)=>{
                       className="form-control"
                       id="label"
                       maxLength="25"
-                      value={category?category.nomCategorie:""}
-                      
+                      value={category ? category.nomCategorie : ""}
                       disabled
                     />
                   </div>
@@ -271,7 +327,7 @@ const traiterDemandeCategory = async(demandeId , status)=>{
                    <img src={""}/>
                   </div>
                 </div> */}
-                
+
                 {/* <div className="col-12">
                   <button type="submit" className="btn btn-primary">
                     {t("Sauvegarder")}
