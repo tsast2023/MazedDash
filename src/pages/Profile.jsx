@@ -61,7 +61,7 @@ function Profile() {
     }
 
     try {
-      const res = await axios.put(`http://192.168.0.102:8081/admin/updateUser`, formDataToUpdate, {
+      const res = await axios.put(`http://localhost:8081/admin/updateUser`, formDataToUpdate, {
         headers: {
           "Content-Type": "multipart/form-data", // Axios generally handles this automatically
           Authorization: `Bearer ${token}` // Replace with your actual token
@@ -87,7 +87,7 @@ function Profile() {
     };
 
     try {
-      const res = await axios.put('http://192.168.0.102:8081/admin/updatePassword', passwordUpdateRequest, {
+      const res = await axios.put('http://localhost:8081/admin/updatePassword', passwordUpdateRequest, {
         headers: {
           Authorization: `Bearer ${token}` // Replace with your actual token
         }

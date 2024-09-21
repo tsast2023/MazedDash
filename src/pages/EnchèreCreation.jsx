@@ -155,7 +155,7 @@ function EnchèreCreation() {
 
       // Make the request
       const res = await axios.post(
-        "http://192.168.0.102:8081/api/bid/createBrouillon",
+        "http://localhost:8081/api/bid/createBrouillon",
         bidData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -232,7 +232,7 @@ function EnchèreCreation() {
 
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.102:8081/api/bid/publishBidNow",
+        "http://localhost:8081/api/bid/publishBidNow",
         formData,
         {
           headers: {
@@ -289,7 +289,7 @@ function EnchèreCreation() {
       }
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.101:8081/api/bid/scheduleBidPublication",
+        "http://localhost:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {

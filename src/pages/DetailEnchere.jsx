@@ -60,7 +60,7 @@ function DetailEnchere(props) {
   const approverUser = async (enchereId, userId) => {
     try {
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/bid/approve/${enchereId}/${userId}`,
+        `http://localhost:8081/api/bid/approve/${enchereId}/${userId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -169,7 +169,7 @@ function DetailEnchere(props) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
+        `http://localhost:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

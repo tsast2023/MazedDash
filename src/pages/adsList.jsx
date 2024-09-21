@@ -78,7 +78,7 @@ function AdsList() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.102:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
+      const res = await axios.delete(`http://localhost:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -140,11 +140,11 @@ function AdsList() {
                     </tr>
                     <tr>
                     <th>{t("Nombre de j'aime")}</th>
-                    <td>{item.likedByUsers.length}</td>
+                    <td>{item.likedByUsers?.length}</td>
                     </tr>
                     <tr>
                     <th>{t("Nombre de personne interessé")}</th>
-                      <td>{item.interestedUsers.length}</td>
+                      <td>{item.interestedUsers?.length}</td>
                     </tr>
                     <tr>
                       <td>{t("Type")}</td>
@@ -198,8 +198,8 @@ function AdsList() {
                         <tr>
                           <td>{item.createdAt?.split("T")[0]}</td>
                           <td>{item.datePublication}</td>
-                          <td>{item.likedByUsers.length}</td>
-                          <td>{item.interestedUsers.length}</td>
+                          <td>{item.likedByUsers?.length}</td>
+                          <td>{item.interestedUsers?.length}</td>
                           <td>{item.type}</td>
                           <td>
                             <Button

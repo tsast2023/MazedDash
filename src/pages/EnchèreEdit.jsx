@@ -203,7 +203,7 @@ function EnchèreEdit(props) {
       formData.append('contractEnchereEnid', data.contractEnchereEnid);
     }
 
-          const res = await axios.put(`http://192.168.0.101:8081/api/bid/${id}`, formData, {
+          const res = await axios.put(`http://localhost:8081/api/bid/${id}`, formData, {
               headers: { Authorization: `Bearer ${token}` },
               'Content-Type': 'multipart/form-data',
           });
@@ -234,7 +234,7 @@ function EnchèreEdit(props) {
 
 //           // Send the request with FormData
 //           const res = await axios.post(
-//               "http://192.168.0.101:8081/api/bid/publishBidNow",
+//               "http://localhost:8081/api/bid/publishBidNow",
 //               formData,
 //               {
 //                   headers: {
@@ -265,7 +265,7 @@ function EnchèreEdit(props) {
 
 //           // Send the request with FormData
 //           const res = await axios.post(
-//               "http://192.168.0.101:8081/api/bid/scheduleBidPublication",
+//               "http://localhost:8081/api/bid/scheduleBidPublication",
 //               formData,
 //               {
 //                   headers: {
@@ -330,7 +330,7 @@ function EnchèreEdit(props) {
 
     const demandeEnchereEdit = async()=>{
         try {
-            const res = await axios.put(`http://192.168.0.101:8081/api/demandes/createModificationEnchereRequest` , {});
+            const res = await axios.put(`http://localhost:8081/api/demandes/createModificationEnchereRequest` , {});
             console.log(res.data)
         } catch (error) {
             console.log(error)

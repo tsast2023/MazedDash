@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
+import ReactPaginate from 'react-paginate';
+ 
 import Cookies from "js-cookie";
 import "../css/Download.css";
 // Modal component
@@ -67,7 +69,7 @@ function TableRow({ userData, onAccept }) {
   const downloadFile = async (fileId, token) => {
     try {
       const res = await axios.get(
-        `http://192.168.0.102:8081/api/demandeTransfert/file/${fileId}`,
+        `http://localhost:8081/api/demandeTransfert/file/${fileId}`,
         {
           responseType: "blob",
           headers: { Authorization: `Bearer ${token}` },
@@ -92,7 +94,7 @@ function TableRow({ userData, onAccept }) {
       console.log(id, status, cause);
 
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
+        `http://localhost:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
         {}, // Empty body
         {
           headers: {
@@ -221,10 +223,14 @@ function TableRow({ userData, onAccept }) {
 // ResponsiveTable component
 function ResponsiveTable({ data, headers, isMobile }) {
   const { t, i18n } = useTranslation();
-
+  const { numTel, setnumTel, pseudo, setpseudo, statusDemande, setstatusDemande ,  typeRecharge,settypeRecharge , pageTransfert, setpageTransfert } = useContext(GlobalState);
   const handleAccept = () => {
     // Handle acceptance logic
     console.log("Item accepted");
+  };
+  const handlePageChange = (selectedPage) => {
+    setpageTransfert(selectedPage.selected);
+    console.log(pageTransfert) // React Paginate is 0-indexed, so we add 1
   };
 
   return (
@@ -235,7 +241,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
             <label htmlFor="recherche">
               <h6>{t("Numéro de téléphone")}</h6>
             </label>
-            <input id="recherche" className="form-control" />
+            <input value={numTel} onChange={e=>setnumTel(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6">
@@ -243,32 +249,47 @@ function ResponsiveTable({ data, headers, isMobile }) {
             <label htmlFor="recherche">
               <h6>{t("Pseudo")}</h6>
             </label>
-            <input id="recherche" className="form-control" />
+            <input value={pseudo} onChange={e=>setpseudo(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6 form-group">
           <h6>{t("Statut")}</h6>
-          <select className="choices form-select">
-            <option value="" disabled selected></option>
-            <option value="square">{t("Approuver")}</option>
-            <option value="rectangle">{t("En attente")}</option>
-            <option value="rectangle">{t("Refuser")}</option>
+          <select value={statusDemande} onChange={e=>setstatusDemande(e.target.value)} className="choices form-select">
+            <option  value=""  selected></option>
+            <option value="APPROUVER">{t("Approuver")}</option>
+            <option value="EN_ATTENTE">{t("En attente")}</option>
+            <option value="REFUSER">{t("Refuser")}</option>
           </select>
         </div>
         <div className="col-6 form-group">
           <h6>{t("Type de recharge")}</h6>
-          <select className="choices form-select">
-            <option value="" disabled selected></option>
-            <option value="square">{t("Versement")}</option>
-            <option value="rectangle">{t("Virement Bancaire")}</option>
-            <option value="rectangle">{t("Cheque")}</option>
+          <select value={typeRecharge} onChange={e=>settypeRecharge(e.target.value)} className="choices form-select">
+            <option value=""  selected></option>
+            <option value="Versement">{t("Versement")}</option>
+            <option value="VirementBancaire">{t("Virement Bancaire")}</option>
+            <option value="Cheque">{t("Cheque")}</option>
+            <option value="VisiteBureau">{t("Visite Bureau")}</option>
+            <option value="Transfert">{t("Transfert")}</option>
+            <option value="CarteRecharge">{t("Carte Recharge")}</option>
+            <option value="PointDeRecharge">{t("Point De Recharge")}</option>
           </select>
         </div>
+        <ReactPaginate
+        previousLabel={"← Previous"}
+        nextLabel={"Next →"}
+        breakLabel={"..."}
+        pageCount={3} // Total number of pages
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+      />
       </div>
       {isMobile ? (
         <table className="table" id="table2">
           <tbody>
-            {data.map((item, index) => (
+            {data.content?.map((item, index) => (
               <React.Fragment key={index}>
                 <TableRow userData={item} onAccept={handleAccept} />
                 <tr>
@@ -292,7 +313,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {data?.content?.map((item, index) => (
               <TableRow
                 key={index}
                 userData={item}
@@ -303,6 +324,9 @@ function ResponsiveTable({ data, headers, isMobile }) {
           </tbody>
         </table>
       )}
+      <div>
+          1 , 2 , 2, 2, , 2
+        </div>
     </div>
   );
 }
@@ -313,7 +337,11 @@ function Transfer() {
   const demandesTransfert = state.demandesT || [];
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
-
+  // State to track selected filter values
+  const [filterStatus, setFilterStatus] = useState("");
+  const [filterType, setFilterType] = useState("");
+  const [searchPseudo, setSearchPseudo] = useState("");
+  const [searchNumtel, setSearchNumtel] = useState("");
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -328,41 +356,6 @@ function Transfer() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const data = [
-    {
-      name: "Graiden",
-      vehicle: "vehicula",
-      value: "076",
-      location: "Offenburg",
-      note: "Lorem",
-      status: {
-        text: "Accepté",
-        color: "secondary",
-      },
-    },
-    {
-      name: "Graiden",
-      vehicle: "vehicula",
-      value: "076",
-      location: "Offenburg",
-      note: "Lorem",
-      status: {
-        text: "Refusé",
-        color: "danger",
-      },
-    },
-    {
-      name: "Graiden",
-      vehicle: "vehicula",
-      value: "076",
-      location: "Offenburg",
-      note: "Lorem",
-      status: {
-        text: "En attente",
-        color: "warning",
-      },
-    },
-  ];
 
   return (
     <div className="content-container">

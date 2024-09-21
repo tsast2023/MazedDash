@@ -57,7 +57,7 @@ const publishNow = async () => {
 
   try {
       const res = await axios.post(
-          "http://192.168.0.102:8081/api/annonce/createAnnonce",
+          "http://localhost:8081/api/annonce/createAnnonce",
           formData, // Send the FormData
           {
               headers: {
@@ -76,7 +76,7 @@ const publishNow = async () => {
   const scheduledAds = async () => {
     try {
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,
+        `http://localhost:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
