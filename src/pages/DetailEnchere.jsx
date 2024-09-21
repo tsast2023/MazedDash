@@ -60,7 +60,7 @@ function DetailEnchere(props) {
   const approverUser = async (enchereId, userId) => {
     try {
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/bid/approve/${enchereId}/${userId}`,
+        `http://192.168.0.104:8081/api/bid/approve/${enchereId}/${userId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -169,7 +169,7 @@ function DetailEnchere(props) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
+        `http://192.168.0.104:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -188,7 +188,11 @@ function DetailEnchere(props) {
         {/* Product Images */}
         <div className="product-images">
           <div className="main-image">
-            <img src={mainImage} alt="Product" className="main-product-img" />
+            <img
+              src={mainImage}
+              alt="Product"
+              className="main-product-img"
+            />
           </div>
           <div className="thumbnail-images">
             {props.selectedItem.galerie.map((image, index) => (
@@ -207,7 +211,6 @@ function DetailEnchere(props) {
         <div className="product-info">
           <div className="product-price-info">
             <div className="status-container">
-              {/* Dynamic Content Based on Status */}
               {props.selectedItem.status === "En_Cours" ? (
                 <div className="status-content in-progress">
                   <h2 className="status-label">{t("En cours")}</h2>
@@ -216,11 +219,7 @@ function DetailEnchere(props) {
                   </p>
                   <p className="remaining-time">{t("Temps restant")}</p>
                   <p className="majoration">
-                    {t("Majoration")} :{" "}
-                    {props.selectedItem.valeurMajoration.map(
-                      (item, i) => `${item}${i !== props.selectedItem.valeurMajoration.length - 1 ? "/" : ""}`
-                    )}{" "}
-                    DT
+                    {t("Majoration")} : {props.selectedItem.valeurMajoration.join("/")} DT
                   </p>
                 </div>
               ) : props.selectedItem.status === "Ouverte" ? (
@@ -255,6 +254,7 @@ function DetailEnchere(props) {
     </div>
   </div>
 </section>
+
 
         <br />
         <br />

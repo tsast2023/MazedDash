@@ -58,7 +58,7 @@ function EnchereListe() {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://192.168.0.102:8081/api/bid/${id}`,
+        `http://13.48.104.124:8081/api/bid/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -226,7 +226,7 @@ function EnchereListe() {
   const AnnulerBid = async (id) => {
     try {
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/bid/annuler/${id}`,
+        `http://13.48.104.124:8081/api/bid/annuler/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -465,7 +465,7 @@ function EnchereListe() {
                   ) : (
                     <Table responsive="sm">
                       <thead>
-                        <tr>
+                        <tr className="customTr">
                           <th>{t("Produit")}</th>
                           <th>{t("Prix")}</th>
                           <th>{t("Nb de Participant")}</th>
@@ -481,7 +481,7 @@ function EnchereListe() {
                           <th>{t("Désépingler")}</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="customTb">
                         {encheres &&
                           encheres.map((item) => (
                             <tr>

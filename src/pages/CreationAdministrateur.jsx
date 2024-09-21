@@ -30,7 +30,7 @@ function CreationAdministrateur() {
     console.log(data);
     try {
       const res = await axios.post(
-        "http://192.168.0.102:8081/admin/createAdmin",
+        "http://13.48.104.124:8081/admin/createAdmin",
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );

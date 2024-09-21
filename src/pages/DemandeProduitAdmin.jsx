@@ -76,7 +76,7 @@ const DemandeProduitAdmin = () => {
     try {
       console.log(token, demandeId, status);
       const res = await axios.post(
-        `http://192.168.0.102:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,
+        `http://13.48.104.124:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

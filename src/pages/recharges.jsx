@@ -71,7 +71,7 @@ function Recharges() {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://192.168.0.102:8081/api/carte/deleteCarte?id=${id}`,
+        `http://13.48.104.124:8081/api/carte/deleteCarte?id=${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -84,7 +84,7 @@ function Recharges() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://192.168.0.102:8081/api/carte/publishNow",
+        "http://13.48.104.124:8081/api/carte/publishNow",
         carteRech,
         { headers: { Authorization: `Bearer ${token}` } }
       );

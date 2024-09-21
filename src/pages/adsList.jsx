@@ -78,7 +78,7 @@ function AdsList() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.102:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
+      const res = await axios.delete(`http://13.48.104.124:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
       console.log(res.data);
     } catch (error) {
       console.log(error);
