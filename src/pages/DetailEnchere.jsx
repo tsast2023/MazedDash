@@ -254,17 +254,20 @@ function DetailEnchere(props) {
                       </div>
                     ) : props.selectedItem.status === "Ouverte" ? (
                       <div>
-                        <p className="price-text">
-                          {t("Prix Mazed online final")} :{" "}
-                          {props.selectedItem.prixMazedOnline}DT
-                        </p>
-                        <p className="date-time">
-                          {t("Date/Heure")} :{" "}
-                          {props.selectedItem.datedeclenchement}
-                        </p>
-                        <button type="button" className="publish-btn">
-                          {t("Publier")}
-                        </button>
+                        <p>Nom Produits</p>
+                        <p>Nom Catégorie</p>
+                        <p>Date Déclenchemant</p>
+                        <p>Date Fermeture</p>
+                        <p>Date Publication</p>
+                        <p>Extension Time</p>
+                        <p>Numbre de Participant attendu</p>
+                        <p>Numbre de Participant réel</p>
+                        <p>Valeur Majoration</p>
+                        <p>Autofinnancement</p>
+                        <p>Facilité</p>
+                        <p>Couc de clic</p>
+                        <p>Frais d'inscription</p>
+
                       </div>
                     ) : (
                       <div>
