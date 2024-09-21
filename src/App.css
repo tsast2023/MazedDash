@@ -163,3 +163,30 @@ table {
   text-align: right;
   direction: rtl; /* Set direction to RTL */
 }
+
+.customTr {
+  font-size: 12px;
+}
+
+.customTb {
+  font-size: 14px;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-row p {
+  margin: 0;
+}
+
+.info-row .data {
+  text-align: right;
+}

@@ -274,7 +274,7 @@ function EnchereListe() {
                     <div className="col-6 form-group">
                       <h6>{t("Ville")}</h6>
                       <select className="choices form-select">
-                      <option value="" disabled selected></option>
+                        <option value="" disabled selected></option>
                         <option>{t("Sousse")}</option>
                         <option>{t("Gafsa")}</option>
                         <option>{t("Tunis")}</option>
@@ -304,7 +304,7 @@ function EnchereListe() {
                     <div className="col-6 form-group">
                       <h6>{t("Statut")}</h6>
                       <select className="choices form-select">
-                      <option value="" disabled selected></option>
+                        <option value="" disabled selected></option>
                         <option value="square">{t("Brouillon")}</option>
                         <option value="rectangle">{t("Ouverte")}</option>
                         <option value="rombo">{t("En cours")}</option>
@@ -465,7 +465,7 @@ function EnchereListe() {
                   ) : (
                     <Table responsive="sm">
                       <thead>
-                        <tr>
+                        <tr className="customTr">
                           <th>{t("Produit")}</th>
                           <th>{t("Prix")}</th>
                           <th>{t("Nb de Participant")}</th>
@@ -481,7 +481,7 @@ function EnchereListe() {
                           <th>{t("Désépingler")}</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="customTb">
                         {encheres &&
                           encheres.map((item) => (
                             <tr>
@@ -609,7 +609,6 @@ function EnchereListe() {
           </div>
         </div>
       )}
-
       <Modal
         show={showPlanifierModal}
         onHide={() => setShowPlanifierModal(false)}
@@ -638,7 +637,6 @@ function EnchereListe() {
           </Button>
         </Modal.Footer>
       </Modal>
-
       {steps === 1 && <DetailEnchere selectedItem={selectedItem} />}
       {steps === 2 && <EnchèreEdit selectedItem={selectedItem} />}
       {steps === 3 && <Configuration selectedItem={selectedItem} />}
