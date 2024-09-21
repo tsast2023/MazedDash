@@ -64,35 +64,80 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  position: relative;
 }
 
-.product-price-info {
-  margin-bottom: 20px;
-}
-
-.status-container {
+.info-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.product-ref {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
 
 .status-content {
   padding: 10px;
-  border: 1px solid #ddd;
   border-radius: 5px;
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  width: 120px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
 }
 
 .in-progress {
-  background-color: #fff3cd;
+  background-color: #ffc107;
 }
 
 .open {
-  background-color: #d4edda;
+  background-color: #28a745;
 }
 
 .closed {
-  background-color: #f8d7da;
+  background-color: #dc3545;
+}
+
+.product-price-info {
+  margin-top: 40px;
+}
+
+.price-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.remaining-time, .date-time, .majoration {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Timer CSS */
+.timer {
+  margin-bottom: 20px;
+}
+
+.timer-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.time-value {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .publish-btn {
@@ -109,7 +154,7 @@
 }
 
 @media screen and (max-width: 1212px) {
-  .product-detail  {
+  .product-detail {
     flex-direction: column;
   }
 }

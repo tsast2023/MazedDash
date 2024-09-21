@@ -209,56 +209,82 @@ function DetailEnchere(props) {
 
                 {/* Product Info */}
                 <div className="product-info">
-                  <div className="product-price-info">
-                    <div className="status-container">
-                      {props.selectedItem.status === "En_Cours" ? (
-                        <div className="status-content in-progress">
-                          <h2 className="status-label">{t("En cours")}</h2>
-                          <p className="price-text">
-                            {t("Prix Mazed online")} :{" "}
-                            {props.selectedItem.prixMazedOnline}DT
-                          </p>
-                          <p className="remaining-time">{t("Temps restant")}</p>
-                          <p className="majoration">
-                            {t("Majoration")} :{" "}
-                            {props.selectedItem.valeurMajoration.join("/")} DT
-                          </p>
-                        </div>
-                      ) : props.selectedItem.status === "Ouverte" ? (
-                        <div className="status-content open">
-                          <h2 className="status-label">{t("Ouverte")}</h2>
-                          <p className="price-text">
-                            {t("Prix Mazed online final")} :{" "}
-                            {props.selectedItem.prixMazedOnline}DT
-                          </p>
-                          <p className="date-time">
-                            {t("Date/Heure")} :{" "}
-                            {props.selectedItem.datedeclenchement}
-                          </p>
-                          <button type="button" className="publish-btn">
-                            {t("Publier")}
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="status-content closed">
-                          <p className="status-label">{t("Terminer")}</p>
-                          <p className="price-text">
-                            {t("Prix Mazed online final")} :{" "}
-                            {props.selectedItem.prixMazedOnline}DT
-                          </p>
-                          <p className="date-time">{t("Date/Heure")}</p>
-                          <p>{t("Nom et Prénom")}</p>
-                          <p>{t("Pseudo")}</p>
-                          <p>{t("Numéro du téléphone")}</p>
-                        </div>
-                      )}
+                  <div className="info-header">
+                    {/* REF and Number */}
+                    <div className="product-ref">
+                      <p>
+                        {t("REF")} : {props.selectedItem.refNumber}
+                      </p>
                     </div>
+                    {/* Statut */}
+                    <div
+                      className={`status-content ${props.selectedItem.status.toLowerCase()}`}
+                    >
+                      <p className="status-label">
+                        {props.selectedItem.status === "En_Cours"
+                          ? t("En cours")
+                          : props.selectedItem.status === "Ouverte"
+                          ? t("Ouverte")
+                          : t("Terminer")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="product-price-info">
+                    {/* Timer for "En Cours" */}
+                    {props.selectedItem.status === "En_Cours" && (
+                      <div className="timer">
+                        <p className="timer-label">{t("Temps restant")}:</p>
+                        <p className="time-value">00:30:00</p>{" "}
+                        {/* This value should dynamically update */}
+                      </div>
+                    )}
+
+                    {props.selectedItem.status === "En_Cours" ? (
+                      <div>
+                        <p className="price-text">
+                          {t("Prix Mazed online")} :{" "}
+                          {props.selectedItem.prixMazedOnline}DT
+                        </p>
+                        <p className="remaining-time">{t("Temps restant")}</p>
+                        <p className="majoration">
+                          {t("Majoration")} :{" "}
+                          {props.selectedItem.valeurMajoration.join("/")} DT
+                        </p>
+                      </div>
+                    ) : props.selectedItem.status === "Ouverte" ? (
+                      <div>
+                        <p className="price-text">
+                          {t("Prix Mazed online final")} :{" "}
+                          {props.selectedItem.prixMazedOnline}DT
+                        </p>
+                        <p className="date-time">
+                          {t("Date/Heure")} :{" "}
+                          {props.selectedItem.datedeclenchement}
+                        </p>
+                        <button type="button" className="publish-btn">
+                          {t("Publier")}
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="price-text">
+                          {t("Prix Mazed online final")} :{" "}
+                          {props.selectedItem.prixMazedOnline}DT
+                        </p>
+                        <p className="date-time">{t("Date/Heure")}</p>
+                        <p>{t("Nom et Prénom")}</p>
+                        <p>{t("Pseudo")}</p>
+                        <p>{t("Numéro du téléphone")}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
         <br />
         <br />
         <section className="section">
