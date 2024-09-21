@@ -253,21 +253,85 @@ function DetailEnchere(props) {
                         </p>
                       </div>
                     ) : props.selectedItem.status === "Ouverte" ? (
-                      <div>
-                        <p>Nom Produits</p>
-                        <p>Nom Catégorie</p>
-                        <p>Date Déclenchemant</p>
-                        <p>Date Fermeture</p>
-                        <p>Date Publication</p>
-                        <p>Extension Time</p>
-                        <p>Numbre de Participant attendu</p>
-                        <p>Numbre de Participant réel</p>
-                        <p>Valeur Majoration</p>
-                        <p>Autofinnancement</p>
-                        <p>Facilité</p>
-                        <p>Couc de clic</p>
-                        <p>Frais d'inscription</p>
-
+                      <div className="info-container">
+                        <div className="info-row">
+                          <p>
+                            <strong>Nom Produits</strong>
+                          </p>
+                          <p className="data">Product Name Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Nom Catégorie</strong>
+                          </p>
+                          <p className="data">Category Name Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Date Déclenchemant</strong>
+                          </p>
+                          <p className="data">Trigger Date Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Date Fermeture</strong>
+                          </p>
+                          <p className="data">Close Date Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Date Publication</strong>
+                          </p>
+                          <p className="data">Publish Date Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Extension Time</strong>
+                          </p>
+                          <p className="data">Extension Time Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Numbre de Participant attendu</strong>
+                          </p>
+                          <p className="data">Expected Participants Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Numbre de Participant réel</strong>
+                          </p>
+                          <p className="data">Actual Participants Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Valeur Majoration</strong>
+                          </p>
+                          <p className="data">Value Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Autofinnancement</strong>
+                          </p>
+                          <p className="data">Self-Financing Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Facilité</strong>
+                          </p>
+                          <p className="data">Facility Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Couc de clic</strong>
+                          </p>
+                          <p className="data">Click Cost Here</p>
+                        </div>
+                        <div className="info-row">
+                          <p>
+                            <strong>Frais d'inscription</strong>
+                          </p>
+                          <p className="data">Registration Fee Here</p>
+                        </div>
                       </div>
                     ) : (
                       <div>

@@ -353,7 +353,86 @@ const DemandeEnchereAdmin = () => {
           <Modal.Title>{t("Ancien Enchére")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img src="./Mazed.jpg" alt="Ancien Enchére" className="img-fluid" />
+          <div className="info-container">
+            <div className="info-row">
+              <p>
+                <strong>Nom Produits</strong>
+              </p>
+              <p className="data">Product Name Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Nom Catégorie</strong>
+              </p>
+              <p className="data">Category Name Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Date Déclenchemant</strong>
+              </p>
+              <p className="data">Trigger Date Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Date Fermeture</strong>
+              </p>
+              <p className="data">Close Date Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Date Publication</strong>
+              </p>
+              <p className="data">Publish Date Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Extension Time</strong>
+              </p>
+              <p className="data">Extension Time Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Numbre de Participant attendu</strong>
+              </p>
+              <p className="data">Expected Participants Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Numbre de Participant réel</strong>
+              </p>
+              <p className="data">Actual Participants Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Valeur Majoration</strong>
+              </p>
+              <p className="data">Value Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Autofinnancement</strong>
+              </p>
+              <p className="data">Self-Financing Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Facilité</strong>
+              </p>
+              <p className="data">Facility Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Couc de clic</strong>
+              </p>
+              <p className="data">Click Cost Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Frais d'inscription</strong>
+              </p>
+              <p className="data">Registration Fee Here</p>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleAncienModalClose}>
@@ -368,7 +447,86 @@ const DemandeEnchereAdmin = () => {
           <Modal.Title>{t("Nouveau Enchére")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img src="./Mazed.jpg" alt="Nouveau Enchére" className="img-fluid" />
+          <div className="info-container">
+            <div className="info-row">
+              <p>
+                <strong>Nom Produits</strong>
+              </p>
+              <p className="data">Product Name Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Nom Catégorie</strong>
+              </p>
+              <p className="data">Category Name Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Date Déclenchemant</strong>
+              </p>
+              <p className="data">Trigger Date Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Date Fermeture</strong>
+              </p>
+              <p className="data">Close Date Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Date Publication</strong>
+              </p>
+              <p className="data">Publish Date Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Extension Time</strong>
+              </p>
+              <p className="data">Extension Time Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Numbre de Participant attendu</strong>
+              </p>
+              <p className="data">Expected Participants Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Numbre de Participant réel</strong>
+              </p>
+              <p className="data">Actual Participants Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Valeur Majoration</strong>
+              </p>
+              <p className="data">Value Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Autofinnancement</strong>
+              </p>
+              <p className="data">Self-Financing Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Facilité</strong>
+              </p>
+              <p className="data">Facility Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Couc de clic</strong>
+              </p>
+              <p className="data">Click Cost Here</p>
+            </div>
+            <div className="info-row">
+              <p>
+                <strong>Frais d'inscription</strong>
+              </p>
+              <p className="data">Registration Fee Here</p>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleNouveauModalClose}>

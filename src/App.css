@@ -171,3 +171,22 @@ table {
 .customTb {
   font-size: 14px;
 }
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-row p {
+  margin: 0;
+}
+
+.info-row .data {
+  text-align: right;
+}
