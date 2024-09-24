@@ -8,7 +8,9 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { GlobalState } from "../GlobalState";
 import Cookies from "js-cookie";
-
+import { toast } from 'react-toastify';
+import { Watch } from 'react-loader-spinner'
+import 'react-toastify/dist/ReactToastify.css';
 function EnchèreCreation() {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
@@ -17,7 +19,7 @@ function EnchèreCreation() {
 
   const [steps, setSteps] = useState(0);
   const fileInputRef = React.createRef();
-
+  
   const [data, setData] = useState({
     ville: "Sousse",
     ref: "",
@@ -174,79 +176,90 @@ function EnchèreCreation() {
     console.log(dataConfig);
     console.log(valeurMajoration);
     console.log(localStorage.getItem("idenchere"));
-    try {
-      const formData = new FormData();
-      Object.keys(dataConfig).forEach((key) => {
-        formData.append(key, dataConfig[key]);
-      });
-
-      // Add IdEnchere to FormData
-      formData.append("IdEnchere", localStorage.getItem("idenchere"));
-      const valeurMajorationArray = String(valeurMajoration)
-        .split(",")
-        .map(Number);
-      console.log(valeurMajorationArray);
-      valeurMajorationArray.forEach((value) => {
-        formData.append("valeurMajoration", value);
-      });
-
-      // Add ContractEnchere file to FormData
-      if (dataConfig.contractEnchere) {
+  
+    const resolveWithSomeData = new Promise(async (resolve, reject) => {
+      try {
+        const formData = new FormData();
+        Object.keys(dataConfig).forEach((key) => {
+          formData.append(key, dataConfig[key]);
+        });
+  
+        // Add IdEnchere to FormData
+        formData.append("IdEnchere", localStorage.getItem("idenchere"));
+        const valeurMajorationArray = String(valeurMajoration)
+          .split(",")
+          .map(Number);
+        console.log(valeurMajorationArray);
+        valeurMajorationArray.forEach((value) => {
+          formData.append("valeurMajoration", value);
+        });
+  
+        // Check for required files
+        if (!dataConfig.contractEnchere || !dataConfig.contractEnchereAr || !dataConfig.contractEnchereEn || !dataConfig.galerie) {
+          reject(new Error("Missing required files"));
+          return;
+        }
+  
         formData.append("ContractEnchere", dataConfig.contractEnchere);
-      } else {
-        console.error("ContractEnchere file is missing.");
-        return;
-      }
-
-      // Add ContractEnchereAr file to FormData
-      if (dataConfig.contractEnchereAr) {
         formData.append("ContractEnchereAr", dataConfig.contractEnchereAr);
-      } else {
-        console.error("ContractEnchereAr file is missing.");
-        return;
-      }
-
-      // Add ContractEnchereEn file to FormData
-      if (dataConfig.contractEnchereEn) {
         formData.append("ContractEnchereEn", dataConfig.contractEnchereEn);
-      } else {
-        console.error("ContractEnchereEn file is missing.");
-        return;
-      }
-
-      // Add ContractEnchereAr file to FormData
-      if (dataConfig.galerie) {
-        console.log("azaza", dataConfig.galerie);
+  
         for (const file of dataConfig.galerie) {
           formData.append("galerie", file);
         }
-      } else {
-        console.error("galerie file is missing.");
-        return;
+  
+        const res = await axios.post(
+          "http://localhost:8081/api/bid/publishBidNow",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+  
+        console.log(res.data);
+        localStorage.removeItem("idenchere");
+        resolve(res.data);
+      } catch (error) {
+        reject(error);
       }
-
-      // Console log FormData contents
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-
-      // Send the request with FormData
-      const res = await axios.post(
-        "http://localhost:8081/api/bid/publishBidNow",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+    });
+  
+    toast.promise(
+      resolveWithSomeData,
+      {
+        pending: {
+          render() {
+            return (<div>
+              <Watch
+  visible={true}
+  height="80"
+  width="80"
+  radius="48"
+  color="#4fa94d"
+  ariaLabel="watch-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  />"Uploading bid configuration..."
+            </div>);
           },
-        }
-      );
-
-      console.log(res.data);
-      localStorage.removeItem("idenchere");
-    } catch (error) {
-      console.log(error);
-    }
+          icon: false,
+        },
+        success: {
+          render({ data }) {
+            return `Bid successfully published!`;
+          },
+          icon: "🟢",
+        },
+        error: {
+          render({ data }) {
+            return `Error: ${data.message}`;
+          },
+        },
+      }
+    );
   };
 
   const addScheduledbid = async (e) => {

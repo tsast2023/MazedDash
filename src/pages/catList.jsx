@@ -16,16 +16,10 @@ function CategoryList() {
   const [isMobile, setIsMobile] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [category, setcategory] = useState({nomCategorieArabe:"" ,nomCategorieEnglish:"",nomCategorie:"" , icon:"" , id : "" , alUne:"" , statusCategorie:""});
+  const [category, setcategory] = useState({nomCategorieArabe:"" ,nomCategorieEnglish:"",nomCategorie:"" , icon:"" , oldCategoryId : "" , alUne:"" , statusCategorie:""});
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setcategory({ ...category, icon: reader.result });
-    };
-
-    reader.readAsDataURL(file);
+    const file = e.target.files[0]; // Get the selected file
+    setcategory({ ...category, icon: file }); // Store the file in the state directly
   };
   useEffect(() => {
     const handleResize = () => {
@@ -274,27 +268,50 @@ const aluneFalse = async(id)=>{
 }
 const updateCat = async (id, e) => {
   e.preventDefault();
+  console.log(category)
+  // Create FormData instance
+  const formData = new FormData();
   
+  // Append form fields to FormData
+  formData.append("nomCategorie", category.nomCategorie);
+  formData.append("nomCategorieArabe", category.nomCategorieArabe);
+  formData.append("nomCategorieEnglish", category.nomCategorieEnglish);
+  
+  // Only append the icon if it's provided (for both endpoints)
+  if (category.icon) {
+    formData.append("icon", category.icon);
+  }
+
+  // Check if the user has "Super admin" role
   if (user.roleAdmin.name === "Super admin") {
     try {
       const res = await axios.put(
         `http://localhost:8081/api/categories/${id}`, 
-        category, 
-        { headers: { Authorization: `Bearer ${token}` } }
+        formData,  // Send FormData
+        { 
+          headers: { 
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "multipart/form-data"  // Set correct headers
+          }
+        }
       );
       console.log(res.data);
     } catch (error) {
       console.error("Error updating category:", error);
     }
-  } else {
+  } 
+  // For normal admin role
+  else {
     try {
-      console.log(category)
       const res = await axios.post(
         `http://localhost:8081/api/demandes/createModificationCategoryRequest`, 
-        category, 
+        formData,  // Send FormData
         { 
-          params: { oldCategoryId: id },
-          headers: { Authorization: `Bearer ${token}` }
+          params: { oldCategoryId: id },  // Include old category ID as a parameter
+          headers: { 
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "multipart/form-data"  // Set correct headers
+          }
         }
       );
       console.log(res.data);
@@ -303,6 +320,8 @@ const updateCat = async (id, e) => {
     }
   }
 };
+
+
 
 
 

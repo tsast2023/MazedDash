@@ -12,11 +12,13 @@ function DetailEnchere(props) {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
   const users = state.Users;
+  console.log(users)
   const participants = [
     ...props.selectedItem.participantNonSignéIds,
     ...props.selectedItem.participantSignéIds,
   ];
-  const filteredUsers = users.filter((user) => participants.includes(user.id));
+  console.log("participants;",participants)
+  const filteredUsers = users?.filter((user) => participants.includes(user.id));
   const [isMobile, setIsMobile] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedGan, setselectedGan] = useState();
@@ -180,8 +182,20 @@ function DetailEnchere(props) {
   };
   return (
     <div className="content-container">
+       <button className="GoBack" onClick={() => window.location.reload()}>
+      <svg
+        height="16"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+        viewBox="0 0 1024 1024"
+      >
+        <path d="M874.690416 495.52477c0 11.2973-9.168824 20.466124-20.466124 20.466124l-604.773963 0 188.083679 188.083679c7.992021 7.992021 7.992021 20.947078 0 28.939099-4.001127 3.990894-9.240455 5.996574-14.46955 5.996574-5.239328 0-10.478655-1.995447-14.479783-5.996574l-223.00912-223.00912c-3.837398-3.837398-5.996574-9.046027-5.996574-14.46955 0-5.433756 2.159176-10.632151 5.996574-14.46955l223.019353-223.029586c7.992021-7.992021 20.957311-7.992021 28.949332 0 7.992021 8.002254 7.992021 20.957311 0 28.949332l-188.073446 188.073446 604.753497 0C865.521592 475.058646 874.690416 484.217237 874.690416 495.52477z"></path>
+      </svg>
+      <span>{t("Retour")}</span>
+    </button>
       <div id="main">
-        <section className="product-section">
+      <section className="product-section">
           <div className="card-container">
             <div className="product-card">
               <div className="product-detail">
@@ -206,8 +220,6 @@ function DetailEnchere(props) {
                     ))}
                   </div>
                 </div>
-
-                {/* Product Info */}
                 <div className="product-info">
                   <div className="info-header">
                     {/* REF and Number */}
@@ -229,7 +241,19 @@ function DetailEnchere(props) {
                       </p>
                     </div>
                   </div>
-
+                  <div className="product-header">
+                    <div className="product-name">
+                      <h2>{props.selectedItem.nomProduit || "Nom Produits"}</h2>
+                    </div>
+                    <div className="product-category">
+                      <p>
+                        {props.selectedItem.nomCategorie || "Nom Catégorie"}
+                      </p>
+                    </div>
+                    <div className="product-description">
+                      <p>{props.selectedItem.description || "Description"}</p>
+                    </div>
+                  </div>
                   <div className="product-price-info">
                     {/* Timer for "En Cours" */}
                     {props.selectedItem.status === "En_Cours" && (
@@ -254,80 +278,113 @@ function DetailEnchere(props) {
                       </div>
                     ) : props.selectedItem.status === "Ouverte" ? (
                       <div className="info-container">
+                        {/* Product Information Details */}
                         <div className="info-row">
                           <p>
-                            <strong>Nom Produits</strong>
-                          </p>
-                          <p className="data">Product Name Here</p>
-                        </div>
-                        <div className="info-row">
-                          <p>
-                            <strong>Nom Catégorie</strong>
-                          </p>
-                          <p className="data">Category Name Here</p>
-                        </div>
-                        <div className="info-row">
-                          <p>
-                            <strong>Date Déclenchemant</strong>
+                            <i
+                              className="fa-solid fa-calendar-check"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Date Déclenchemant :</strong>
                           </p>
                           <p className="data">Trigger Date Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Date Fermeture</strong>
+                            <i
+                              className="fa-solid fa-calendar-xmark"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Date Fermeture :</strong>
                           </p>
                           <p className="data">Close Date Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Date Publication</strong>
+                            <i
+                              className="fa-solid fa-calendar-days"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Date Publication :</strong>
                           </p>
                           <p className="data">Publish Date Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Extension Time</strong>
+                            <i
+                              className="fa-solid fa-stopwatch-20"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Extension Time :</strong>
                           </p>
                           <p className="data">Extension Time Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Numbre de Participant attendu</strong>
+                            <i
+                              className="fa-solid fa-user-clock"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Numbre de Participant attendu :</strong>
                           </p>
                           <p className="data">Expected Participants Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Numbre de Participant réel</strong>
+                            <i
+                              className="fa-solid fa-users"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Numbre de Participant réel :</strong>
                           </p>
                           <p className="data">Actual Participants Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Valeur Majoration</strong>
+                            <i
+                              className="fa-solid fa-list-ol"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Valeur Majoration :</strong>
                           </p>
                           <p className="data">Value Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Autofinnancement</strong>
+                            <i
+                              className="fa-solid fa-coins"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Autofinancement :</strong>
                           </p>
                           <p className="data">Self-Financing Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Facilité</strong>
+                            <i
+                              className="fa-solid fa-money-bill-transfer"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Facilité :</strong>
                           </p>
                           <p className="data">Facility Here</p>
                         </div>
                         <div className="info-row">
                           <p>
-                            <strong>Couc de clic</strong>
+                            <i
+                              className="fa-solid fa-hand-holding-dollar"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            <strong>Cou de clic :</strong>
                           </p>
                           <p className="data">Click Cost Here</p>
                         </div>
                         <div className="info-row">
                           <p>
+                            <i
+                              className="fa-solid fa-money-bill-trend-up"
+                              style={{ marginRight: "8px" }}
+                            ></i>
                             <strong>Frais d'inscription</strong>
                           </p>
                           <p className="data">Registration Fee Here</p>

@@ -13,6 +13,7 @@ import EnchèreEdit from "./EnchèreEdit";
 import Cookies from "js-cookie";
 import Configuration from "./configuration";
 import { toast } from "react-toastify";
+import ReactPaginate from 'react-paginate';
 
 function EnchereListe() {
   const token = Cookies.get("token");
@@ -22,6 +23,20 @@ function EnchereListe() {
   const [selectedItem, setSelectedItem] = useState();
   const state = useContext(GlobalState);
   const encheres = state.Bids;
+
+  const {
+    statusBid,
+    setStatusBid,
+    
+    nomCategorie ,
+    setNomCategorie,
+    nomProduit ,
+    setNomProduit,
+    ville,
+    setVille,
+    pageBid,
+    setPageBid
+  } =useContext(GlobalState)
   const [showPlanifierModal, setShowPlanifierModal] = useState(false);
   const [NumberMois, setNumberMois] = useState();
 
@@ -38,6 +53,11 @@ function EnchereListe() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handlePageChange = (selectedPage) => {
+    setPageBid(selectedPage.selected);
+    console.log(pageBid) // React Paginate is 0-indexed, so we add 1
+  };
   useEffect(() => {}, [i18n.language]);
   const getEnchereName = (cat) => {
     switch (i18n.language) {
@@ -260,7 +280,7 @@ function EnchereListe() {
                         <label htmlFor="recherche">
                           <h6>{t("Nom Produit")}</h6>
                         </label>
-                        <input id="recherche" className="form-control" />
+                        <input value={nomProduit} onChange={e=>setNomProduit(e.target.value)} id="recherche" className="form-control" />
                       </div>
                     </div>
                     <div className="col-6">
@@ -268,13 +288,13 @@ function EnchereListe() {
                         <label htmlFor="recherche">
                           <h6>{t("Nom Catégorie")}</h6>
                         </label>
-                        <input id="recherche" className="form-control" />
+                        <input value={nomCategorie} onChange={e=>setNomCategorie(e.target.value)} id="recherche" className="form-control" />
                       </div>
                     </div>
                     <div className="col-6 form-group">
                       <h6>{t("Ville")}</h6>
-                      <select className="choices form-select">
-                        <option value="" disabled selected></option>
+                      <select value={ville} onChange={e=>setVille(e.target.value)} className="choices form-select">
+                        <option   selected></option>
                         <option>{t("Sousse")}</option>
                         <option>{t("Gafsa")}</option>
                         <option>{t("Tunis")}</option>
@@ -303,21 +323,33 @@ function EnchereListe() {
                     </div>
                     <div className="col-6 form-group">
                       <h6>{t("Statut")}</h6>
-                      <select className="choices form-select">
-                        <option value="" disabled selected></option>
-                        <option value="square">{t("Brouillon")}</option>
-                        <option value="rectangle">{t("Ouverte")}</option>
-                        <option value="rombo">{t("En cours")}</option>
-                        <option value="romboid">{t("Cachée")}</option>
-                        <option value="trapeze">{t("Annulée")}</option>
+                      <select value={statusBid} onChange={e=>setStatusBid(e.target.value)} className="choices form-select">
+                        <option  selected></option>
+                        <option value="Brouillon">{t("Brouillon")}</option>
+                        <option value="Ouverte">{t("Ouverte")}</option>
+                        <option value="En_cours">{t("En cours")}</option>
+                        <option value="Cachée">{t("Cachée")}</option>
+                        <option value="Annulée">{t("Annulée")}</option>
                       </select>
                     </div>
+                    <ReactPaginate
+        previousLabel={"← Previous"}
+        nextLabel={"Next →"}
+        breakLabel={"..."}
+        pageCount={3} // Total number of pages
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        className="react-paginate"
+      />
                   </div>
                   {isMobile ? (
                     <Table responsive="sm">
                       <tbody>
                         {encheres &&
-                          encheres.map((item) => (
+                          encheres.content?.map((item) => (
                             <>
                               <tr>
                                 <td>{t("Produit")}</td>
@@ -483,7 +515,7 @@ function EnchereListe() {
                       </thead>
                       <tbody className="customTb">
                         {encheres &&
-                          encheres.map((item) => (
+                          encheres?.content?.map((item) => (
                             <tr>
                               <td className="text-bold-500">
                                 {getEnchereName(item)}

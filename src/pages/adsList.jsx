@@ -128,7 +128,7 @@ function AdsList() {
                 <table className="table" id="table1">
                   <tbody>
                   {annonces &&
-                      annonces.map((item) => (
+                      annonces?.content?.((item) => (
                         <>
                     <tr>
                       <td>{t("Date de création")}</td>
@@ -194,7 +194,7 @@ function AdsList() {
                   </thead>
                   <tbody>
                     {annonces &&
-                      annonces.map((item) => (
+                      annonces?.content?.map((item) => (
                         <tr>
                           <td>{item.createdAt?.split("T")[0]}</td>
                           <td>{item.datePublication}</td>

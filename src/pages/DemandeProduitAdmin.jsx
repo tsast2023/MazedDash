@@ -10,6 +10,16 @@ const DemandeProduitAdmin = () => {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
   const demandes = state.demandes;
+  const {
+    identifiantDemCat ,
+    setidentifiantDemCat,
+    statusDemCat ,
+    setstatusDemCat,
+    pageDemCat,
+    setpageDemCat,
+    actionDemCat,
+    setactionDemCat,
+  } = useContext(GlobalState)
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [starClicked, setStarClicked] = useState(false);
@@ -104,22 +114,31 @@ const DemandeProduitAdmin = () => {
             <h2 className="new-price">{t("Demande Categorie")}</h2>
           </div>
           <div className="card-body">
-            <div className="row ">
-              <div className="col-6">
+          <div className="row ">
+              <div className="col-4">
                 <div className="form-group">
                   <label htmlFor="recherche">
                     <h6>{t("Recherche")}</h6>
                   </label>
-                  <input id="recherche" className="form-control" />
+                  <input value={identifiantDemCat} onChange={e=>setidentifiantDemCat(e.target.value)} id="recherche" className="form-control" />
                 </div>
               </div>
-              <div className="col-6 form-group">
+              <div className="col-4 form-group">
                 <h6>{t("Statut")}</h6>
-                <select className="choices form-select">
-                <option value="" disabled selected></option>
-                  <option value="square">{t("Approuver")}</option>
-                  <option value="rectangle">{t("En attente")}</option>
-                  <option value="rectangle">{t("Refuser")}</option>
+                <select value={statusDemCat} onChange={e=>setstatusDemCat(e.target.value)} className="choices form-select">
+                <option value=""  selected></option>
+                  <option value="APPROUVER">{t("Approuver")}</option>
+                  <option value="EN_ATTENTE">{t("En attente")}</option>
+                  <option value="REFUSER">{t("Refuser")}</option>
+                </select>
+              </div>
+              <div className="col-4 form-group">
+                <h6>{t("Action")}</h6>
+                <select value={actionDemCat} onChange={e=>setactionDemCat(e.target.value)} className="choices form-select">
+                <option value=""  selected></option>
+                  <option value="CHANGEMENT_STATUT">{t("CHANGEMENT_STATUT")}</option>
+                  <option value="MODIFICATION">{t("MODIFICATION")}</option>
+                
                 </select>
               </div>
             </div>
@@ -127,7 +146,7 @@ const DemandeProduitAdmin = () => {
               <Table responsive="sm">
                 <tbody>
                   {demandes &&
-                    demandes.map((item) => (
+                    demandes?.content?.map((item) => (
                       <>
                         <tr>
                           <td>{t("Admin")}</td>
@@ -229,7 +248,7 @@ const DemandeProduitAdmin = () => {
                 </thead>
                 <tbody>
                   {demandes &&
-                    demandes.map((item) => (
+                    demandes.content?.map((item) => (
                       <tr>
                         <td>
                           <h6>{item.administrateur.identifiant}</h6>
@@ -317,7 +336,7 @@ const DemandeProduitAdmin = () => {
                       id="label"
                       maxLength="25"
                       value={category ? category.nomCategorie : ""}
-                      disabled
+                      
                     />
                   </div>
                 </div>

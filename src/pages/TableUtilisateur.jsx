@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import { Modal, Button, Table, Form } from "react-bootstrap";
+import ReactPaginate from 'react-paginate';
 
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -17,6 +18,18 @@ function TableUtilisateur() {
   const [modalType, setModalType] = useState("");
   const state = useContext(GlobalState);
   const users = state.Users;
+  const {
+    userPseudo ,
+    setUserPseudo,
+    userStatus ,
+    setUserStatus,
+    pageUser,
+    setpageUser
+  } = useContext(GlobalState);
+  const handlePageChange = (selectedPage) => {
+    setpageUser(selectedPage.selected);
+    console.log(pageUser) // React Paginate is 0-indexed, so we add 1
+  };
   const [updateItem, setUpdateItem] = useState({
     nomFamille: "",
     prenom: "",
@@ -176,12 +189,24 @@ function TableUtilisateur() {
                 </div>
                 <div className="col-6 form-group">
                   <h6>{t("Statut")}</h6>
-                  <select className="choices form-select">
-                    <option value="" disabled selected></option>
-                    <option value="square">{t("Bloquer")}</option>
-                    <option value="rectangle">{t("Débloquer")}</option>
+                  <select value={userStatus} onChange={e=>setUserStatus(e.target.value)} className="choices form-select">
+                    <option value=""  selected></option>
+                    <option value="BLOQUER">{t("Bloquer")}</option>
+                    <option value="DEBLOQUER">{t("Débloquer")}</option>
                   </select>
                 </div>
+               <ReactPaginate
+        previousLabel={"← Previous"}
+        nextLabel={"Next →"}
+        breakLabel={"..."}
+        pageCount={3} // Total number of pages
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        className="react-paginate"
+      />
               </div>
               <div className="table-responsive">
                 {isMobile ? (

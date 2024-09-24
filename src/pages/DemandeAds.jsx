@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
 import Cookies from "js-cookie"
+import ReactPaginate from 'react-paginate';
+
 function DemandeAds() {
   const token = Cookies.get('token')
   const { t, i18n } = useTranslation();
@@ -17,7 +19,17 @@ function DemandeAds() {
   const [selectedItem, setselectedItem] = useState("");
   const [uploadInputs, setUploadInputs] = useState([]);
   const state = useContext(GlobalState);
-  const annonces = state.Annonces;
+  const annonces = state.Annonces?.content;
+  const {
+    pseudoAds,
+    setpseudoAds,
+    numTelAds,
+    setnumTelAds,
+    actionAnnonceAds,
+    setactionAnnonceAds,
+    pageAds,
+    setpageAds
+  } = useContext(GlobalState)
   const filteredAnnonces = annonces?.filter(annonce => annonce.statusDemande === "EN_ATTENTE");
   const showDetail = (item) =>{
     console.log(item)
@@ -37,7 +49,10 @@ function DemandeAds() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  const handlePageChange = (selectedPage) => {
+    setpageAds(selectedPage.selected);
+    console.log(pageAds) // React Paginate is 0-indexed, so we add 1
+  };
   const handleTraiterAccept = (id , status) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
@@ -165,7 +180,7 @@ function DemandeAds() {
                     <label htmlFor="recherche">
                       <h6>{t("Numéro de téléphone")}</h6>
                     </label>
-                    <input id="recherche" className="form-control" />
+                    <input value={numTelAds} onChange={e=>setnumTelAds(e.target.value)} id="recherche" className="form-control" />
                   </div>
                 </div>
                 <div className="col-6">
@@ -173,15 +188,15 @@ function DemandeAds() {
                     <label htmlFor="recherche">
                       <h6>{t("Pseudo")}</h6>
                     </label>
-                    <input id="recherche" className="form-control" />
+                    <input value={pseudoAds} onChange={e=>setpseudoAds(e.target.value)} id="recherche" className="form-control" />
                   </div>
                 </div>
                 <div className="col-6 form-group">
                   <h6>{t("Action")}</h6>
-                  <select className="choices form-select">
-                  <option value="" disabled selected></option>
-                    <option value="square">{t("Modification")}</option>
-                    <option value="rectangle">{t("Création")}</option>
+                  <select value={actionAnnonceAds} onChange={e=>setactionAnnonceAds(e.target.value)} className="choices form-select">
+                  <option value="" selected></option>
+                    <option value="Modification">{t("Modification")}</option>
+                    <option value="Création">{t("Création")}</option>
                   </select>
                 </div>
                 <div className="col-6 form-group">
@@ -193,6 +208,18 @@ function DemandeAds() {
                     <option value="rectangle">{t("Refuser")}</option>
                   </select>
                 </div>
+                <ReactPaginate
+        previousLabel={"← Previous"}
+        nextLabel={"Next →"}
+        breakLabel={"..."}
+        pageCount={3} // Total number of pages
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        className="react-paginate"
+      />
               </div>
               {isMobile ? (
                 <table className="table" id="table1">
@@ -223,7 +250,7 @@ function DemandeAds() {
                     </tr>
                     <tr>
                     <th>{t("Action")}</th>
-                    <td>{item.action}</td>
+                    <td>{item.actionAnnonce}</td>
                     </tr>
                     <tr>
                       <td>{t("Voir")}</td>
@@ -290,7 +317,7 @@ function DemandeAds() {
                           <td>{item.user.pseudo}</td>
                           <td>{item.user.numTel}</td>
                           <td>{item.type}</td>
-                          <td>{item.action}</td>
+                          <td>{item.actionAnnonce}</td>
                           <td>
                             <Button
                               className="btn"

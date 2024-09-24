@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Table } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import ReactPaginate from 'react-paginate';
 
 function Recharges() {
   const token = Cookies.get("token");
@@ -18,7 +19,14 @@ function Recharges() {
     valeurBonusRecharge: "",
   });
   const [isMobile, setIsMobile] = useState(false);
-
+  const {   
+    numcard,
+    setNumCard,
+    statusRech,
+    setStatusRech,
+    pageCardRech,
+    setpageCardRech
+  } = useContext(GlobalState)
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -32,7 +40,10 @@ function Recharges() {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  const handlePageChange = (selectedPage) => {
+    setpageCardRech(selectedPage.selected);
+    console.log(pageCardRech) // React Paginate is 0-indexed, so we add 1
+  };
   const handleDelete = (id) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
@@ -254,23 +265,35 @@ function Recharges() {
             <label htmlFor="recherche">
               <h6>{t("Numéro de série")}</h6>
             </label>
-            <input id="recherche" className="form-control" />
+            <input value={numcard} onChange={e=>setNumCard(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6 form-group">
           <h6>{t("Statut")}</h6>
-          <select className="choices form-select">
-            <option value="" disabled selected></option>
-            <option value="square">{t("Utiliser")}</option>
-            <option value="rectangle">{t("Non Utiliser")}</option>
+          <select value={statusRech} onChange={e=>setStatusRech(e.target.value)} className="choices form-select">
+            <option value=""  selected></option>
+            <option value="UTILISER">{t("Utiliser")}</option>
+            <option value="NONUTILISER">{t("Non Utiliser")}</option>
           </select>
         </div>
+       <ReactPaginate
+        previousLabel={"← Previous"}
+        nextLabel={"Next →"}
+        breakLabel={"..."}
+        pageCount={3} // Total number of pages
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        className="react-paginate"
+      />
       </div>
               {isMobile ? (
                 <Table responsive="sm">
                   <tbody>
                     {cartes ? (
-                      cartes.map((item) => (
+                      cartes?.content?.map((item) => (
                         <React.Fragment key={item.id}>
                           <tr>
                             <td>{t("Numéro de série")}</td>
@@ -330,7 +353,7 @@ function Recharges() {
                     </thead>
                     <tbody>
                       {cartes ? (
-                        cartes.map((item) => (
+                        cartes?.content?.map((item) => (
                           <tr key={item.id}>
                             <td className="text-bold-500">{item.numSérie}</td>
                             <td>{item.valeur}</td>

@@ -108,7 +108,7 @@ function TableRow({ userData, onAccept }) {
       console.log(error);
     }
   };
-  const handleAccept = () => {
+  const handleAccept = (id, status, cause) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
       icon: "warning",
@@ -118,14 +118,17 @@ function TableRow({ userData, onAccept }) {
       cancelButtonText: t("Non, annuler !"),
       closeOnConfirm: false,
       closeOnCancel: false,
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
+        await traiterDemande(id, status, cause);
         onAccept();
         Swal.fire({
           title: "Accepter",
           text: "Votre élément est Accepter :)",
           icon: "Succes",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after the alert is confirmed
         });
       } else {
         Swal.fire({
@@ -193,7 +196,7 @@ function TableRow({ userData, onAccept }) {
           <td>
             <i
               className="fa-solid fa-circle-check text-success"
-              onClick={() => traiterDemande(userData.id, "APPROUVER")}
+              onClick={() => handleAccept(userData.id, "APPROUVER")}
             ></i>
           </td>
           <td>
@@ -206,7 +209,7 @@ function TableRow({ userData, onAccept }) {
               >
                 <i className="fa-solid fa-circle-xmark text-danger"></i>
               </button>
-              <Modal t={t} id={userData.id} traiterDemande={traiterDemande} />
+              <Modal t={t} id={userData.id} traiterDemande={handleAccept} />
             </section>
           </td>
         </>
@@ -274,7 +277,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
             <option value="PointDeRecharge">{t("Point De Recharge")}</option>
           </select>
         </div>
-        <ReactPaginate
+       <ReactPaginate
         previousLabel={"← Previous"}
         nextLabel={"Next →"}
         breakLabel={"..."}
@@ -284,6 +287,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
         onPageChange={handlePageChange}
         containerClassName={"pagination"}
         activeClassName={"active"}
+        className="react-paginate"
       />
       </div>
       {isMobile ? (
@@ -324,9 +328,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
           </tbody>
         </table>
       )}
-      <div>
-          1 , 2 , 2, 2, , 2
-        </div>
+      
     </div>
   );
 }

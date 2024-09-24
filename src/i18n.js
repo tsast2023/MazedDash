@@ -459,10 +459,12 @@ const resources = {
       "Approuver": "Accepted",
       "Modification": "Modification",
       "Création": "Creation",
+      "Retour": "Back",
     }
   },
   fr: {
     translation: {
+      "Retour":"Retour",
       "Création": "Création",
       "Approuver": "Approuver",
       "Cachée":"Cachée",
@@ -930,6 +932,7 @@ const resources = {
   },
   ar: {
     translation: {
+      "Retour": "رجوع",
       "Création": "صنع",
       "Modification": "تعديل",
       "Approuver": "مقبول",

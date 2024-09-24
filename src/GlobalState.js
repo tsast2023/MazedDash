@@ -33,6 +33,34 @@ export const DataProvider = ({children}) => {
   const [typeRecharge , settypeRecharge] = useState("");
   const [pageTransfert , setpageTransfert] = useState(0);
   const [traffic , setTraffic] = useState();
+  const [numcard , setNumCard] = useState("");
+  const [statusRech , setStatusRech] = useState("");
+  const [pageCardRech , setpageCardRech] = useState(0);
+  const [userPseudo , setUserPseudo] = useState("");
+  const [userNumtel , setUserNumtel] = useState("");
+  const [userStatus , setUserStatus] = useState("");
+  const [pageUser , setpageUser] = useState(0);
+
+  const [statusBid, setStatusBid] = useState(""); // Assuming StatusEnchere is an enum, you can also set a default here
+  const [nomCategorie, setNomCategorie] = useState('');
+  
+  const [nomProduit, setNomProduit] = useState('');
+  
+ 
+  const [ville, setVille] = useState('');
+  const [pageBid, setPageBid] = useState(0);
+
+
+  const [pseudoAds ,setpseudoAds] = useState("");
+  const [numTelAds ,setnumTelAds] = useState("");
+  const [actionAnnonceAds ,setactionAnnonceAds] = useState("");
+  const [pageAds , setpageAds] = useState(0);
+
+  const [identifiantDemCat , setidentifiantDemCat] = useState("");
+  const [statusDemCat , setstatusDemCat] = useState("");
+  const [actionDemCat , setactionDemCat] = useState("");
+  const [pageDemCat , setpageDemCat] = useState(0);
+
   useEffect(()=>{
     const getAllAcheteur = async() =>{
       try {
@@ -80,24 +108,8 @@ export const DataProvider = ({children}) => {
         console.log(error)
       }
     }
-    const getCarteRechar = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/carte/getAll', {headers : {Authorization: `Bearer ${token}`}});
-        console.log('cartes:' , res.data);
-        setCarteRech(res.data);
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const getAllBids = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/bid/getAll', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("all bids:" , res.data)
-        setBids(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    
+    
     const getAllPermissions = async()=>{
       try {
         const res = await axios.get('http://localhost:8081/admin/permission/permissions', {headers : {Authorization: `Bearer ${token}`}})
@@ -134,24 +146,16 @@ export const DataProvider = ({children}) => {
     //     console.log(error)
     //   }
     // }
-    const getAllUsers = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/admin/users/Acheteur', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("all Users:" , res.data)
-        setUsers(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const getAllTermes = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/termes/getAll', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("all termes:" , res.data)
-        setTermes(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
+
+    // const getAllTermes = async()=>{
+    //   try {
+    //     const res = await axios.get('http://localhost:8081/api/termes/getAll', {headers : {Authorization: `Bearer ${token}`}})
+    //     console.log("all termes:" , res.data)
+    //     setTermes(res.data)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }
     const getAllQuestions = async()=>{
       try {
         const res = await axios.get('http://localhost:8081/api/questions', {headers : {Authorization: `Bearer ${token}`}})
@@ -161,24 +165,8 @@ export const DataProvider = ({children}) => {
         console.log(error)
       }
     }
-    const getAllAnnonces = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/annonce/getAll', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("all annonces:" , res.data)
-        setAnnonces(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const getAllDemandesTransfert = async()=>{
-      try {
-        const res = await axios.get(`http://localhost:8081/api/demandeTransfert/filter?numTel=${numTel}&pseudo=${pseudo}&statusDemande=${statusDemande}&typeRecharge=${typeRecharge}&page=${pageTransfert}`, {headers : {Authorization: `Bearer ${token}`}})
-        console.log("all demandes transferts:" , res.data , token)
-        setDemandeT(res.data)
-      } catch (error) {
-        console.log(error , token)
-      }
-    }
+    
+    
     const getAllEcheances = async()=>{
       try {
         const res = await axios.get('http://localhost:8081/api/echeance', {headers : {Authorization: `Bearer ${token}`}})
@@ -188,15 +176,15 @@ export const DataProvider = ({children}) => {
         console.log(error , token)
       }
     }
-    const getAllWinners = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/bid/winners', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("all winners:" , res.data , token)
-        setWinners(res.data)
-      } catch (error) {
-        console.log(error , token)
-      }
-    }
+    // const getAllWinners = async()=>{
+    //   try {
+    //     const res = await axios.get('http://localhost:8081/api/bid/winners', {headers : {Authorization: `Bearer ${token}`}})
+    //     console.log("all winners:" , res.data , token)
+    //     setWinners(res.data)
+    //   } catch (error) {
+    //     console.log(error , token)
+    //   }
+    // }
     const getAllNotifications = async()=>{
       try {
         const res = await axios.get('http://localhost:8081/admin/noticationByLangue', {headers : {Authorization: `Bearer ${token}`}})
@@ -215,15 +203,7 @@ export const DataProvider = ({children}) => {
         console.log(error , token)
       }
     }
-    const getAllDemandeCategories = async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/demandes', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("All demandes:" , res.data)
-        setDemandeCat(res.data)
-      } catch (error) {
-        console.log(error , token)
-      }
-    }
+    
     const getTrafic= async()=>{
       try {
         const res = await axios.get('http://localhost:8081/api/bid/trafic', {headers : {Authorization: `Bearer ${token}`}})
@@ -237,28 +217,109 @@ export const DataProvider = ({children}) => {
 getTrafic()
 getAllVendeur()
 getAllAcheteur()
-getAllUsers();
 // getAllCommandes();
 getAllAdmin();     
 getAllCategories();
 // getAllProducts();
 getAllTuto();
-getAllBids();
-getCarteRechar();
+
 getAllPermissions();
 getAllRoles();
 getAllQuestions();
-getAllAnnonces();
-getAllBids();
-getAllDemandesTransfert();
+
+
 getAllEcheances();
-getAllWinners();
+// getAllWinners();
 getAllNotifications();
 getMe();
-getAllDemandeCategories();
-  } , [token, pseudo , statusDemande , typeRecharge , pageTransfert ])
-  
-   const state ={
+
+  } , [token ])
+  useEffect(()=>{
+    const getCarteRechar = async()=>{
+      try {
+        const res = await axios.get(`http://localhost:8081/api/carte/filter?numSerie=${numcard}&statusCarte=${statusRech}&page=${pageCardRech}`, {headers : {Authorization: `Bearer ${token}`}});
+        console.log('cartes:' , res.data);
+        setCarteRech(res.data);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getCarteRechar();
+
+  } ,[ numcard , statusRech , pageCardRech] )
+
+  useEffect(()=>{
+    const getAllUsers = async()=>{
+    //pseudo=${userPseudo}&numTel=${userNumtel}&status=${userStatus}&page=${pageUser}
+      try {
+        const res = await axios.get(`http://localhost:8081/admin/users/filtredUser`, {headers : {Authorization: `Bearer ${token}`}})
+        console.log("all Users:" , res.data)
+        setUsers(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getAllUsers();
+
+  } , [userPseudo , userStatus , pageUser])
+
+  useEffect(()=>{
+    console.log(nomProduit)
+    const getAllBids = async()=>{
+      let url = `http://localhost:8081/api/bid/filter?nomProduit=${nomProduit}&nomCategorie=${nomCategorie}&ville=${ville}&page=${pageBid}`
+      try {
+        if(statusBid !== ""){
+          url = url + `&status=${statusBid}`
+        }
+
+        const res = await axios.get(url, {headers : {Authorization: `Bearer ${token}`}})
+        console.log("all bids:" , res.data)
+        setBids(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getAllBids();
+
+  } , [nomCategorie  , statusBid  , nomProduit , ville  , pageBid ])
+   
+  useEffect(()=>{
+    const getAllAnnonces = async()=>{
+      try {
+        const res = await axios.get(`http://localhost:8081/api/annonce/filter?pseudo=${pseudoAds}&numTel=${numTelAds}&actionAnnonce=${actionAnnonceAds}&page=${pageAds}`, {headers : {Authorization: `Bearer ${token}`}})
+        console.log("all annonces:" , res.data)
+        setAnnonces(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getAllAnnonces();
+  },[pseudoAds , numTelAds , actionAnnonceAds ,pageAds ])
+  useEffect(()=>{
+    const getAllDemandeCategories = async()=>{
+      try {
+        const res = await axios.get(`http://localhost:8081/api/demandes/filter?identifiant=${identifiantDemCat}&statusDemande=${statusDemCat}&page=${pageDemCat}&action=${actionDemCat}`, {headers : {Authorization: `Bearer ${token}`}})
+        console.log("All demandes:" , res.data)
+        setDemandeCat(res.data)
+      } catch (error) {
+        console.log(error , token)
+      }
+    }
+    getAllDemandeCategories();
+  } , [identifiantDemCat , statusDemCat , pageDemCat , actionDemCat ])
+  useEffect(()=>{
+    const getAllDemandesTransfert = async()=>{
+      try {
+        const res = await axios.get(`http://localhost:8081/api/demandeTransfert/filter?numTel=${numTel}&pseudo=${pseudo}&statusDemande=${statusDemande}&typeRecharge=${typeRecharge}&page=${pageTransfert}`, {headers : {Authorization: `Bearer ${token}`}})
+        console.log("all demandes transferts:" , res.data , token)
+        setDemandeT(res.data)
+      } catch (error) {
+        console.log(error , token)
+      }
+    }
+    getAllDemandesTransfert()
+  }, [pseudo , statusDemande , typeRecharge , pageTransfert ])
+  const state ={
     Categories : Categories,
     Products : Products,
     tutorials : tutoriel,
@@ -280,10 +341,10 @@ getAllDemandeCategories();
     Me : me,
     demandes: demandeCat,
     Traffic : traffic,
-
-
+    
+    //for demandes transferts
     numTel,
-    setnumTel,       // Add these to be accessible in the components
+    setnumTel,      
     pseudo,
     setpseudo,
     statusDemande,
@@ -292,6 +353,48 @@ getAllDemandeCategories();
     settypeRecharge,
     pageTransfert,
     setpageTransfert,
+    //for carte recharges
+    numcard,
+    setNumCard,
+    statusRech,
+    setStatusRech,
+    pageCardRech,
+    setpageCardRech,
+    userPseudo ,
+    setUserPseudo,
+    userStatus ,
+    setUserStatus,
+    pageUser,
+    setpageUser,
+    //for bid
+    statusBid,
+    setStatusBid,
+    nomCategorie ,
+    setNomCategorie,
+    nomProduit ,
+    setNomProduit,
+    ville ,
+    setVille,
+    pageBid,
+    setPageBid,
+    pseudoAds,
+    setpseudoAds,
+    numTelAds,
+    setnumTelAds,
+    actionAnnonceAds,
+    setactionAnnonceAds,
+    pageAds,
+    setpageAds,
+    //for demande category
+    identifiantDemCat ,
+    setidentifiantDemCat,
+    statusDemCat ,
+    setstatusDemCat,
+    actionDemCat,
+    setactionDemCat,
+    pageDemCat,
+    setpageDemCat,
+
 
   }
 
