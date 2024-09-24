@@ -8,9 +8,9 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { GlobalState } from "../GlobalState";
 import Cookies from "js-cookie";
-import { toast } from 'react-toastify';
-import { Watch } from 'react-loader-spinner'
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import { Watch } from "react-loader-spinner";
+import "react-toastify/dist/ReactToastify.css";
 function EnchèreCreation() {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
@@ -19,7 +19,7 @@ function EnchèreCreation() {
 
   const [steps, setSteps] = useState(0);
   const fileInputRef = React.createRef();
-  
+
   const [data, setData] = useState({
     ville: "Sousse",
     ref: "",
@@ -28,7 +28,7 @@ function EnchèreCreation() {
     avocat: "",
     notaire: "",
     description: "",
-    categoryName: categories ? categories[0].nomCategorie : "", // Default value if exists
+    categoryName: categories ? categories[0].nomCategorie : "",
     // New fields
     villeArabe: "",
     descriptionAr: "",
@@ -157,7 +157,7 @@ function EnchèreCreation() {
 
       // Make the request
       const res = await axios.post(
-        "http://localhost:8081/api/bid/createBrouillon",
+        "http://192.168.0.112:8081/api/bid/createBrouillon",
         bidData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -176,14 +176,14 @@ function EnchèreCreation() {
     console.log(dataConfig);
     console.log(valeurMajoration);
     console.log(localStorage.getItem("idenchere"));
-  
+
     const resolveWithSomeData = new Promise(async (resolve, reject) => {
       try {
         const formData = new FormData();
         Object.keys(dataConfig).forEach((key) => {
           formData.append(key, dataConfig[key]);
         });
-  
+
         // Add IdEnchere to FormData
         formData.append("IdEnchere", localStorage.getItem("idenchere"));
         const valeurMajorationArray = String(valeurMajoration)
@@ -193,23 +193,28 @@ function EnchèreCreation() {
         valeurMajorationArray.forEach((value) => {
           formData.append("valeurMajoration", value);
         });
-  
+
         // Check for required files
-        if (!dataConfig.contractEnchere || !dataConfig.contractEnchereAr || !dataConfig.contractEnchereEn || !dataConfig.galerie) {
+        if (
+          !dataConfig.contractEnchere ||
+          !dataConfig.contractEnchereAr ||
+          !dataConfig.contractEnchereEn ||
+          !dataConfig.galerie
+        ) {
           reject(new Error("Missing required files"));
           return;
         }
-  
+
         formData.append("ContractEnchere", dataConfig.contractEnchere);
         formData.append("ContractEnchereAr", dataConfig.contractEnchereAr);
         formData.append("ContractEnchereEn", dataConfig.contractEnchereEn);
-  
+
         for (const file of dataConfig.galerie) {
           formData.append("galerie", file);
         }
-  
+
         const res = await axios.post(
-          "http://localhost:8081/api/bid/publishBidNow",
+          "http://192.168.0.112:8081/api/bid/publishBidNow",
           formData,
           {
             headers: {
@@ -218,7 +223,7 @@ function EnchèreCreation() {
             },
           }
         );
-  
+
         console.log(res.data);
         localStorage.removeItem("idenchere");
         resolve(res.data);
@@ -226,40 +231,40 @@ function EnchèreCreation() {
         reject(error);
       }
     });
-  
-    toast.promise(
-      resolveWithSomeData,
-      {
-        pending: {
-          render() {
-            return (<div>
+
+    toast.promise(resolveWithSomeData, {
+      pending: {
+        render() {
+          return (
+            <div style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
               <Watch
-  visible={true}
-  height="80"
-  width="80"
-  radius="48"
-  color="#4fa94d"
-  ariaLabel="watch-loading"
-  wrapperStyle={{}}
-  wrapperClass=""
-  />"Uploading bid configuration..."
-            </div>);
-          },
-          icon: false,
+                visible={true}
+                height="30"
+                width="30"
+                radius="48"
+                color="#4fa94d"
+                ariaLabel="watch-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+              "Uploading bid configuration..."
+            </div>
+          );
         },
-        success: {
-          render({ data }) {
-            return `Bid successfully published!`;
-          },
-          icon: "🟢",
+        icon: false,
+      },
+      success: {
+        render({ data }) {
+          return `Bid successfully published!`;
         },
-        error: {
-          render({ data }) {
-            return `Error: ${data.message}`;
-          },
+        icon: "🟢",
+      },
+      error: {
+        render({ data }) {
+          return `Error: ${data.message}`;
         },
-      }
-    );
+      },
+    });
   };
 
   const addScheduledbid = async (e) => {
@@ -302,7 +307,7 @@ function EnchèreCreation() {
       }
       // Send the request with FormData
       const res = await axios.post(
-        "http://localhost:8081/api/bid/scheduleBidPublication",
+        "http://192.168.0.112:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {

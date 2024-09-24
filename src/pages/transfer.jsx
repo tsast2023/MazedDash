@@ -69,7 +69,7 @@ function TableRow({ userData, onAccept }) {
   const downloadFile = async (fileId, token) => {
     try {
       const res = await axios.get(
-        `http://localhost:8081/api/demandeTransfert/file/${fileId}`,
+        `http://192.168.0.112:8081/api/demandeTransfert/file/${fileId}`,
         {
           responseType: "blob",
           headers: { Authorization: `Bearer ${token}` },
@@ -94,7 +94,7 @@ function TableRow({ userData, onAccept }) {
       console.log(id, status, cause);
 
       const res = await axios.post(
-        `http://localhost:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
+        `http://192.168.0.112:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
         {}, // Empty body
         {
           headers: {

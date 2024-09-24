@@ -93,7 +93,7 @@ function ListeAdministrateur() {
   };
 const block = async(id)=>{
 try {
-    const res = await axios.put(`http://localhost:8081/admin/block/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+    const res = await axios.put(`http://192.168.0.112:8081/admin/block/${id}` , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data) 
 } catch (error) {
   console.log(error)
@@ -101,7 +101,7 @@ try {
 }
 const unBlock = async(id)=>{
 try {
-  const res = await axios.put(`http://localhost:8081/admin/unblock/${id}` , {headers : {Authorization: `Bearer ${token}`}});
+  const res = await axios.put(`http://192.168.0.112:8081/admin/unblock/${id}` , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data)
 } catch (error) {
   console.log(error)
@@ -111,7 +111,7 @@ const updateRole = async(id , e) =>{
   e.preventDefault();
   console.log(selectedAdmin)
   try {
-    const res = await axios.put(`http://localhost:8081/admin/${id}/${role}` , {headers : {Authorization: `Bearer ${token}`}});
+    const res = await axios.put(`http://192.168.0.112:8081/admin/${id}/${role}` , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data);
   } catch (error) {
     console.log(error)

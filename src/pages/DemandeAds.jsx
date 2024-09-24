@@ -88,7 +88,7 @@ function DemandeAds() {
 
   const traiterAnnonce = async (id , status) => {
     try {
-      const res = await axios.post(`http://localhost:8081/api/annonce/traiter?id=${id}&statusDemande=${status}` , {} , {headers : {Authorization: `Bearer ${token}`} } );
+      const res = await axios.post(`http://192.168.0.112:8081/api/annonce/traiter?id=${id}&statusDemande=${status}` , {} , {headers : {Authorization: `Bearer ${token}`} } );
       console.log(res.data);
     } catch (error) {
       console.log(error);
