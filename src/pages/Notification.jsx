@@ -44,7 +44,7 @@ const Notification = () => {
     
     try {
       const res = await axios.post(
-        "http://localhost:8081/Notification/sendToAll",
+        "http://192.168.0.112:8081/Notification/sendToAll",
         Notification,
         { headers: { Authorization: `Bearer ${token}` } }
       );

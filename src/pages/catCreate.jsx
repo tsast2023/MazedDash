@@ -51,7 +51,7 @@ const submitCat = async (e) => {
 
   try {
       const res = await axios.post(
-          "http://localhost:8081/api/categories/addCategorie",
+          "http://192.168.0.112:8081/api/categories/addCategorie",
           formData, // Send FormData
           {
               headers: {

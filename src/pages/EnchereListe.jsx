@@ -78,7 +78,7 @@ function EnchereListe() {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8081/api/bid/${id}`,
+        `http://192.168.0.112:8081/api/bid/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);

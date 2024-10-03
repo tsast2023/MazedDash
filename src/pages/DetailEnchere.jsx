@@ -8,6 +8,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 function DetailEnchere(props) {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
@@ -63,7 +64,7 @@ function DetailEnchere(props) {
   const approverUser = async (enchereId, userId) => {
     try {
       const res = await axios.post(
-        `http://localhost:8081/api/bid/approve/${enchereId}/${userId}`,
+        `http://192.168.0.112:8081/api/bid/approve/${enchereId}/${userId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -172,7 +173,7 @@ function DetailEnchere(props) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
+        `http://192.168.0.112:8081/api/bid/updateHighestBidder?datePayement=${newTableData.datePayement}&montantPayer=${newTableData.montantPayer}&enchereId=${newTableData.enchereId}&encherissementId=${newTableData.encherissementId}&enchereId=${newTableData.enchereId}&typepaiement=${newTableData.typepaiement}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -196,6 +197,7 @@ function DetailEnchere(props) {
       <span>{t("Retour")}</span>
     </button>
       <div id="main">
+
       <section className="product-section">
           <div className="card-container">
             <div className="card">
