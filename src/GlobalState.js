@@ -250,9 +250,9 @@ getMe();
 
   useEffect(()=>{
     const getAllUsers = async()=>{
-    //pseudo=${userPseudo}&numTel=${userNumtel}&status=${userStatus}&page=${pageUser}
+    console.log(userPseudo,userStatus , pageUser)
       try {
-        const res = await axios.get(`http://localhost:8081/admin/users/filtredUser`, {headers : {Authorization: `Bearer ${token}`}})
+        const res = await axios.get(`http://localhost:8081/admin/filtredUser?pseudo=${userPseudo}&status=${userStatus}&page=${pageUser}`, {headers : {Authorization: `Bearer ${token}`}})
         console.log("all Users:" , res.data)
         setUsers(res.data)
       } catch (error) {
@@ -298,7 +298,11 @@ getMe();
   useEffect(()=>{
     const getAllDemandeCategories = async()=>{
       try {
-        const res = await axios.get(`http://localhost:8081/api/demandes/filter?identifiant=${identifiantDemCat}&statusDemande=${statusDemCat}&page=${pageDemCat}&action=${actionDemCat}`, {headers : {Authorization: `Bearer ${token}`}})
+        let  url = `http://localhost:8081/api/demandes`///filter?identifiant=${identifiantDemCat}&page=${pageDemCat}
+        if (actionDemCat){
+          url += `&action=${actionDemCat}`
+        }
+        const res = await axios.get(url, {headers : {Authorization: `Bearer ${token}`}})
         console.log("All demandes:" , res.data)
         setDemandeCat(res.data)
       } catch (error) {

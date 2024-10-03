@@ -184,7 +184,7 @@ function TableUtilisateur() {
                     <label htmlFor="recherche">
                       <h6>{t("Pseudo")}</h6>
                     </label>
-                    <input id="recherche" className="form-control" />
+                    <input value={userPseudo} onChange={e=>setUserPseudo(e.target.value)} id="recherche" className="form-control" />
                   </div>
                 </div>
                 <div className="col-6 form-group">
@@ -213,7 +213,7 @@ function TableUtilisateur() {
                   <table className="table" id="table1">
                     <tbody>
                       {users &&
-                        users.map((item) => (
+                        users?.content?.map((item) => (
                           <>
                             <tr>
                               <td>{t("Nom")}</td>
@@ -283,7 +283,7 @@ function TableUtilisateur() {
                     </thead>
                     <tbody>
                       {users &&
-                        users.map((item) => (
+                        users?.content?.map((item) => (
                           <tr>
                             <td>{item.prenom}</td>
                             <td>{item.pseudo}</td>
@@ -373,7 +373,7 @@ function TableUtilisateur() {
                                     height: "48px",
                                     borderRadius: "25px",
                                   }}
-                                  src="assets/static/images/faces/2.jpg"
+                                  src={currentItem?.photoDeProfil}
                                   alt={t("Avatar")}
                                 />
                               </div>

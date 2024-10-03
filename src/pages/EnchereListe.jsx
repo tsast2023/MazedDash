@@ -23,7 +23,7 @@ function EnchereListe() {
   const [selectedItem, setSelectedItem] = useState();
   const state = useContext(GlobalState);
   const encheres = state.Bids;
-
+  const user = state.Me
   const {
     statusBid,
     setStatusBid,
@@ -244,16 +244,31 @@ function EnchereListe() {
     });
   };
   const AnnulerBid = async (id) => {
-    try {
-      const res = await axios.post(
-        `http://localhost:8081/api/bid/annuler/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    
+      if (user.roleAdmin.name === "Super admin") {
+        try {
+          const res = await axios.post(
+            `http://localhost:8081/api/bid/annuler/${id}`,
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          console.log(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }else{
+        try {
+          const res = await axios.post(
+            `http://localhost:8081/api/demandes/creerDemandeAnnulation?enchereId=${id}`,
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          console.log(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      
   };
   return (
     <>

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Swal from "sweetalert2";
 import { Table, Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { GlobalState } from "../GlobalState";
 
 const DemandeEnchereAdmin = () => {
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [starClicked, setStarClicked] = useState(false);
-
+  const state = useContext(GlobalState);
+  const demandesBid = state.demandes;
   // State for editing modal
   const [showEditModal, setShowEditModal] = useState(false);
 

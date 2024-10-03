@@ -146,12 +146,12 @@ const DemandeProduitAdmin = () => {
               <Table responsive="sm">
                 <tbody>
                   {demandes &&
-                    demandes?.content?.map((item) => (
+                    demandes?.map((item) => (
                       <>
                         <tr>
                           <td>{t("Admin")}</td>
                           <td>
-                            <h6>{item.administrateur.identifiant}</h6>
+                            <h6>{item?.administrateur?.identifiant}</h6>
                           </td>
                         </tr>
 
@@ -248,10 +248,10 @@ const DemandeProduitAdmin = () => {
                 </thead>
                 <tbody>
                   {demandes &&
-                    demandes.content?.map((item) => (
+                    demandes?.map((item) => (
                       <tr>
                         <td>
-                          <h6>{item.administrateur.identifiant}</h6>
+                          <h6>{item?.administrateur?.identifiant}</h6>
                         </td>
 
                         <td>{item.typeDemandeAdmin}</td>

@@ -11,13 +11,14 @@ import Cookies from "js-cookie";
 function DetailEnchere(props) {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
-  const users = state.Users;
+  const users = state.Users?.content;
   console.log(users)
   const participants = [
     ...props.selectedItem.participantNonSignéIds,
     ...props.selectedItem.participantSignéIds,
   ];
   console.log("participants;",participants)
+  console.log("enchereDetail" , props.selectedItem)
   const filteredUsers = users?.filter((user) => participants.includes(user.id));
   const [isMobile, setIsMobile] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -197,7 +198,7 @@ function DetailEnchere(props) {
       <div id="main">
       <section className="product-section">
           <div className="card-container">
-            <div className="product-card">
+            <div className="card">
               <div className="product-detail">
                 {/* Product Images */}
                 <div className="product-images">
@@ -247,7 +248,7 @@ function DetailEnchere(props) {
                     </div>
                     <div className="product-category">
                       <p>
-                        {props.selectedItem.nomCategorie || "Nom Catégorie"}
+                        {props.selectedItem.categorie.nomCategorie || "Nom Catégorie"}
                       </p>
                     </div>
                     <div className="product-description">
@@ -265,17 +266,119 @@ function DetailEnchere(props) {
                     )}
 
                     {props.selectedItem.status === "En_Cours" ? (
-                      <div>
-                        <p className="price-text">
-                          {t("Prix Mazed online")} :{" "}
-                          {props.selectedItem.prixMazedOnline}DT
-                        </p>
-                        <p className="remaining-time">{t("Temps restant")}</p>
-                        <p className="majoration">
-                          {t("Majoration")} :{" "}
-                          {props.selectedItem.valeurMajoration.join("/")} DT
-                        </p>
-                      </div>
+                     <div className="info-container">
+                     {/* Product Information Details */}
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-calendar-check"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Date Déclenchemant :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.datedeclenchement}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-calendar-xmark"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Date Fermeture :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.datefermeture}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-calendar-days"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Date Publication :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.datePublication}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-stopwatch-20"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Extension Time :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.extensionTime}(secondes)</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-user-clock"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Numbre de Participant attendu :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.nombreParticipantAttendu}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-users"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Numbre de Participant réel :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.nombreParticipantréel}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-list-ol"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Valeur Majoration :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.valeurMajoration.join('/')}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-coins"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Autofinancement :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.autoFinancement}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-money-bill-transfer"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Facilité :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.valeurFacilité}</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-hand-holding-dollar"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Cou de clic :</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.coutClic}DT</p>
+                     </div>
+                     <div className="info-row">
+                       <p>
+                         <i
+                           className="fa-solid fa-money-bill-trend-up"
+                           style={{ marginRight: "8px" }}
+                         ></i>
+                         <strong>Frais d'inscription</strong>
+                       </p>
+                       <p className="data">{props.selectedItem.coutParticipation}DT</p>
+                     </div>
+                   </div>
                     ) : props.selectedItem.status === "Ouverte" ? (
                       <div className="info-container">
                         {/* Product Information Details */}
@@ -287,7 +390,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Date Déclenchemant :</strong>
                           </p>
-                          <p className="data">Trigger Date Here</p>
+                          <p className="data">{props.selectedItem.datedeclenchement}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -297,7 +400,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Date Fermeture :</strong>
                           </p>
-                          <p className="data">Close Date Here</p>
+                          <p className="data">{props.selectedItem.datefermeture}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -307,7 +410,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Date Publication :</strong>
                           </p>
-                          <p className="data">Publish Date Here</p>
+                          <p className="data">{props.selectedItem.datePublication}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -317,7 +420,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Extension Time :</strong>
                           </p>
-                          <p className="data">Extension Time Here</p>
+                          <p className="data">{props.selectedItem.extensionTime}(secondes)</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -327,7 +430,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Numbre de Participant attendu :</strong>
                           </p>
-                          <p className="data">Expected Participants Here</p>
+                          <p className="data">{props.selectedItem.nombreParticipantAttendu}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -337,7 +440,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Numbre de Participant réel :</strong>
                           </p>
-                          <p className="data">Actual Participants Here</p>
+                          <p className="data">{props.selectedItem.nombreParticipantréel}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -347,7 +450,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Valeur Majoration :</strong>
                           </p>
-                          <p className="data">Value Here</p>
+                          <p className="data">{props.selectedItem.valeurMajoration.join('/')}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -357,7 +460,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Autofinancement :</strong>
                           </p>
-                          <p className="data">Self-Financing Here</p>
+                          <p className="data">{props.selectedItem.autoFinancement}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -367,7 +470,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Facilité :</strong>
                           </p>
-                          <p className="data">Facility Here</p>
+                          <p className="data">{props.selectedItem.valeurFacilité}</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -377,7 +480,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Cou de clic :</strong>
                           </p>
-                          <p className="data">Click Cost Here</p>
+                          <p className="data">{props.selectedItem.coutClic}DT</p>
                         </div>
                         <div className="info-row">
                           <p>
@@ -387,7 +490,7 @@ function DetailEnchere(props) {
                             ></i>
                             <strong>Frais d'inscription</strong>
                           </p>
-                          <p className="data">Registration Fee Here</p>
+                          <p className="data">{props.selectedItem.coutParticipation}DT</p>
                         </div>
                       </div>
                     ) : (
