@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
 import axios from "axios";
 import ReactPaginate from 'react-paginate';
- 
 import Cookies from "js-cookie";
 import "../css/Download.css";
 // Modal component
