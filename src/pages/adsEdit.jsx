@@ -93,7 +93,7 @@ function AdsList() {
       );
     } else if (editType === "carousel") {
       return (
-        <input type="file" className="form-control mb-3" multiple accept="image/*" />
+        <input required type="file" className="form-control mb-3" multiple accept="image/*" />
       );
     }
     return null;
@@ -172,7 +172,7 @@ function AdsList() {
                 {uploadInputs.map((_, index) => (
                   <div key={index} className="mt-2">
                     <div className="custom-file">
-                      <input type="file" className="custom-file-input" />
+                      <input required type="file" className="custom-file-input" />
                       <label className="custom-file-label" htmlFor="customFile">
                         {t("Choisir un fichier")}
                       </label>

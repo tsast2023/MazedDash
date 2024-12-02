@@ -120,7 +120,7 @@ const DemandeEnchereAdmin = () => {
                   <label htmlFor="recherche">
                     <h6>{t("Recherche")}</h6>
                   </label>
-                  <input id="recherche" className="form-control" />
+                  <input required id="recherche" className="form-control" />
                 </div>
               </div>
               <div className="col-6 form-group">
@@ -334,7 +334,7 @@ const DemandeEnchereAdmin = () => {
                 </div>
                 <div className="col-12">
                   <label>{t("Description")}</label>
-                  <textarea
+                  <textarea required 
                     className="form-control"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}

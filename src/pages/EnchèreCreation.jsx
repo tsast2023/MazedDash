@@ -15,6 +15,7 @@ function EnchèreCreation() {
   const token = Cookies.get("token");
   const state = useContext(GlobalState);
   const categories = state.Categories;
+  
   const { t, i18n } = useTranslation();
 
   const [steps, setSteps] = useState(0);
@@ -24,6 +25,7 @@ function EnchèreCreation() {
     ville: "Sousse",
     ref: "",
     prixMazedOnline: 0,
+    prixAchat:0,
     libProduct: "",
     avocat: "",
     notaire: "",
@@ -157,7 +159,7 @@ function EnchèreCreation() {
 
       // Make the request
       const res = await axios.post(
-        "http://192.168.0.112:8081/api/bid/createBrouillon",
+        "http://localhost:8081/api/bid/createBrouillon",
         bidData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -214,7 +216,7 @@ function EnchèreCreation() {
         }
 
         const res = await axios.post(
-          "http://192.168.0.112:8081/api/bid/publishBidNow",
+          "http://localhost:8081/api/bid/publishBidNow",
           formData,
           {
             headers: {
@@ -307,7 +309,7 @@ function EnchèreCreation() {
       }
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.112:8081/api/bid/scheduleBidPublication",
+        "http://localhost:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {
@@ -422,6 +424,25 @@ function EnchèreCreation() {
                               </div>
                               <div className="col-12">
                                 <div className="form-group">
+                                  <label htmlFor="prixMazedOnline">
+                                    {t("Prix Achat")}
+                                  </label>
+                                  <input
+                                    onChange={(e) =>
+                                      setData({
+                                        ...data,
+                                        prixAchat: e.target.value,
+                                      })
+                                    }
+                                    type="number"
+                                    id="prixMazedOnline"
+                                    className="form-control"
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-12">
+                                <div className="form-group">
                                   <label htmlFor="notaire">
                                     {t("Notaire")}
                                   </label>
@@ -501,7 +522,7 @@ function EnchèreCreation() {
                               <div className="col-12">
                                 <label>{t("Description")}</label>
                                 <div className="form-group">
-                                  <textarea
+                                  <textarea required 
                                     onChange={(e) =>
                                       setData({
                                         ...data,
@@ -510,7 +531,7 @@ function EnchèreCreation() {
                                     }
                                     id="description"
                                     className="form-control"
-                                    required
+                                    
                                   />
                                 </div>
                               </div>
@@ -580,7 +601,7 @@ function EnchèreCreation() {
                                   <label htmlFor="descriptionAr">
                                     {t("Description Arabe")}
                                   </label>
-                                  <textarea
+                                  <textarea required 
                                     onChange={(e) =>
                                       setData({
                                         ...data,
@@ -597,7 +618,7 @@ function EnchèreCreation() {
                                   <label htmlFor="descriptionEn">
                                     {t("Description Anglaise")}
                                   </label>
-                                  <textarea
+                                  <textarea required 
                                     onChange={(e) =>
                                       setData({
                                         ...data,

@@ -12,7 +12,7 @@ function QuestionForm() {
   const addQuestion = async(e)=>{
     e.preventDefault();
     try {
-      const res = await axios.post("http://192.168.0.112:8081/api/questions/create", question , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.post("http://localhost:8081/api/questions/create", question , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -41,7 +41,7 @@ function QuestionForm() {
                           <label htmlFor="question" className="form-label">
                             {t("La question")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="question"
                             rows={3}
@@ -52,7 +52,7 @@ function QuestionForm() {
                           <label htmlFor="question" className="form-label">
                             {t("La réponse")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="question"
                             rows={3}
@@ -63,7 +63,7 @@ function QuestionForm() {
                           <label htmlFor="reponse" className="form-label">
                             {t("La question(arabe)")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="reponse"
                             rows={3}
@@ -74,7 +74,7 @@ function QuestionForm() {
                           <label htmlFor="reponse" className="form-label">
                             {t("La réponse(arabe)")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="reponse"
                             rows={3}
@@ -85,7 +85,7 @@ function QuestionForm() {
                           <label htmlFor="reponse" className="form-label">
                             {t("La question(eng)")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="reponse"
                             rows={3}
@@ -96,7 +96,7 @@ function QuestionForm() {
                           <label htmlFor="reponse" className="form-label">
                             {t("La reponse(eng)")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="reponse"
                             rows={3}

@@ -116,7 +116,7 @@ const ProductEditForm = () => {
                       <label htmlFor="exampleFormControlTextarea1">
                         {t("Description")}
                       </label>
-                      <textarea
+                      <textarea required 
                         className="form-control"
                         id="exampleFormControlTextarea1"
                         rows="3"

@@ -78,7 +78,7 @@ function AdsList() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.112:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
+      const res = await axios.delete(`http://localhost:8081/api/annonce/deleteAnnonce?id=${id}` , {headers : {Authorization: `Bearer ${token}`}} );
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -128,7 +128,7 @@ function AdsList() {
                 <table className="table" id="table1">
                   <tbody>
                   {annonces &&
-                      annonces?.content?.((item) => (
+                      annonces.content?.map((item) => (
                         <>
                     <tr>
                       <td>{t("Date de création")}</td>
@@ -253,7 +253,7 @@ function AdsList() {
                 {uploadInputs.map((_, index) => (
                   <div key={index} className="mt-2">
                     <div className="custom-file">
-                      <input type="file" className="custom-file-input" />
+                      <input required type="file" className="custom-file-input" />
                       <label className="custom-file-label" htmlFor="customFile">
                         {t("Choisir un fichier")}
                       </label>

@@ -34,7 +34,7 @@ function Modal({ t, id, traiterDemande }) {
           </div>
           <div className="card-body">
             <div className="form-group with-title mb-3">
-              <textarea
+              <textarea required 
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 rows="3"
@@ -69,7 +69,7 @@ function TableRow({ userData, onAccept }) {
   const downloadFile = async (fileId, token) => {
     try {
       const res = await axios.get(
-        `http://192.168.0.112:8081/api/demandeTransfert/file/${fileId}`,
+        `http://localhost:8081/api/demandeTransfert/file/${fileId}`,
         {
           responseType: "blob",
           headers: { Authorization: `Bearer ${token}` },
@@ -94,7 +94,7 @@ function TableRow({ userData, onAccept }) {
       console.log(id, status, cause);
 
       const res = await axios.post(
-        `http://192.168.0.112:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
+        `http://localhost:8081/api/demandeTransfert/traiter/${id}?statusDemande=${status}&cause=${cause}`,
         {}, // Empty body
         {
           headers: {
@@ -244,7 +244,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
             <label htmlFor="recherche">
               <h6>{t("Numéro de téléphone")}</h6>
             </label>
-            <input value={numTel} onChange={e=>setnumTel(e.target.value)} id="recherche" className="form-control" />
+            <input required value={numTel} onChange={e=>setnumTel(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6">
@@ -252,7 +252,7 @@ function ResponsiveTable({ data, headers, isMobile }) {
             <label htmlFor="recherche">
               <h6>{t("Pseudo")}</h6>
             </label>
-            <input value={pseudo} onChange={e=>setpseudo(e.target.value)} id="recherche" className="form-control" />
+            <input required value={pseudo} onChange={e=>setpseudo(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6 form-group">

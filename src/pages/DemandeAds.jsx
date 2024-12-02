@@ -88,7 +88,7 @@ function DemandeAds() {
 
   const traiterAnnonce = async (id , status) => {
     try {
-      const res = await axios.post(`http://192.168.0.112:8081/api/annonce/traiter?id=${id}&statusDemande=${status}` , {} , {headers : {Authorization: `Bearer ${token}`} } );
+      const res = await axios.post(`http://localhost:8081/api/annonce/traiter?id=${id}&statusDemande=${status}` , {} , {headers : {Authorization: `Bearer ${token}`} } );
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -180,7 +180,7 @@ function DemandeAds() {
                     <label htmlFor="recherche">
                       <h6>{t("Numéro de téléphone")}</h6>
                     </label>
-                    <input value={numTelAds} onChange={e=>setnumTelAds(e.target.value)} id="recherche" className="form-control" />
+                    <input required value={numTelAds} onChange={e=>setnumTelAds(e.target.value)} id="recherche" className="form-control" />
                   </div>
                 </div>
                 <div className="col-6">
@@ -188,7 +188,7 @@ function DemandeAds() {
                     <label htmlFor="recherche">
                       <h6>{t("Pseudo")}</h6>
                     </label>
-                    <input value={pseudoAds} onChange={e=>setpseudoAds(e.target.value)} id="recherche" className="form-control" />
+                    <input required value={pseudoAds} onChange={e=>setpseudoAds(e.target.value)} id="recherche" className="form-control" />
                   </div>
                 </div>
                 <div className="col-6 form-group">
@@ -376,7 +376,7 @@ function DemandeAds() {
                 {uploadInputs.map((_, index) => (
                   <div key={index} className="mt-2">
                     <div className="custom-file">
-                      <input type="file" className="custom-file-input" />
+                      <input required type="file" className="custom-file-input" />
                       <label className="custom-file-label" htmlFor="customFile">
                         {t("Choisir un fichier")}
                       </label>

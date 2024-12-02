@@ -16,7 +16,7 @@ const Login = () => {
     try {
       
       console.log(data)
-      const res = await  axios.post('http://192.168.0.112:8090/api/auth/login' , data);
+      const res = await  axios.post('http://localhost:8090/api/auth/login' , data);
       console.log(res.data.refreshtoken)
       Cookies.set('token' , res.data.refreshtoken )
       window.location.href = "/"
@@ -38,11 +38,11 @@ const Login = () => {
               <form onSubmit={submitLogin}>
                 <div className="form-group">
                   <label htmlFor="identifiant">Identifiant:</label>
-                  <input type="text" className="form-control" id="identifiant" placeholder="Enter identifiant" onChange={e=>setData({...data , login:e.target.value})} />
+                  <input required type="text" className="form-control" id="identifiant" placeholder="Enter identifiant" onChange={e=>setData({...data , login:e.target.value})} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Mot de passe:</label>
-                  <input type="password" className="form-control" id="password" placeholder="Enter password" onChange={e=>setData({...data , password:e.target.value})} />
+                  <input required type="password" className="form-control" id="password" placeholder="Enter password" onChange={e=>setData({...data , password:e.target.value})} />
                 </div>
                 <button type="submit" className="btn btn-primary">Se connecter</button>
               </form>

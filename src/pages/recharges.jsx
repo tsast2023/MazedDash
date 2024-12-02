@@ -14,9 +14,8 @@ function Recharges() {
   const state = useContext(GlobalState);
   const cartes = state.cartes;
   const [carteRech, setCarteRech] = useState({
-    numSérie: "",
-    valeur: "",
-    valeurBonusRecharge: "",
+    quantity: 0,
+    montant: 0
   });
   const [isMobile, setIsMobile] = useState(false);
   const {   
@@ -44,59 +43,66 @@ function Recharges() {
     setpageCardRech(selectedPage.selected);
     console.log(pageCardRech) // React Paginate is 0-indexed, so we add 1
   };
-  const handleDelete = (id) => {
+  const handleDelete = (id, itemName) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
-      text: t(
-        "Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"
-      ),
+      text: t("Veuillez entrer le nom de l'élément pour confirmer la suppression."),
       icon: "warning",
+      input: "text",
+      inputPlaceholder: t("Entrez le nom de l'élément"),
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: t("Oui, supprimez-le !"),
       cancelButtonText: t("Non, annuler !"),
-      closeOnConfirm: false,
-      closeOnCancel: false,
+      preConfirm: (inputValue) => {
+        if (inputValue !== itemName) {
+          Swal.showValidationMessage(t("Le nom ne correspond pas."));
+          return false;
+        }
+        return true;
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         deleteItem(id);
         Swal.fire({
-          title: "Supprimer",
-          text: "Votre élément est Supprimer:)",
-          icon: "Succes",
+          title: t("Supprimé"),
+          text: t("Votre élément a été supprimé :)"),
+          icon: "success",
           confirmButtonColor: "#b0210e",
         }).then(() => {
           window.location.reload(); // Reload after the alert is confirmed
-        }); // window.location.reload();
-      } else {
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
-          title: "Annulé",
-          text: "Votre élément est en sécurité :)",
+          title: t("Annulé"),
+          text: t("Votre élément est en sécurité :)"),
           icon: "error",
           confirmButtonColor: "#b0210e",
         });
       }
     });
   };
-
+  
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://192.168.0.112:8081/api/carte/deleteCarte?id=${id}`,
+        `http://localhost:8081/api/carte/deleteCarte?id=${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+  
 
   const addCarte = async (e) => {
     e.preventDefault();
+    console.log(carteRech)
     try {
       const res = await axios.post(
-        "http://192.168.0.112:8081/api/carte/publishNow",
-        carteRech,
+        `http://localhost:8081/api/carte/generer?quantity=${carteRech.quantity}&montant=${carteRech.montant}`,
+        
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -163,25 +169,25 @@ function Recharges() {
                           <form onSubmit={addCarte}>
                             <div className="modal-body">
                               <label htmlFor="serialNumber">
-                                {t("Numéro de série")}
+                                {t("quantity")}
                               </label>
                               <div className="form-group">
                                 <input
                                   id="serialNumber"
-                                  type="text"
+                                  type="number"
                                   placeholder={t("Écrivez ici")}
                                   className="form-control"
                                   maxLength="25"
                                   onChange={(e) =>
                                     setCarteRech({
                                       ...carteRech,
-                                      numSérie: e.target.value,
+                                      quantity: e.target.value,
                                     })
                                   }
                                 />
                               </div>
                               <label htmlFor="serialNumber">
-                                {t("Valeur de Bonus de la Carte")}
+                                {t("montant")}
                               </label>
                               <div className="form-group">
                                 <input
@@ -193,12 +199,12 @@ function Recharges() {
                                   onChange={(e) =>
                                     setCarteRech({
                                       ...carteRech,
-                                      valeurBonusRecharge: e.target.value,
+                                      montant: e.target.value,
                                     })
                                   }
                                 />
                               </div>
-                              <label htmlFor="value">{t("Valeur")}</label>
+                              {/* <label htmlFor="value">{t("Valeur")}</label>
                               <div className="form-group">
                                 <input
                                   id="value"
@@ -213,7 +219,7 @@ function Recharges() {
                                     })
                                   }
                                 />
-                              </div>
+                              </div> */}
                             </div>
                             <div className="modal-footer">
                               <button
@@ -232,12 +238,12 @@ function Recharges() {
                                 data-bs-dismiss="modal"
                               >
                                 <i className="bx bx-check d-block d-sm-none"></i>
-                                <span
+                                {/* <span
                                   className="btn btn-primary"
                                   onClick={notify}
-                                >
+                                > */}
                                   {t("Enregistrer")}
-                                </span>
+                                {/* </span> */}
                               </button>
                             </div>
                           </form>
@@ -265,7 +271,7 @@ function Recharges() {
             <label htmlFor="recherche">
               <h6>{t("Numéro de série")}</h6>
             </label>
-            <input value={numcard} onChange={e=>setNumCard(e.target.value)} id="recherche" className="form-control" />
+            <input required value={numcard} onChange={e=>setNumCard(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
         <div className="col-6 form-group">
@@ -326,7 +332,7 @@ function Recharges() {
                             <td>
                               <i
                                 className="fa-solid fa-trash deleteIcon"
-                                onClick={() => handleDelete(item.id)}
+                                onClick={() => handleDelete(item.id , item.numSérie)}
                               ></i>
                             </td>
                           </tr>
@@ -373,7 +379,7 @@ function Recharges() {
                             <td>
                               <i
                                 className="fa-solid fa-trash deleteIcon"
-                                onClick={() => handleDelete(item.id)}
+                                onClick={() => handleDelete(item.id , item.numSérie)}
                               ></i>
                             </td>
                           </tr>

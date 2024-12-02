@@ -44,7 +44,7 @@ const Notification = () => {
     
     try {
       const res = await axios.post(
-        "http://192.168.0.112:8081/Notification/sendToAll",
+        "http://localhost:8081/Notification/sendToAll",
         Notification,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -95,7 +95,7 @@ const Notification = () => {
                           />
 
                           <label htmlFor="fr">{t("body(francais)")}</label>
-                          <textarea
+                          <textarea required 
                             onChange={(e) =>
                               setNotification({
                                 ...Notification,
@@ -124,7 +124,7 @@ const Notification = () => {
                             required
                           />
                           <label htmlFor="en">{t("body(englais)")}</label>
-                          <textarea
+                          <textarea required 
                             onChange={(e) =>
                               setNotification({
                                 ...Notification,
@@ -153,7 +153,7 @@ const Notification = () => {
                             required
                           />
                           <label htmlFor="ar">{t("body(arabe)")}</label>
-                          <textarea
+                          <textarea required 
                             onChange={(e) =>
                               setNotification({
                                 ...Notification,

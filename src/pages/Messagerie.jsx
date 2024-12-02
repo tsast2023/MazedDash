@@ -60,7 +60,7 @@ const Messagerie = () => {
                 ))}
             </div>
             <form className="message-input" onSubmit={handleSendMessage}>
-              <input 
+              <input required 
                 type="text" 
                 placeholder="Type a message..." 
                 value={message}

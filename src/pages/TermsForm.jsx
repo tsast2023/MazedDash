@@ -10,7 +10,7 @@ function TermsForm() {
     e.preventDefault();
     try {
       console.log(termes)
-      const res = await axios.post("http://192.168.0.112:8081/api/termes/createTermes", termes , {headers : {Authorization: `Bearer ${token}`}})
+      const res = await axios.post("http://localhost:8081/api/termes/createTermes", termes , {headers : {Authorization: `Bearer ${token}`}})
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -37,7 +37,7 @@ function TermsForm() {
                           >
                             {t("Text")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="exampleFormControlTextarea1"
                             rows={3}

@@ -187,7 +187,7 @@ function Configuration() {
 
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.112:8081/api/bid/publishBidNow",
+        "http://localhost:8081/api/bid/publishBidNow",
         formData,
         {
           headers: {
@@ -218,7 +218,7 @@ function Configuration() {
 
       // Send the request with FormData
       const res = await axios.post(
-        "http://192.168.0.112:8081/api/bid/scheduleBidPublication",
+        "http://localhost:8081/api/bid/scheduleBidPublication",
         formData,
         {
           headers: {

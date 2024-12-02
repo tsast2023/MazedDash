@@ -24,7 +24,7 @@ function TermsForm() {
                           >
                             {t("Text")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="exampleFormControlTextarea1"
                             rows={3}

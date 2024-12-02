@@ -61,7 +61,7 @@ function TermesList() {
 
   const deleteItem = async(id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.112:8081/api/termes/deleteTerme/${id}` , {headers : {Authorization: `Bearer ${token}`}})
+      const res = await axios.delete(`http://localhost:8081/api/termes/deleteTerme/${id}` , {headers : {Authorization: `Bearer ${token}`}})
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -74,7 +74,7 @@ function TermesList() {
   const updateTermes = async(e , id)=>{
     e.preventDefault()
     try {
-      const res = await axios.put(`http://192.168.0.112:8081/api/termes/updateTermme/${id}`, data , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.put(`http://localhost:8081/api/termes/updateTermme/${id}`, data , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data)
     } catch (error) {
       console.log(error)
@@ -205,7 +205,7 @@ function TermesList() {
                           <label htmlFor="exampleFormControlTextarea1" className="form-label">
                             {t("Text")}
                           </label>
-                          <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} onChange={e=>setData({...data , text:e.target.value})}  defaultValue={currentItem.text} />
+                          <textarea required  className="form-control" id="exampleFormControlTextarea1" rows={3} onChange={e=>setData({...data , text:e.target.value})}  defaultValue={currentItem.text} />
                         </div>
                       </div>
                       <div className="col-12">

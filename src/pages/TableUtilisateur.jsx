@@ -89,7 +89,7 @@ function TableUtilisateur() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://192.168.0.112:8081/admin/alimenter/${currentItem.id}?montant=${montant}`,
+        `http://localhost:8081/admin/alimenter/${currentItem.id}?montant=${montant}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -131,7 +131,7 @@ function TableUtilisateur() {
   const blockItem = async (id) => {
     try {
       const res = await axios.put(
-        `http://192.168.0.112:8081/admin/block/${id}`,
+        `http://localhost:8081/admin/block/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -143,7 +143,7 @@ function TableUtilisateur() {
   const unblockItem = async (id) => {
     try {
       const res = await axios.put(
-        `http://192.168.0.112:8081/admin/unblock/${id}`,
+        `http://localhost:8081/admin/unblock/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -155,7 +155,7 @@ function TableUtilisateur() {
     e.preventDefault();
     try {
       const res = await axios.put(
-        `http://192.168.0.112:8081/admin/${id}/role/?role=${updateItem.role}`,
+        `http://localhost:8081/admin/${id}/role/?role=${updateItem.role}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -184,7 +184,7 @@ function TableUtilisateur() {
                     <label htmlFor="recherche">
                       <h6>{t("Pseudo")}</h6>
                     </label>
-                    <input value={userPseudo} onChange={e=>setUserPseudo(e.target.value)} id="recherche" className="form-control" />
+                    <input required value={userPseudo} onChange={e=>setUserPseudo(e.target.value)} id="recherche" className="form-control" />
                   </div>
                 </div>
                 <div className="col-6 form-group">

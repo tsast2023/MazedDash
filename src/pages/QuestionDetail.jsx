@@ -29,7 +29,7 @@ function QuestionDetail() {
                           >
                             {t("La Question")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="exampleFormControlTextarea1"
                             rows={3}
@@ -43,7 +43,7 @@ function QuestionDetail() {
                           >
                             {t("La Réponse")}
                           </label>
-                          <textarea
+                          <textarea required 
                             className="form-control"
                             id="exampleFormControlTextarea1"
                             rows={3}

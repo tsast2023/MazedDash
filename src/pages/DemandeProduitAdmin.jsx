@@ -86,7 +86,7 @@ const DemandeProduitAdmin = () => {
     try {
       console.log(token, demandeId, status);
       const res = await axios.post(
-        `http://192.168.0.112:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,
+        `http://localhost:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -120,7 +120,7 @@ const DemandeProduitAdmin = () => {
                   <label htmlFor="recherche">
                     <h6>{t("Recherche")}</h6>
                   </label>
-                  <input value={identifiantDemCat} onChange={e=>setidentifiantDemCat(e.target.value)} id="recherche" className="form-control" />
+                  <input required value={identifiantDemCat} onChange={e=>setidentifiantDemCat(e.target.value)} id="recherche" className="form-control" />
                 </div>
               </div>
               <div className="col-4 form-group">

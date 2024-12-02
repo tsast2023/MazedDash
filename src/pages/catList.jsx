@@ -46,17 +46,24 @@ function CategoryList() {
     }
   };
 
-  const handleDeleteModal = (catId) => {
+  const handleDeleteModal = (catId, categoryName) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
-      text: t(
-        "Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"
-      ),
+      text: t(`Veuillez entrer le nom de l'élément "${categoryName}"  pour confirmer la suppression.`),
       icon: "warning",
+      input: "text",
+      inputPlaceholder: t("Entrez le nom de la catégorie"),
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: t("Oui, supprimez-le !"),
       cancelButtonText: t("Non, annuler !"),
+      preConfirm: (inputValue) => {
+        if (inputValue !== categoryName) {
+          Swal.showValidationMessage(t("Le nom ne correspond pas."));
+          return false;
+        }
+        return true;
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         deleteC(catId);
@@ -67,12 +74,7 @@ function CategoryList() {
         }).then(() => {
           window.location.reload(); // Reload after the alert is confirmed
         });
-      } else {
-        Swal.fire({
-          text: "Annulé, Votre élément est en sécurité :)",
-          icon: "error",
-          confirmButtonColor: "#b0210e",
-        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           text: "Annulé, Votre élément est en sécurité :)",
           icon: "error",
@@ -81,14 +83,19 @@ function CategoryList() {
       }
     });
   };
-const deleteC = async(id) =>{
-  try {
-    const res = await axios.delete(`http://192.168.0.112:8081/api/categories/${id}` ,{headers : {Authorization: `Bearer ${token}`} });
-    console.log(res.data);
-  } catch (error) {
-    console.log(error)
-  }
-}
+  
+  const deleteC = async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8081/api/categories/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   const handleBanModal = (catId) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
@@ -212,14 +219,14 @@ const deleteC = async(id) =>{
   const banC = async(id) =>{
     if (user.roleAdmin.name === "Super admin") {
       try {
-        const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/deactivate` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.patch(`http://localhost:8081/api/categories/${id}/deactivate` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
       }
     }else{
       try {
-        const res = await axios.post(`http://192.168.0.112:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=DESACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.post(`http://localhost:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=DESACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
@@ -231,14 +238,14 @@ const deleteC = async(id) =>{
   const unbanC = async(id) =>{
     if (user.roleAdmin.name === "Super admin") {
       try {
-        const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/activate` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.patch(`http://localhost:8081/api/categories/${id}/activate` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
       }
     }else{
       try {
-        const res = await axios.post(`http://192.168.0.112:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=ACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
+        const res = await axios.post(`http://localhost:8081/api/demandes/changerStatutCategorie?categoryId=${id}&newStatus=ACTIVER` ,{},{headers : {Authorization: `Bearer ${token}`} });
         console.log(res.data);
       } catch (error) {
         console.log(error)
@@ -250,7 +257,7 @@ const deleteC = async(id) =>{
 const alune = async(id)=>{
   try {
     console.log("done")
-    const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/set-al-une?alUne=true` ,{},{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.patch(`http://localhost:8081/api/categories/${id}/set-al-une?alUne=true` ,{},{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
     console.log("done true")
   } catch (error) {
@@ -259,7 +266,7 @@ const alune = async(id)=>{
 }
 const aluneFalse = async(id)=>{
   try {
-    const res = await axios.patch(`http://192.168.0.112:8081/api/categories/${id}/set-al-une?alUne=false` ,{},{headers : {Authorization: `Bearer ${token}`} });
+    const res = await axios.patch(`http://localhost:8081/api/categories/${id}/set-al-une?alUne=false` ,{},{headers : {Authorization: `Bearer ${token}`} });
     console.log(res.data);
     console.log("done false")
   } catch (error) {
@@ -286,7 +293,7 @@ const updateCat = async (id, e) => {
   if (user.roleAdmin.name === "Super admin") {
     try {
       const res = await axios.put(
-        `http://192.168.0.112:8081/api/categories/${id}`, 
+        `http://localhost:8081/api/categories/${id}`, 
         formData,  // Send FormData
         { 
           headers: { 
@@ -304,7 +311,7 @@ const updateCat = async (id, e) => {
   else {
     try {
       const res = await axios.post(
-        `http://192.168.0.112:8081/api/demandes/createModificationCategoryRequest`, 
+        `http://localhost:8081/api/demandes/createModificationCategoryRequest`, 
         formData,  // Send FormData
         { 
           params: { oldCategoryId: id },  // Include old category ID as a parameter
@@ -382,7 +389,7 @@ const updateCat = async (id, e) => {
                 <td>
                   <i
                     className="fa-solid fa-trash deleteIcon"
-                    onClick={() => handleDeleteModal(cat.id)}
+                    onClick={() => handleDeleteModal(cat.id , getCategoryName(cat))}
                   ></i>
                 </td>
               </tr>
@@ -451,7 +458,7 @@ const updateCat = async (id, e) => {
               <td>
                 <i
                   className="fa-solid fa-trash deleteIcon"
-                  onClick={() => handleDeleteModal(cat.id)}
+                  onClick={() => handleDeleteModal(cat.id , getCategoryName(cat))}
                 ></i>
               </td>
               <td>

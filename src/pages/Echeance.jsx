@@ -73,7 +73,7 @@ export function Echeance() {
                           <label htmlFor="recherche">
                             <h6>{t("Numéro de téléphone")}</h6>
                           </label>
-                          <input id="recherche" className="form-control" />
+                          <input required id="recherche" className="form-control" />
                         </div>
                       </div>
                       <div className="col-6">
@@ -81,7 +81,7 @@ export function Echeance() {
                           <label htmlFor="recherche">
                             <h6>{t("Pseudo")}</h6>
                           </label>
-                          <input id="recherche" className="form-control" />
+                          <input required id="recherche" className="form-control" />
                         </div>
                       </div>
                     </div>

@@ -57,46 +57,61 @@ function QuestionList() {
     setCurrentItem(item);
     setQuestion({...question , question:item.question ,questionAr:item.questionAr,questionEn:item.questionEn, reponse:item.reponse , reponseAr:item.reponseAr ,reponseEn:item.reponseEn })
   };
-  const handleDelete =  (id) => {
+  const handleDelete = (id, itemName) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
-      text: t("Une fois supprimé(e), vous ne pourrez pas récupérer cet élément !"),
+      text: t(`Veuillez entrer le nom de l'élément "${itemName}" pour confirmer la suppression.`),
       icon: "warning",
+      input: "text",
+      inputPlaceholder: t("Entrez le nom de l'élément"),
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: t("Oui, supprimez-le !"),
       cancelButtonText: t("Non, annuler !"),
-      closeOnConfirm: false,
-      closeOnCancel: false,
+      preConfirm: (inputValue) => {
+        if (inputValue !== itemName) {
+          Swal.showValidationMessage(t("Le nom ne correspond pas."));
+          return false;
+        }
+        return true;
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         await deleteItem(id);
-        console.log("fffffffffffffffffffffff")
-        Swal.fire({   title: "Supprimer",
-          text: "Votre élément est Supprimer:)",
-          icon: "Succes",
+        Swal.fire({
+          title: "Supprimé",
+          text: "Votre élément a été supprimé :)",
+          icon: "success",
           confirmButtonColor: "#b0210e",
-        });      } else {
-          Swal.fire({   title: "Annulé",
-            text: "Votre élément est en sécurité :)",
-            icon: "error",
-            confirmButtonColor: "#b0210e",
-          });            }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: "Annulé",
+          text: "Votre élément est en sécurité :)",
+          icon: "error",
+          confirmButtonColor: "#b0210e",
+        });
+      }
     });
   };
-
-  const deleteItem = async(id) => {
+  
+  const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.112:8081/api/questions/${id}` , {headers : {Authorization: `Bearer ${token}`}});
-      console.log(res.data)
+      const res = await axios.delete(
+        `http://localhost:8081/api/questions/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(res.data);
     } catch (error) {
-      console.log(error)
+      console.error(error);
     }
   };
 const updateQuestion = async(e , id) =>{
   e.preventDefault();
   try {
-    const res = await axios.put(`http://192.168.0.112:8081/api/questions/${id}` , question , {headers : {Authorization: `Bearer ${token}`}});
+    const res = await axios.put(`http://localhost:8081/api/questions/${id}` , question , {headers : {Authorization: `Bearer ${token}`}});
     console.log(res.data)
     } catch (error) {
     console.log(error)
@@ -200,7 +215,7 @@ const updateQuestion = async(e , id) =>{
                               <i className="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editModal" onClick={() => openModal('edit', item)}></i>
                             </th>
                             <th>
-                              <i onClick={()=>handleDelete(item.id)} className="fa-solid fa-trash"></i>
+                              <i onClick={()=>handleDelete(item.id , getQuestionName(item))} className="fa-solid fa-trash"></i>
                             </th>
                           </tr>
                         ))}
@@ -250,27 +265,27 @@ const updateQuestion = async(e , id) =>{
                     <div className="col-12">
                       <div className="form-group has-icon-left">
                         <label htmlFor="question" className="form-label">{t("La question")}</label>
-                        <textarea value={question.question} onChange={e=>setQuestion({...question , question:e.target.value})} className="form-control" id="question" rows={3}></textarea>
+                        <textarea required  value={question.question} onChange={e=>setQuestion({...question , question:e.target.value})} className="form-control" id="question" rows={3}></textarea>
                       </div>
                       <div className="form-group has-icon-left">
                         <label htmlFor="answer" className="form-label">{t("La réponse")}</label>
-                        <textarea value={question.reponse} onChange={e=>setQuestion({...question , reponse:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
+                        <textarea required  value={question.reponse} onChange={e=>setQuestion({...question , reponse:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
                       </div>
                       <div className="form-group has-icon-left">
                         <label htmlFor="answer" className="form-label">{t("La question(arabe)")}</label>
-                        <textarea value={question.questionAr} onChange={e=>setQuestion({...question , questionAr:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
+                        <textarea required  value={question.questionAr} onChange={e=>setQuestion({...question , questionAr:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
                       </div>
                       <div className="form-group has-icon-left">
                         <label htmlFor="answer" className="form-label">{t("La réponse(arabe)")}</label>
-                        <textarea value={question.reponseAr} onChange={e=>setQuestion({...question , reponseAr:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
+                        <textarea required  value={question.reponseAr} onChange={e=>setQuestion({...question , reponseAr:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
                       </div>
                       <div className="form-group has-icon-left">
                         <label htmlFor="answer" className="form-label">{t("La question(englais)")}</label>
-                        <textarea value={question.questionEn} onChange={e=>setQuestion({...question , questionEn:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
+                        <textarea required  value={question.questionEn} onChange={e=>setQuestion({...question , questionEn:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
                       </div>
                       <div className="form-group has-icon-left">
                         <label htmlFor="answer" className="form-label">{t("La réponse(englais)")}</label>
-                        <textarea value={question.reponseEn} onChange={e=>setQuestion({...question , reponseEn:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
+                        <textarea required  value={question.reponseEn} onChange={e=>setQuestion({...question , reponseEn:e.target.value})} className="form-control" id="answer" rows={3}></textarea>
                       </div>
                     </div>
                   </div>

@@ -71,11 +71,11 @@ function ProdAction() {
         <Modal.Body>
           <div className="mb-3">
             <label htmlFor="dateInput" className="form-label">{t("Date")}</label>
-            <input type="date" className="form-control" id="dateInput" />
+            <input required type="date" className="form-control" id="dateInput" />
           </div>
           <div className="mb-3">
             <label htmlFor="timeInput" className="form-label">{t("Heure")}</label>
-            <input type="time" className="form-control" id="timeInput" />
+            <input required type="time" className="form-control" id="timeInput" />
           </div>
         </Modal.Body>
         <Modal.Footer>

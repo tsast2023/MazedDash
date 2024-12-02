@@ -187,7 +187,7 @@ const App = () => {
                         >
                           {t("Description")}
                         </label>
-                        <textarea
+                        <textarea required 
                           className="form-control"
                           id="exampleFormControlTextarea1"
                           rows="3"

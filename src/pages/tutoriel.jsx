@@ -53,7 +53,7 @@ const Modal = ({ t, handleImageChange, tuto, setTuto, addTuto }) => {
               </div>
               <label htmlFor="description">{t("Description")}</label>
               <div className="form-group">
-                <textarea
+                <textarea required 
                   id="description"
                   type="text"
                   placeholder={t("Écrivez ici")}
@@ -63,7 +63,7 @@ const Modal = ({ t, handleImageChange, tuto, setTuto, addTuto }) => {
               </div>
               <label htmlFor="description">{t("Description(arabe)")}</label>
               <div className="form-group">
-                <textarea
+                <textarea required 
                   id="descriptionAr"
                   type="text"
                   placeholder={t("Écrivez ici")}
@@ -73,7 +73,7 @@ const Modal = ({ t, handleImageChange, tuto, setTuto, addTuto }) => {
               </div>
               <label htmlFor="description">{t("Description(englais)")}</label>
               <div className="form-group">
-                <textarea
+                <textarea required 
                   id="descriptionEn"
                   type="text"
                   placeholder={t("Écrivez ici")}
@@ -231,7 +231,7 @@ const Tutoriel = () => {
 
   const deleteItem = async (id) => {
     try {
-      const res = await axios.delete(`http://192.168.0.112:8081/api/tuto/deleteTuto?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
+      const res = await axios.delete(`http://localhost:8081/api/tuto/deleteTuto?id=${id}` , {headers : {Authorization: `Bearer ${token}`}});
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -256,7 +256,7 @@ const Tutoriel = () => {
     }
 
     try {
-        const res = await axios.post("http://192.168.0.112:8081/api/tuto/publishNow", formData, {
+        const res = await axios.post("http://localhost:8081/api/tuto/publishNow", formData, {
             headers: { 
                 Authorization: `Bearer ${token}`, 
                 'Content-Type': 'multipart/form-data' // Ensure to set the content type appropriately

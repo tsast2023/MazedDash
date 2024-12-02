@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from 'react-toastify';
+import { Watch } from "react-loader-spinner";
 
 
 function AnnonceCreator() {
@@ -46,45 +47,137 @@ const handleFileUpload = (e) => {
 
 const publishNow = async () => {
   if (!contenu) {
-      console.error("No content file selected");
-      return; // Show an error or notify the user
+    toast.error("No content file selected");
+    return; // Notify the user and exit
   }
 
-  const formData = new FormData();
-  formData.append("contenu", contenu); // Append the file
-  formData.append("type", type); // Append the type of the announcement
-  formData.append("description", description); // Append description
+  const resolveWithSomeData = new Promise(async (resolve, reject) => {
+    try {
+      const formData = new FormData();
+      formData.append("contenu", contenu); // Append the file
+      formData.append("type", type); // Append the type of the announcement
+      formData.append("description", description); // Append description
 
-  try {
       const res = await axios.post(
-          "http://192.168.0.112:8081/api/annonce/createAnnonce",
-          formData, // Send the FormData
-          {
-              headers: {
-                  "Content-Type": "multipart/form-data", // Set content type
-                  Authorization: `Bearer ${token}` // Include the authorization token
-              }
-          }
+        "http://localhost:8081/api/annonce/createAnnonce",
+        formData, // Send the FormData
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set content type
+            Authorization: `Bearer ${token}`, // Include the authorization token
+          },
+        }
       );
-      console.log(res.data);
-      toast.success(t("Action créée avec succès"));
-      // Log the response
-  } catch (error) {
+
+      console.log(res.data); // Log the response
+      resolve(res.data); // Resolve the promise with response data
+    } catch (error) {
       console.error("Error creating announcement:", error);
-  }
+      reject(error); // Reject the promise with error
+    }
+  });
+
+  toast.promise(resolveWithSomeData, {
+    pending: {
+      render() {
+        return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Watch
+              visible={true}
+              height="30"
+              width="30"
+              radius="48"
+              color="#4fa94d"
+              ariaLabel="watch-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+            "Uploading announcement..."
+          </div>
+        );
+      },
+      icon: false,
+    },
+    success: {
+      render({ data }) {
+        return "Announcement successfully created!";
+      },
+      icon: "🟢",
+    },
+    error: {
+      render({ data }) {
+        return `Error: ${data.message}`;
+      },
+    },
+  });
 };
-  const scheduledAds = async () => {
+const scheduledAds = async () => {
+  const resolveWithSomeData = new Promise(async (resolve, reject) => {
     try {
       const res = await axios.post(
-        `http://192.168.0.112:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,
+        `http://localhost:8081/api/annonce/planifier?contenu=${contenu}&type=${type}&description=${description}&datePublication=${datePublication}`,
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log(res.data);
+
+      console.log(res.data); // Log the response
+      resolve(res.data); // Resolve the promise with response data
     } catch (error) {
-      console.log(error);
+      console.error("Error scheduling ads:", error);
+      reject(error); // Reject the promise with error
     }
-  };
+  });
+
+  toast.promise(resolveWithSomeData, {
+    pending: {
+      render() {
+        return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Watch
+              visible={true}
+              height="30"
+              width="30"
+              radius="48"
+              color="#4fa94d"
+              ariaLabel="watch-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+            "Scheduling your ad..."
+          </div>
+        );
+      },
+      icon: false,
+    },
+    success: {
+      render({ data }) {
+        return "Ad successfully scheduled!";
+      },
+      icon: "🟢",
+    },
+    error: {
+      render({ data }) {
+        return `Error: ${data.message}`;
+      },
+    },
+  });
+};
 
   return (
     <div className="content-container">
@@ -119,7 +212,7 @@ const publishNow = async () => {
                     </div>
                     <div className="">
                       <h6 className="">Description:</h6>
-                      <textarea
+                      <textarea required 
                         className="form-control"
                         name="description"
                         onChange={e => setDescripton(e.target.value)}

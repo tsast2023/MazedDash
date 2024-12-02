@@ -24,7 +24,7 @@ function EnchèreEdit(props) {
       nomProduit: props.selectedItem.nomProduit,
       avocat: props.selectedItem.avocat,
       notaire:props.selectedItem.notaire,
-      galerie: [],
+    //   galerie: [],
       description:props.selectedItem.description,
       categoryName: props.selectedItem.categoryName , // Default value if exists
       // New fields
@@ -47,9 +47,9 @@ function EnchèreEdit(props) {
       nombreParticipantAttendu: props.selectedItem.nombreParticipantAttendu,
       nombreMois: props.selectedItem.nombreMois,
       extensionTime: props.selectedItem.extensionTime,
-      contractEnchereid: "",
-      contractEnchereEnid:"",
-      contractEnchereArid:"",
+    //   contractEnchereid: "",
+    //   contractEnchereEnid:"",
+    //   contractEnchereArid:"",
       autoFinancement: props.selectedItem.autoFinancement
     
   });
@@ -203,7 +203,7 @@ function EnchèreEdit(props) {
       formData.append('contractEnchereEnid', data.contractEnchereEnid);
     }
 
-          const res = await axios.put(`http://192.168.0.112:8081/api/bid/${id}`, formData, {
+          const res = await axios.put(`http://localhost:8081/api/bid/${id}`, formData, {
               headers: { Authorization: `Bearer ${token}` },
               'Content-Type': 'multipart/form-data',
           });
@@ -234,7 +234,7 @@ function EnchèreEdit(props) {
 
 //           // Send the request with FormData
 //           const res = await axios.post(
-//               "http://192.168.0.112:8081/api/bid/publishBidNow",
+//               "http://localhost:8081/api/bid/publishBidNow",
 //               formData,
 //               {
 //                   headers: {
@@ -265,7 +265,7 @@ function EnchèreEdit(props) {
 
 //           // Send the request with FormData
 //           const res = await axios.post(
-//               "http://192.168.0.112:8081/api/bid/scheduleBidPublication",
+//               "http://localhost:8081/api/bid/scheduleBidPublication",
 //               formData,
 //               {
 //                   headers: {
@@ -330,7 +330,7 @@ function EnchèreEdit(props) {
 
     const demandeEnchereEdit = async()=>{
         try {
-            const res = await axios.put(`http://192.168.0.112:8081/api/demandes/createModificationEnchereRequest` , {});
+            const res = await axios.put(`http://localhost:8081/api/demandes/createModificationEnchereRequest` , {});
             console.log(res.data)
         } catch (error) {
             console.log(error)
@@ -441,26 +441,26 @@ function EnchèreEdit(props) {
                                                           <div className="col-12">
                                                               <label>{t("description")}</label>
                                                               <div className="form-group">
-                                                                  <textarea
+                                                                  <textarea required 
                                                                       onChange={e => setData({ ...data, description: e.target.value })}
                                                                       value={data.description}
                                                                       id="description" 
                                                                       className="form-control" 
                                                                       placeholder={t("description")} 
-                                                                      required 
+                                                                       
                                                                   />
                                                               </div>
                                                           </div>
                                                           <div className="col-12">
                                                               <label>{t("galerie")}</label>
                                                               <div className="form-group">
-                                                                  <input 
+                                                                  <input required 
                                                                       onChange={handleGalerieChange} 
                                                                       type="file" 
                                                                       multiple 
                                                                       id="galerie" 
                                                                       className="form-control" 
-                                                                      required 
+                                                                       
                                                                   />
                                                               </div>
                                                           </div>
@@ -518,7 +518,7 @@ function EnchèreEdit(props) {
                                                           <div className="col-12">
                                                               <div className="form-group">
                                                                   <label htmlFor="descriptionAr">{t("Description Arabe")}</label>
-                                                                  <textarea
+                                                                  <textarea required 
                                                                       onChange={e => setData({ ...data, descriptionAr: e.target.value })}
                                                                       value={data.descriptionAr}
                                                                       id="descriptionAr"
@@ -530,7 +530,7 @@ function EnchèreEdit(props) {
                                                           <div className="col-12">
                                                               <div className="form-group">
                                                                   <label htmlFor="descriptionEn">{t("Description Anglaise")}</label>
-                                                                  <textarea
+                                                                  <textarea required 
                                                                       onChange={e => setData({ ...data, descriptionEn: e.target.value })}
                                                                       value={data.descriptionEn}
                                                                       id="descriptionEn"
@@ -902,7 +902,7 @@ function EnchèreEdit(props) {
                                                   <Modal.Body>
                                                       <form onSubmit={e => addScheduledbid(e)} className="mb-3">
                                                           <label htmlFor="dateInput" className="form-label">{t("Date")}</label>
-                                                          <input onChange={e => setDateScheduled(e.target.value)} type="datetime-local" className="form-control" id="dateInput" />
+                                                          <input required onChange={e => setDateScheduled(e.target.value)} type="datetime-local" className="form-control" id="dateInput" />
                                                           <Button variant="secondary" onClick={() => setShowModal(false)}>
                                                               {t("Fermer")}
                                                           </Button>

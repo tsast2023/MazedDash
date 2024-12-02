@@ -78,7 +78,7 @@ function EnchereListe() {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://192.168.0.112:8081/api/bid/${id}`,
+        `http://localhost:8081/api/bid/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
@@ -120,29 +120,44 @@ function EnchereListe() {
     });
   };
 
-  const handleDel = (id) => {
+  const handleDel = (id, itemName) => {
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
+      text: t(
+        `Pour confirmer, veuillez saisir le nom de l'élément "${itemName}"  à supprimer :`
+      ),
+      input: "text",
+      inputPlaceholder: t("Entrez le nom de l'élément ici..."),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
-      confirmButtonText: t("Oui"),
+      confirmButtonText: t("Oui, supprimez-le !"),
       cancelButtonText: t("Non, annuler !"),
       closeOnConfirm: false,
       closeOnCancel: false,
+      preConfirm: (inputValue) => {
+        if (inputValue !== itemName) {
+          Swal.showValidationMessage(
+            t("Le nom de l'élément saisi est incorrect.")
+          );
+          return false;
+        }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         deleteItem(id);
         Swal.fire({
-          title: "Épingler",
-          text: "Votre élément est épingler",
-          icon: "Succes",
+          title: t("Supprimer"),
+          text: t("Votre élément a été supprimé avec succès."),
+          icon: "success",
           confirmButtonColor: "#b0210e",
+        }).then(() => {
+          window.location.reload(); // Reload after deletion
         });
       } else {
         Swal.fire({
-          title: "Annulé",
-          text: "Votre élément est en sécurité :)",
+          title: t("Annulé"),
+          text: t("Votre élément est en sécurité :)"),
           icon: "error",
           confirmButtonColor: "#b0210e",
         });
@@ -295,7 +310,7 @@ function EnchereListe() {
                         <label htmlFor="recherche">
                           <h6>{t("Nom Produit")}</h6>
                         </label>
-                        <input value={nomProduit} onChange={e=>setNomProduit(e.target.value)} id="recherche" className="form-control" />
+                        <input required value={nomProduit} onChange={e=>setNomProduit(e.target.value)} id="recherche" className="form-control" />
                       </div>
                     </div>
                     <div className="col-6">
@@ -303,7 +318,7 @@ function EnchereListe() {
                         <label htmlFor="recherche">
                           <h6>{t("Nom Catégorie")}</h6>
                         </label>
-                        <input value={nomCategorie} onChange={e=>setNomCategorie(e.target.value)} id="recherche" className="form-control" />
+                        <input required value={nomCategorie} onChange={e=>setNomCategorie(e.target.value)} id="recherche" className="form-control" />
                       </div>
                     </div>
                     <div className="col-6 form-group">
@@ -462,7 +477,7 @@ function EnchereListe() {
                                   <div className="buttons">
                                     <a className="btn">
                                       <i
-                                        onClick={() => handleDelete(item.id)}
+                                        onClick={() => handleDel(item.id , getEnchereName(item))}
                                         className="fa-solid fa-trash"
                                       ></i>
                                     </a>
@@ -609,7 +624,7 @@ function EnchereListe() {
                                 <div className="buttons">
                                   <a className="btn">
                                     <i
-                                      onClick={() => handleDelete(item.id)}
+                                      onClick={() => handleDel(item.id , getEnchereName(item))}
                                       className="fa-solid fa-trash"
                                     ></i>
                                   </a>
@@ -629,7 +644,7 @@ function EnchereListe() {
                                 <div className="buttons">
                                   <a className="btn">
                                     <i
-                                      onClick={() => handleDel(item.id)}
+                                      onClick={() => handleDel(item.id , getEnchereName(item))}
                                       className="fa-solid fa-thumbtack"
                                     ></i>
                                   </a>

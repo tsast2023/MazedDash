@@ -286,7 +286,7 @@ const DemandeCatAdmin = () => {
                 <div className="col-12">
                   <div className="form-group">
                     <label htmlFor="description">{t("Description")}</label>
-                    <textarea
+                    <textarea required 
                       className="form-control"
                       id="description"
                       value={description}
