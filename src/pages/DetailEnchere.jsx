@@ -15,8 +15,7 @@ function DetailEnchere(props) {
   const users = state.Users?.content;
   console.log(users)
   const participants = [
-    ...props.selectedItem.participantNonSignéIds,
-    ...props.selectedItem.participantSignéIds,
+    ...props.selectedItem.participantIds
   ];
   console.log("participants;",participants)
   console.log("enchereDetail" , props.selectedItem)
@@ -228,7 +227,7 @@ function DetailEnchere(props) {
                     {/* REF and Number */}
                     <div className="product-ref">
                       <p>
-                        {t("REF")} : {props.selectedItem.refNumber}
+                        {t("REF")} : {props.selectedItem.ref}
                       </p>
                     </div>
                     {/* Statut */}
@@ -568,7 +567,7 @@ function DetailEnchere(props) {
                         <th>{t("Numéro du téléphone")}</th>
                         <th>{t("Nombre d'encheres y liées")}</th>
                         <th>{t("Détail")}</th>
-                        <th>{t("approuver")}</th>
+                        {/* <th>{t("approuver")}</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -583,7 +582,7 @@ function DetailEnchere(props) {
                             <td>
                               <i className="fa-solid fa-eye font-medium-1"></i>
                             </td>
-                            {!props.selectedItem.participantSignéIds.includes(
+                            {/* {!props.selectedItem.participantSignéIds.includes(
                               item.id
                             ) ? (
                               <td>
@@ -596,7 +595,7 @@ function DetailEnchere(props) {
                               </td>
                             ) : (
                               <td>-</td>
-                            )}
+                            )} */}
                           </tr>
                         ))}
                     </tbody>
