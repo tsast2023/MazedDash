@@ -24,7 +24,9 @@ function Recharges() {
     statusRech,
     setStatusRech,
     pageCardRech,
-    setpageCardRech
+    setpageCardRech,
+    size,
+    setSize
   } = useContext(GlobalState)
   useEffect(() => {
     const handleResize = () => {
@@ -266,7 +268,7 @@ function Recharges() {
           <div className="card-content">
             <div className="card-body">
             <div className="row ">
-        <div className="col-6">
+        <div className="col-4">
           <div className="form-group">
             <label htmlFor="recherche">
               <h6>{t("Numéro de série")}</h6>
@@ -274,14 +276,19 @@ function Recharges() {
             <input required value={numcard} onChange={e=>setNumCard(e.target.value)} id="recherche" className="form-control" />
           </div>
         </div>
-        <div className="col-6 form-group">
+        <div className="col-4 form-group">
           <h6>{t("Statut")}</h6>
           <select value={statusRech} onChange={e=>setStatusRech(e.target.value)} className="choices form-select">
             <option value=""  selected></option>
             <option value="UTILISER">{t("Utiliser")}</option>
             <option value="NONUTILISER">{t("Non Utiliser")}</option>
           </select>
+        </div><div className="col-4 form-group">
+          <h6>{t("nombre des pages")}</h6>
+          <input type="text" value={size} onChange={e=>setSize(e.target.value)} className="form-control" />
         </div>
+        
+
        <ReactPaginate
         previousLabel={"← Previous"}
         nextLabel={"Next →"}

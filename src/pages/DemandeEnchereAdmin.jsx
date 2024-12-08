@@ -135,7 +135,7 @@ const DemandeEnchereAdmin = () => {
             </div>
             {isMobile ? (
               <Table responsive="sm">
-                <tbody>
+                {/* <tbody>
                   <tr>
                     <td>{t("Photo de Profile")}</td>
                     <td>
@@ -203,7 +203,7 @@ const DemandeEnchereAdmin = () => {
                       ></i>
                     </td>
                   </tr>
-                </tbody>
+                </tbody> */}
               </Table>
             ) : (
               <Table responsive="sm">
@@ -220,7 +220,7 @@ const DemandeEnchereAdmin = () => {
                     <th>{t("Refuser")}</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   <tr>
                     <td>
                       <img
@@ -267,7 +267,7 @@ const DemandeEnchereAdmin = () => {
                       ></i>
                     </td>
                   </tr>
-                </tbody>
+                </tbody> */}
               </Table>
             )}
           </div>

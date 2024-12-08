@@ -607,33 +607,113 @@ function DetailEnchere(props) {
         </section>
         <br />
         <br />
-
-        <section className="section">
-          <div className="card">
-            <div className="card-header">
-              <h2 className="new-price">{t("Liste des Enchèrissement")}</h2>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive datatable-minimal">
-                {isMobile ? (
-                  <table className="table" id="table2">
-                    <tbody>
-                      {props.selectedItem &&
-                        props.selectedItem.enchérissement?.length > 0 &&
-                        props.selectedItem.enchérissement
-                          .sort(
-                            (a, b) =>
-                              new Date(b.heureMajoration) -
-                              new Date(a.heureMajoration)
-                          ) // Sort by heureMajoration, newest first
-                          .map((item) => (
-                            <React.Fragment
-                              key={item.id || item.participant.pseudo}
-                            >
-                              {" "}
-                              {/* Use React.Fragment with a unique key */}
-                              <tr>
-                                <td>{t("User")}</td>
+        {
+          props.selectedItem.status === "En_Cours"?(
+            <section className="section">
+            <div className="card">
+              <div className="card-header">
+                <h2 className="new-price">{t("Liste des Enchèrissement")}</h2>
+              </div>
+              <div className="card-body">
+                <div className="table-responsive datatable-minimal">
+                  {isMobile ? (
+                    <table className="table" id="table2">
+                      <tbody>
+                        {props.selectedItem &&
+                          props.selectedItem.enchérissement?.length > 0 &&
+                          props.selectedItem.enchérissement
+                            .sort(
+                              (a, b) =>
+                                new Date(b.heureMajoration) -
+                                new Date(a.heureMajoration)
+                            ) // Sort by heureMajoration, newest first
+                            .map((item) => (
+                              <React.Fragment
+                                key={item.id || item.participant.pseudo}
+                              >
+                                {" "}
+                                {/* Use React.Fragment with a unique key */}
+                                <tr>
+                                  <td>{t("User")}</td>
+                                  <td>
+                                    <img
+                                      style={{ borderRadius: "50px" }}
+                                      className="imgtable"
+                                      src="./Mazed.jpg"
+                                      alt="img"
+                                    />
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Nom")}</td>
+                                  <td>{item.participant.nomFamille}</td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Prénom")}</td>
+                                  <td>{item.participant.prenom}</td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Pseudo")}</td>
+                                  <td>{item.participant.pseudo}</td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Heure de majoration")}</td>
+                                  <td>{item.heureMajoration}</td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Valeur Majoration")}</td>
+                                  <td>{item.valeurMajorationUser}</td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Montant total")}</td>
+                                  <td>{item.montantTot}</td>
+                                </tr>
+                                <tr>
+                                  <td>{t("Gagnant")}</td>
+                                  <td>
+                                    <i
+                                      className="fa-solid fa-trophy"
+                                      onClick={() =>
+                                        funModal(
+                                          item.participant,
+                                          item.enchere,
+                                          item.id
+                                        )
+                                      }
+                                    ></i>
+                                  </td>
+                                </tr>
+                              </React.Fragment>
+                            ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <table className="table" id="table2">
+                      <thead>
+                        <tr>
+                          <th>{t("User")}</th>
+                          <th>{t("Nom")}</th>
+                          <th>{t("Prénom")}</th>
+                          <th>{t("Pseudo")}</th>
+                          <th>{t("Heure de majoration")}</th>
+                          <th>{t("Valeur Majoration")}</th>
+                          <th>{t("Montant total")}</th>
+                          <th>{t("Gagant")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {props.selectedItem &&
+                          props.selectedItem.enchérissement?.length > 0 &&
+                          props.selectedItem.enchérissement
+                            .sort(
+                              (a, b) =>
+                                new Date(b.heureMajoration) -
+                                new Date(a.heureMajoration)
+                            ) // Sort by heureMajoration, newest first
+                            .map((item) => (
+                              <tr key={item.id || item.participant.pseudo}>
+                                {" "}
+                                {/* Add a unique key prop */}
                                 <td>
                                   <img
                                     style={{ borderRadius: "50px" }}
@@ -642,33 +722,12 @@ function DetailEnchere(props) {
                                     alt="img"
                                   />
                                 </td>
-                              </tr>
-                              <tr>
-                                <td>{t("Nom")}</td>
                                 <td>{item.participant.nomFamille}</td>
-                              </tr>
-                              <tr>
-                                <td>{t("Prénom")}</td>
                                 <td>{item.participant.prenom}</td>
-                              </tr>
-                              <tr>
-                                <td>{t("Pseudo")}</td>
                                 <td>{item.participant.pseudo}</td>
-                              </tr>
-                              <tr>
-                                <td>{t("Heure de majoration")}</td>
                                 <td>{item.heureMajoration}</td>
-                              </tr>
-                              <tr>
-                                <td>{t("Valeur Majoration")}</td>
                                 <td>{item.valeurMajorationUser}</td>
-                              </tr>
-                              <tr>
-                                <td>{t("Montant total")}</td>
                                 <td>{item.montantTot}</td>
-                              </tr>
-                              <tr>
-                                <td>{t("Gagnant")}</td>
                                 <td>
                                   <i
                                     className="fa-solid fa-trophy"
@@ -682,72 +741,19 @@ function DetailEnchere(props) {
                                   ></i>
                                 </td>
                               </tr>
-                            </React.Fragment>
-                          ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <table className="table" id="table2">
-                    <thead>
-                      <tr>
-                        <th>{t("User")}</th>
-                        <th>{t("Nom")}</th>
-                        <th>{t("Prénom")}</th>
-                        <th>{t("Pseudo")}</th>
-                        <th>{t("Heure de majoration")}</th>
-                        <th>{t("Valeur Majoration")}</th>
-                        <th>{t("Montant total")}</th>
-                        <th>{t("Gagant")}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {props.selectedItem &&
-                        props.selectedItem.enchérissement?.length > 0 &&
-                        props.selectedItem.enchérissement
-                          .sort(
-                            (a, b) =>
-                              new Date(b.heureMajoration) -
-                              new Date(a.heureMajoration)
-                          ) // Sort by heureMajoration, newest first
-                          .map((item) => (
-                            <tr key={item.id || item.participant.pseudo}>
-                              {" "}
-                              {/* Add a unique key prop */}
-                              <td>
-                                <img
-                                  style={{ borderRadius: "50px" }}
-                                  className="imgtable"
-                                  src="./Mazed.jpg"
-                                  alt="img"
-                                />
-                              </td>
-                              <td>{item.participant.nomFamille}</td>
-                              <td>{item.participant.prenom}</td>
-                              <td>{item.participant.pseudo}</td>
-                              <td>{item.heureMajoration}</td>
-                              <td>{item.valeurMajorationUser}</td>
-                              <td>{item.montantTot}</td>
-                              <td>
-                                <i
-                                  className="fa-solid fa-trophy"
-                                  onClick={() =>
-                                    funModal(
-                                      item.participant,
-                                      item.enchere,
-                                      item.id
-                                    )
-                                  }
-                                ></i>
-                              </td>
-                            </tr>
-                          ))}
-                    </tbody>
-                  </table>
-                )}
+                            ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+          ):(
+            <></>
+          )
+        }
+
       </div>
       {/* Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>

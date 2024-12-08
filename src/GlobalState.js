@@ -40,7 +40,7 @@ export const DataProvider = ({children}) => {
   const [userNumtel , setUserNumtel] = useState("");
   const [userStatus , setUserStatus] = useState("");
   const [pageUser , setpageUser] = useState(0);
-
+  const [size , setSize] = useState(20);
   const [statusBid, setStatusBid] = useState(""); // Assuming StatusEnchere is an enum, you can also set a default here
   const [nomCategorie, setNomCategorie] = useState('');
   
@@ -237,7 +237,7 @@ getMe();
   useEffect(()=>{
     const getCarteRechar = async()=>{
       try {
-        const res = await axios.get(`http://localhost:8081/api/carte/filter?numSerie=${numcard}&statusCarte=${statusRech}&page=${pageCardRech}`, {headers : {Authorization: `Bearer ${token}`}});
+        const res = await axios.get(`http://localhost:8081/api/carte/filter?numSerie=${numcard}&statusCarte=${statusRech}&page=${pageCardRech}&size=${size}`, {headers : {Authorization: `Bearer ${token}`}});
         console.log('cartes:' , res.data);
         setCarteRech(res.data);
       } catch (error) {
@@ -246,13 +246,13 @@ getMe();
     }
     getCarteRechar();
 
-  } ,[ numcard , statusRech , pageCardRech] )
+  } ,[ numcard , statusRech , pageCardRech , size] )
 
   useEffect(()=>{
     const getAllUsers = async()=>{
     console.log(userPseudo,userStatus , pageUser)
       try {
-        const res = await axios.get(`http://localhost:8081/admin/filtredUser?pseudo=${userPseudo}&status=${userStatus}&page=${pageUser}`, {headers : {Authorization: `Bearer ${token}`}})
+        const res = await axios.get(`http://localhost:8081/admin/filtredUser?pseudo=${userPseudo}&status=${userStatus}&page=${pageUser}&size=${size}`, {headers : {Authorization: `Bearer ${token}`}})
         console.log("all Users:" , res.data)
         setUsers(res.data)
       } catch (error) {
@@ -261,12 +261,12 @@ getMe();
     }
     getAllUsers();
 
-  } , [userPseudo , userStatus , pageUser])
+  } , [userPseudo , userStatus , pageUser , size])
 
   useEffect(()=>{
     console.log(nomProduit)
     const getAllBids = async()=>{
-      let url = `http://localhost:8081/api/bid/filter?nomProduit=${nomProduit}&nomCategorie=${nomCategorie}&ville=${ville}&page=${pageBid}`
+      let url = `http://localhost:8081/api/bid/filter?nomProduit=${nomProduit}&nomCategorie=${nomCategorie}&ville=${ville}&page=${pageBid}&size=${size}`
       try {
         if(statusBid !== ""){
           url = url + `&status=${statusBid}`
@@ -281,7 +281,7 @@ getMe();
     }
     getAllBids();
 
-  } , [nomCategorie  , statusBid  , nomProduit , ville  , pageBid ])
+  } , [nomCategorie  , statusBid  , nomProduit , ville  , pageBid , size])
    
   useEffect(()=>{
     const getAllAnnonces = async()=>{
@@ -314,7 +314,7 @@ getMe();
   useEffect(()=>{
     const getAllDemandesTransfert = async()=>{
       try {
-        const res = await axios.get(`http://localhost:8081/api/demandeTransfert/filter?numTel=${numTel}&pseudo=${pseudo}&statusDemande=${statusDemande}&typeRecharge=${typeRecharge}&page=${pageTransfert}`, {headers : {Authorization: `Bearer ${token}`}})
+        const res = await axios.get(`http://localhost:8081/api/demandeTransfert/filter?numTel=${numTel}&pseudo=${pseudo}&statusDemande=${statusDemande}&typeRecharge=${typeRecharge}&page=${pageTransfert}&size=${size}`, {headers : {Authorization: `Bearer ${token}`}})
         console.log("all demandes transferts:" , res.data , token)
         setDemandeT(res.data)
       } catch (error) {
@@ -322,7 +322,7 @@ getMe();
       }
     }
     getAllDemandesTransfert()
-  }, [pseudo , statusDemande , typeRecharge , pageTransfert ])
+  }, [pseudo , statusDemande , typeRecharge , pageTransfert , size ])
   const state ={
     Categories : Categories,
     Products : Products,
@@ -398,7 +398,8 @@ getMe();
     setactionDemCat,
     pageDemCat,
     setpageDemCat,
-
+    size,
+    setSize
 
   }
 

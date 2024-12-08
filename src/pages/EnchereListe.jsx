@@ -27,7 +27,8 @@ function EnchereListe() {
   const {
     statusBid,
     setStatusBid,
-    
+    size,
+    setSize,
     nomCategorie ,
     setNomCategorie,
     nomProduit ,
@@ -362,6 +363,10 @@ function EnchereListe() {
                         <option value="Annulée">{t("Annulée")}</option>
                       </select>
                     </div>
+                    <div className="col-4 form-group">
+          <h6>{t("nombre des pages")}</h6>
+          <input type="text" value={size} onChange={e=>setSize(e.target.value)} className="form-control" />
+        </div>
                     <ReactPaginate
         previousLabel={"← Previous"}
         nextLabel={"Next →"}

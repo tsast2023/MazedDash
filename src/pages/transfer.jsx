@@ -226,7 +226,7 @@ function TableRow({ userData, onAccept }) {
 // ResponsiveTable component
 function ResponsiveTable({ data, headers, isMobile }) {
   const { t, i18n } = useTranslation();
-  const { numTel, setnumTel, pseudo, setpseudo, statusDemande, setstatusDemande ,  typeRecharge,settypeRecharge , pageTransfert, setpageTransfert } = useContext(GlobalState);
+  const { numTel, setnumTel, pseudo, setpseudo, statusDemande, setstatusDemande ,  typeRecharge,settypeRecharge , pageTransfert, setpageTransfert , size ,setSize} = useContext(GlobalState);
   const handleAccept = () => {
     // Handle acceptance logic
     console.log("Item accepted");
@@ -276,6 +276,10 @@ function ResponsiveTable({ data, headers, isMobile }) {
             <option value="CarteRecharge">{t("Carte Recharge")}</option>
             <option value="PointDeRecharge">{t("Point De Recharge")}</option>
           </select>
+        </div>
+        <div className="col-6 form-group">
+          <h6>{t("nombre des pages")}</h6>
+          <input type="text" value={size} onChange={e=>setSize(e.target.value)} className="form-control" />
         </div>
        <ReactPaginate
         previousLabel={"← Previous"}

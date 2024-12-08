@@ -24,7 +24,9 @@ function TableUtilisateur() {
     userStatus ,
     setUserStatus,
     pageUser,
-    setpageUser
+    setpageUser,
+    size,
+    setSize
   } = useContext(GlobalState);
   const handlePageChange = (selectedPage) => {
     setpageUser(selectedPage.selected);
@@ -195,6 +197,10 @@ function TableUtilisateur() {
                     <option value="DEBLOQUER">{t("Débloquer")}</option>
                   </select>
                 </div>
+                <div className="col-4 form-group">
+          <h6>{t("nombre des pages")}</h6>
+          <input type="text" value={size} onChange={e=>setSize(e.target.value)} className="form-control" />
+        </div>
                <ReactPaginate
         previousLabel={"← Previous"}
         nextLabel={"Next →"}
