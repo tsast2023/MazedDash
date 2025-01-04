@@ -148,14 +148,11 @@ const App = () => {
               <Route path='/QuestionList' element={<QuestionList/>}/>
               <Route path='/QuestionDetail' element={<QuestionDetail/>}/>
               <Route path='/QuestionEdit' element={<QuestionEdit/>}/>
-              <Route path='/TermsForm' element={<TermsForm/>}/>
-              <Route path='/TermesList' element={<TermesList/>}/>
               <Route path='/TermsAcheteur' element={<TermsAcheteur/>}/>
               <Route path='/OffreEnchere' element={<OffreEnchere/>}/>
               <Route path='/CreationRole' element={<CreationRole/>}/>
               <Route path='/ListeAdministrateur' element={<ListeAdministrateur/>}/>
               <Route path='/CreationAdministrateur' element={<CreationAdministrateur/>}/>
-              <Route path='/TableVendeurs' element={<TableVendeurs/>}/>
               <Route path='/ParticipantForm' element={<ParticipantForm/>}/>
               <Route path='/configuration' element={<Configuration/>}/>
               <Route path='/CreationCat' element={<Categories />} />
@@ -179,8 +176,6 @@ const App = () => {
               <Route path='/Messagerie' element={<Messagerie />} />
               <Route path='/Profile' element={<Profile />} />
               <Route path='/ProdAction' element={<ProdAction />} />
-              <Route path='/TermeEdit' element={<TermeEdit />} />
-              <Route path='/DemandeVendeurCreation' element={<DemandeVendeurCreation/>}/>
               <Route path='/adsEdit' element={<AdsEdit />} />
               <Route path='/adminEdit' element={<AdminEdit />} />
               <Route path='/EnchèreEdit' element={<EnchèreEdit />} />

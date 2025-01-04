@@ -213,22 +213,16 @@ export const DataProvider = ({children}) => {
         console.log(error , token)
       }
     }
-// getAllTermes()
 getTrafic()
 getAllVendeur()
 getAllAcheteur()
-// getAllCommandes();
 getAllAdmin();     
 getAllCategories();
-// getAllProducts();
 getAllTuto();
-
 getAllPermissions();
 getAllRoles();
 getAllQuestions();
-
-
-getAllEcheances();
+getAllEcheances();  
 // getAllWinners();
 getAllNotifications();
 getMe();

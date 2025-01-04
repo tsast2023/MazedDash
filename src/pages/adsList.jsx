@@ -143,8 +143,8 @@ function AdsList() {
                     <td>{item.likedByUsers?.length}</td>
                     </tr>
                     <tr>
-                    <th>{t("Nombre de personne interessé")}</th>
-                      <td>{item.interestedUsers?.length}</td>
+                    <th>{t("Nombre de Commentaire")}</th>
+                      <td>{item.nbCommentaire}</td>
                     </tr>
                     <tr>
                       <td>{t("Type")}</td>
@@ -186,7 +186,7 @@ function AdsList() {
                       <th>{t("Date de création")}</th>
                       <th>{t("Date de publication")}</th>
                       <th>{t("Nombre de j'aime")}</th>
-                      <th>{t("Nombre de personne interessé")}</th>
+                      <th>{t("Nombre de Commentaire")}</th>
                       <th>{t("Type")}</th>
                       <th>{t("Voir")}</th>
                       <th>{t("Supprimer")}</th>
@@ -199,7 +199,7 @@ function AdsList() {
                           <td>{item.createdAt?.split("T")[0]}</td>
                           <td>{item.datePublication}</td>
                           <td>{item.likedByUsers?.length}</td>
-                          <td>{item.interestedUsers?.length}</td>
+                          <td>{item.nbCommentaire}</td>
                           <td>{item.type}</td>
                           <td>
                             <Button
