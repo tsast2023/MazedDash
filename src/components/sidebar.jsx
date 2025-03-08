@@ -497,7 +497,7 @@ const Playground = () => {
               >
                 {t("Cartes recharges")}
               </MenuItem>
-              <MenuItem
+              {/* <MenuItem
                 component={<Link to="/echeances" />}
                 icon={<i className="fa-solid fa-clock"></i>}
                 onClick={() => setActiveLink("/echeances")}
@@ -506,7 +506,7 @@ const Playground = () => {
                 }
               >
                 {t("Echéances")}
-              </MenuItem>
+              </MenuItem> */}
               {/* <MenuItem
                 component={<Link to="/winners" />}
                 icon={<i className="fa-solid fa-trophy"></i>}

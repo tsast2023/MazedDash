@@ -232,6 +232,7 @@ function DetailEnchere(props) {
                     </div>
                     {/* Statut */}
                     <div
+                    style={{backgroundColor:'black'}}
                       className={`status-content ${props.selectedItem.status.toLowerCase()}`}
                     >
                       <p className="status-label">
