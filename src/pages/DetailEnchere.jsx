@@ -267,7 +267,7 @@ function DetailEnchere(props) {
                       </div>
                     )}
 
-                    {props.selectedItem.status === "En_Cours" ? (
+                    {(props.selectedItem.status === "En_Cours"||props.selectedItem.status === "Terminée") ? (
                      <div className="info-container">
                      {/* Product Information Details */}
                      <div className="info-row">
