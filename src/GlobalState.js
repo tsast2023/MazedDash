@@ -276,7 +276,6 @@ getMe();
     getAllBids();
 
   } , [nomCategorie  , statusBid  , nomProduit , ville  , pageBid , size])
-   
   useEffect(()=>{
     const getAllAnnonces = async()=>{
       try {
@@ -292,13 +291,11 @@ getMe();
   useEffect(()=>{
     const getAllDemandeCategories = async()=>{
       try {
-        let  url = `http://localhost:8081/api/demandes`///filter?identifiant=${identifiantDemCat}&page=${pageDemCat}
-        if (actionDemCat){
-          url += `&action=${actionDemCat}`
-        }
+        let  url = `http://localhost:8081/api/demandes/filter?identifiant=${identifiantDemCat}&action=${actionDemCat}&statusDemande=${statusDemCat}&page=${pageDemCat}`
+      
         const res = await axios.get(url, {headers : {Authorization: `Bearer ${token}`}})
-        console.log("All demandes:" , res.data)
-        setDemandeCat(res.data)
+        console.log("All demandes categorie =====:" , res.data.content)
+        setDemandeCat(res.data.content)
       } catch (error) {
         console.log(error , token)
       }

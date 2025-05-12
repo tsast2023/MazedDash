@@ -91,7 +91,7 @@ const Navbar = ({ username }) => {
       >
         <div className="notification-content">
           {notifications &&
-            notifications.slice(-5).reverse().map((item, index) => (
+            notifications.slice(5).map((item, index) => (
               <div className="notification-item" key={index}>
                 <div className="icon-circle">
                   <i className="fa-solid fa-money-bill"></i>
