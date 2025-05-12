@@ -142,7 +142,7 @@ const updateRole = async(id , e) =>{
                         <td>{item.email}</td>
                       </tr>
                       <tr>
-                        <td>{t("Pseudo")}</td>
+                        <td>{t("Identifiant")}</td>
                         <td>{item.identifiant}</td>
                       </tr>
                       <tr>
@@ -151,7 +151,17 @@ const updateRole = async(id , e) =>{
                       </tr>
                       <tr>
                         <td>{t("Status")}</td>
-                        <td>{item.status}</td>
+                        <td> <span
+          className={
+            item.status === "DEBLOQUER"
+              ? "badge bg-info"
+              : item.status === "BLOQUER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span></td>
                       </tr>
                       <tr>
                         <td>{t("Modifier")}</td>
@@ -181,9 +191,9 @@ const updateRole = async(id , e) =>{
                     <thead>
                       <tr>
                         <th>{t("Email")}</th>
-                        <th>{t("Pseudo")}</th>
+                        <th>{t("Identifiant")}</th>
                         <th>{t("Role")}</th>
-                        <th>{t("Status")}</th>
+                        <th>{t("Statut")}</th>
                         <th>{t("Modifier")}</th>
                         <th>{t("Bloquer")}</th>
                         <th>{t("Débloquer")}</th>
@@ -195,7 +205,19 @@ const updateRole = async(id , e) =>{
                           <td>{item.email}</td>
                           <td>{item.identifiant}</td>
                           <td>{item.roleAdmin?.name}</td>
-                          <td>{item.status}</td>
+                               <td>
+        <span
+          className={
+            item.status === "DEBLOQUER"
+              ? "badge bg-info"
+              : item.status === "BLOQUER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span>
+      </td>
                           <td>
                             <i className="fa-solid fa-pen-to-square" onClick={()=>openEditModal(item)}></i>
                           </td>

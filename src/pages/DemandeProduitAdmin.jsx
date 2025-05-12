@@ -31,6 +31,8 @@ const DemandeProduitAdmin = () => {
   const [color, setColor] = useState("#ffffff");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState();
+    const MODIFICATION = "MODIFICATION";
+    const CHANGEMENT_STATUT = "CHANGEMENT_STATUT";
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1212);
@@ -43,7 +45,7 @@ const DemandeProduitAdmin = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleValidation = (action, status, id) => {
+  const handleValidation =  (action, status, id , actionDem) => {
     console.log(action, status, id);
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
@@ -57,7 +59,7 @@ const DemandeProduitAdmin = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         if (action === "valider") {
-          await traiterDemandeCategory(id, status);
+          await traiterDemandeCategory(id, status , actionDem);
           Swal.fire({
             title: "Valider",
             text: "Votre élément est validé :)",
@@ -82,15 +84,27 @@ const DemandeProduitAdmin = () => {
       }
     });
   };
-  const traiterDemandeCategory = async (demandeId, status) => {
+  const traiterDemandeCategory = async (demandeId, status , actionDem) => {
     try {
       console.log(token, demandeId, status);
-      const res = await axios.post(
+      if(actionDem ===  CHANGEMENT_STATUT) {
+          const res = await axios.post(
+        `http://localhost:8081/api/demandes/desactivation-categorie?demandeId=${demandeId}&statusDemande=${status}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+
+      }else if(actionDem === MODIFICATION){
+          const res = await axios.post(
         `http://localhost:8081/api/demandes/traiterDemandeModificationCategorie?demandeId=${demandeId}&statusDemande=${status}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(res.data);
+        
+      }
+    
     } catch (error) {
       console.log(error);
     }
@@ -148,17 +162,29 @@ const DemandeProduitAdmin = () => {
                   {demandes &&
                     demandes?.map((item) => (
                       <>
-                        <tr>
-                          <td>{t("Admin")}</td>
-                          <td>
-                            <h6>{item?.administrateur?.identifiant}</h6>
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <td>{t("type demande ")}</td>
-                          <td>{item.typeDemandeAdmin}</td>
-                        </tr>
+                         <tr>
+                    <td>{t("Photo de Profile")}</td>
+                                <td>
+  <img
+    style={{ borderRadius: "50px" }}
+    className="imgtable"
+    src={
+      item?.administrateur?.photoDeProfil || "/user.png"
+    }
+    alt="img"
+  />
+</td>
+                  </tr>
+                  <td>{t("Identifiant")}</td>
+                  <td>{item?.administrateur?.identifiant}</td>
+                  <tr>
+                    <td>{t("Nom")}</td>
+                    <td>{item?.administrateur?.nomFamille}</td>
+                  </tr>
+                  <tr>
+                    <td>{t("Prénom")}</td>
+                    <td>{item?.administrateur?.prenom}</td>
+                  </tr>
                         <tr>
                           <td>{t("Ancien categorie")}</td>
                           <td>
@@ -183,11 +209,19 @@ const DemandeProduitAdmin = () => {
                         </tr>
                         <tr>
                           <td>{t("Statut")}</td>
-                          <td>
-                            <button className="btn btn-secondary">
-                              {item.status}
-                            </button>
-                          </td>
+                               <td>
+        <span
+          className={
+            item.status === "EN_ATTENTE"
+              ? "badge bg-info"
+              : item.status === "REFUSER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span>
+      </td>
                         </tr>
                         <tr>
                           <td>{t("Valider")}</td>
@@ -199,7 +233,8 @@ const DemandeProduitAdmin = () => {
                                   handleValidation(
                                     "valider",
                                     "APPROUVER",
-                                    item.id
+                                    item.id, 
+                                    item.action
                                   )
                                 }
                               ></i>
@@ -218,7 +253,8 @@ const DemandeProduitAdmin = () => {
                                   handleValidation(
                                     "refuser",
                                     "REFUSER",
-                                    item.id
+                                    item.id, 
+                                    item.action
                                   )
                                 }
                               ></i>
@@ -235,9 +271,10 @@ const DemandeProduitAdmin = () => {
               <Table responsive="sm">
                 <thead>
                   <tr>
-                    <th>{t("Admin")}</th>
-
-                    <th>{t("type demande")}</th>
+                   <th>{t("Photo de Profile")}</th>
+                    <th>{t("Identifiant")}</th>
+                    <th>{t("Nom")}</th>
+                    <th>{t("Prénom")}</th>
                     <th>{t("Ancien categorie")}</th>
                     <th>{t("Nouveau categorie")}</th>
                     <th>{t("Statut")}</th>
@@ -250,11 +287,22 @@ const DemandeProduitAdmin = () => {
                   {demandes &&
                     demandes?.map((item) => (
                       <tr>
-                        <td>
-                          <h6>{item?.administrateur?.identifiant}</h6>
-                        </td>
-
-                        <td>{item.typeDemandeAdmin}</td>
+                                    <td>
+  
+  <img
+    style={{ borderRadius: "50px" }}
+    className="imgtable"
+    src={item?.administrateur?.photoDeProfil || "/user.png"}
+    alt="img"
+    onError={(e) => {
+      e.target.onerror = null; // évite une boucle infinie si l'image par défaut échoue aussi
+      e.target.src = "/user.png"; // image par défaut
+    }}
+  />
+</td>
+                    <td>{item?.administrateur?.identifiant}</td>
+                    <td>{item?.administrateur?.nomFamille}</td>
+                    <td>{item?.administrateur?.prenom}</td>
                         <td>
                           <button
                             onClick={() => showModal(item.oldCategorie)}
@@ -271,11 +319,19 @@ const DemandeProduitAdmin = () => {
                             View
                           </button>
                         </td>
-                        <td>
-                          <button className="btn btn-secondary">
-                            {item.status}
-                          </button>
-                        </td>
+                             <td>
+        <span
+          className={
+            item.status === "EN_ATTENTE"
+              ? "badge bg-info"
+              : item.status === "REFUSER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span>
+      </td>
                         <td>{item.action}</td>
                         <td>
                           {item.status === "EN_ATTENTE" ? (
@@ -285,7 +341,8 @@ const DemandeProduitAdmin = () => {
                                 handleValidation(
                                   "valider",
                                   "APPROUVER",
-                                  item.id
+                                  item.id,
+                                  item.action
                                 )
                               }
                             ></i>
@@ -298,7 +355,7 @@ const DemandeProduitAdmin = () => {
                             <i
                               className="fa-solid fa-circle-xmark text-danger"
                               onClick={() =>
-                                handleValidation("valider", "REFUSER", item.id)
+                                handleValidation("valider", "REFUSER", item.id , item.action)
                               }
                             ></i>
                           ) : (

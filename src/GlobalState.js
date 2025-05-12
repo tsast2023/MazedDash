@@ -27,6 +27,7 @@ export const DataProvider = ({children}) => {
   const [notifications , setNotifications] = useState();
   const [me , setMe] = useState();
   const [demandeCat , setDemandeCat] = useState();
+  const [demandeBid , setDemandeBid] = useState([]);
   const [numTel , setnumTel] = useState("");
   const [pseudo , setpseudo] = useState("");
   const [statusDemande , setstatusDemande] = useState("");
@@ -60,6 +61,11 @@ export const DataProvider = ({children}) => {
   const [statusDemCat , setstatusDemCat] = useState("");
   const [actionDemCat , setactionDemCat] = useState("");
   const [pageDemCat , setpageDemCat] = useState(0);
+
+    const [identifiantDemBid , setidentifiantDemBid] = useState("");
+  const [statusDemBid , setstatusDemBid] = useState("");
+  const [actionDemBid , setactionDemBid] = useState("");
+  const [pageDemBid , setpageDemBid] = useState(0);
 
   useEffect(()=>{
     const getAllAcheteur = async() =>{
@@ -204,16 +210,6 @@ export const DataProvider = ({children}) => {
       }
     }
     
-    const getTrafic= async()=>{
-      try {
-        const res = await axios.get('http://localhost:8081/api/bid/trafic', {headers : {Authorization: `Bearer ${token}`}})
-        console.log("All trafic:" , res.data)
-        setTraffic(res.data)
-      } catch (error) {
-        console.log(error , token)
-      }
-    }
-getTrafic()
 getAllVendeur()
 getAllAcheteur()
 getAllAdmin();     
@@ -302,6 +298,21 @@ getMe();
     }
     getAllDemandeCategories();
   } , [identifiantDemCat , statusDemCat , pageDemCat , actionDemCat ])
+
+    useEffect(()=>{
+    const getAllDemandeBid = async()=>{
+      try {
+        let  url = `http://localhost:8081/api/demandes/filterRequestBid?identifiant=${identifiantDemBid}&action=${actionDemBid}&statusDemande=${statusDemBid}&page=${pageDemBid}`
+      
+        const res = await axios.get(url, {headers : {Authorization: `Bearer ${token}`}})
+        console.log("All demandes Bid =========:" , res.data.content)
+        setDemandeBid(res.data.content)
+      } catch (error) {
+        console.log(error , token)
+      }
+    }
+    getAllDemandeBid();
+  } , [identifiantDemBid , statusDemBid , pageDemBid , actionDemBid ])
   useEffect(()=>{
     const getAllDemandesTransfert = async()=>{
       try {
@@ -335,6 +346,7 @@ getMe();
     notifications: notifications,
     Me : me,
     demandes: demandeCat,
+    demandesBid : demandeBid,
     Traffic : traffic,
     
     //for demandes transferts
@@ -390,7 +402,16 @@ getMe();
     pageDemCat,
     setpageDemCat,
     size,
-    setSize
+    setSize,
+    identifiantDemBid,
+    setidentifiantDemBid,
+    statusDemBid,
+    setstatusDemBid,
+    actionDemBid,
+    setactionDemBid,
+    setDemandeBid,
+    pageDemBid,
+    setpageDemBid
 
   }
 

@@ -146,7 +146,7 @@ function TableRow({ userData, onAccept }) {
       <td>
         <div class="custom-button">
           <div class="custom-button-wrapper">
-            <a class="custom-text">Download</a>
+            <a class="custom-text">{t("download")}</a>
             <a
               onClick={() => downloadFile(userData.fileId, token)}
               class="custom-icon"

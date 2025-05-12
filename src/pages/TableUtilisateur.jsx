@@ -225,17 +225,34 @@ function TableUtilisateur() {
                               <td>{t("Nom")}</td>
                               <td>{item.prenom}</td>
                             </tr>
-                            <tr>
-                              <td>{t("Pseudo")}</td>
-                              <td>{item.pseudo}</td>
-                            </tr>
+                             <td>
+    {item?.role === "Acheteur"
+      ? item?.pseudo
+      : item?.role === "Admin"
+      ? item?.identifiant
+      : "-"}
+  </td>
                             <tr>
                               <td>{t("Email")}</td>
                               <td>{item.email}</td>
                             </tr>
+                              <tr>
+                              <td>{t("Role")}</td>
+                              <td>{item.role}</td>
+                            </tr>
                             <tr>
-                              <td>{t("Status")}</td>
-                              <td>{item.status}</td>
+                              <td>{t("Statut")}</td>
+                                 <td> <span
+          className={
+            item.status === "DEBLOQUER"
+              ? "badge bg-info"
+              : item.status === "BLOQUER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span></td>
                             </tr>
                             <tr>
                               <td>{t("Détail")}</td>
@@ -279,7 +296,9 @@ function TableUtilisateur() {
                         <th>{t("Nom")}</th>
                         <th>{t("Pseudo")}</th>
                         <th>{t("Email")}</th>
-                        <td>{t("Status")}</td>
+                        
+                        <td>{t("Role")}</td>
+                        <td>{t("Statut")}</td>
                         <th>{t("Détail")}</th>
                         {/* <th>{t("Modifier")}</th> */}
                         <th>{t("Bloquer")}</th>
@@ -292,9 +311,27 @@ function TableUtilisateur() {
                         users?.content?.map((item) => (
                           <tr>
                             <td>{item.prenom}</td>
-                            <td>{item.pseudo}</td>
+                                                 <td>
+    {item?.role === "Acheteur"
+      ? item?.pseudo
+      : item?.role === "Admin"
+      ? item?.identifiant
+      : "-"}
+  </td>
                             <td>{item.email}</td>
-                            <td>{item.status}</td>
+                            
+                            <td>{item.role}</td>
+                             <td> <span
+          className={
+            item.status === "DEBLOQUER"
+              ? "badge bg-info"
+              : item.status === "BLOQUER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span></td>
                             <td>
                               <i
                                 className="fa-solid fa-eye"

@@ -5,9 +5,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
+      "download":"Download",
       "Recherche": "Search",
       "Tableau de bord": "Dashboard",
       "Super Admin": "Super Admin",
+      "Demande annonce":"Announcement requests",
       "Catégories": "Categories",
       "Catégorie": "Category",
       "Création de catégorie": "Category Creation",
@@ -464,8 +466,10 @@ const resources = {
   },
   fr: {
     translation: {
+      "download":"Download",
       "Retour":"Retour",
       "Création": "Création",
+      "Demande annonce" : "Demandes annonce",
       "Approuver": "Approuver",
       "Cachée":"Cachée",
       "Action annulée": "Action annulée",
@@ -932,6 +936,8 @@ const resources = {
   },
   ar: {
     translation: {
+      "download":"تحميل",
+      "Demande annonce":"طلبات اعلان",
       "Retour": "رجوع",
       "Création": "صنع",
       "Modification": "تعديل",

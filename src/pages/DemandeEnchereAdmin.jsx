@@ -4,15 +4,31 @@ import { Table, Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../GlobalState";
-
+import Cookies from "js-cookie";
+import axios from "axios";
 const DemandeEnchereAdmin = () => {
+  const token = Cookies.get("token");
   const { t, i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [starClicked, setStarClicked] = useState(false);
   const state = useContext(GlobalState);
-  const demandesBid = state.demandes;
+  const[bid , setBid]= useState()
+  const demandesBid = state.demandesBid;
+    const {
+    identifiantDemBid,
+    setidentifiantDemBid,
+    statusDemBid,
+    setstatusDemBid,
+    actionDemBid,
+    setactionDemBid,
+    pageDemBid,
+    setpageDemBid
+    } = useContext(GlobalState)
   // State for editing modal
   const [showEditModal, setShowEditModal] = useState(false);
+  const MODIFICATION = "MODIFICATION";
+const ANNULATION = "ANNULATION";
+
 
   // State for showing modals for images
   const [showAncienModal, setShowAncienModal] = useState(false);
@@ -37,19 +53,21 @@ const DemandeEnchereAdmin = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleValidation = (action) => {
+   const handleValidation =  (action, status, id , actionDem) => {
+    console.log(action, status, id);
     Swal.fire({
       title: t("Êtes-vous sûr(e) ?"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
+      confirmButtonColor: "#DD6B55", 
       confirmButtonText: t("Oui"),
       cancelButtonText: t("Non, annuler !"),
       closeOnConfirm: false,
       closeOnCancel: false,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         if (action === "valider") {
+          await traiterDemandeBid(id, status , actionDem);
           Swal.fire({
             title: "Valider",
             text: "Votre élément est validé :)",
@@ -57,6 +75,7 @@ const DemandeEnchereAdmin = () => {
             confirmButtonColor: "#8c111b",
           });
         } else {
+          await traiterDemandeBid(id, status , actionDem);
           Swal.fire({
             title: "Refuser",
             text: "Votre élément est refusé :)",
@@ -73,6 +92,31 @@ const DemandeEnchereAdmin = () => {
         });
       }
     });
+  };
+  const traiterDemandeBid = async (demandeId, status , actionDem) => {
+    try {
+      console.log(token, demandeId, status);
+      if(actionDem === MODIFICATION) {
+         const res = await axios.post(
+        `http://localhost:8081/api/demandes/traiterDemandeModificationEnchere?demandeId=${demandeId}&statusDemande=${status}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+
+      }else if (actionDem === ANNULATION){
+         const res = await axios.post(
+        `http://localhost:8081/api/demandes/traiterDemandeAnnulationEnchere?demandeId=${demandeId}&statusDemande=${status}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(res.data);
+
+      }
+     
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -100,6 +144,12 @@ const DemandeEnchereAdmin = () => {
     setShowEditModal(false);
   };
 
+   const showModal = (item) => {
+    setShowEditModal(true);
+    console.log(item);
+    setBid(item);
+  };
+
   const handleAncienModalClose = () => setShowAncienModal(false);
   const handleNouveauModalClose = () => setShowNouveauModal(false);
 
@@ -115,95 +165,150 @@ const DemandeEnchereAdmin = () => {
           </div>
           <div className="card-body">
             <div className="row ">
-              <div className="col-6">
+              <div className="col-4">
                 <div className="form-group">
                   <label htmlFor="recherche">
                     <h6>{t("Recherche")}</h6>
                   </label>
-                  <input required id="recherche" className="form-control" />
+                  <input required value={identifiantDemBid} onChange={e=>setidentifiantDemBid(e.target.value)} id="recherche" className="form-control" />
                 </div>
               </div>
-              <div className="col-6 form-group">
+              <div className="col-4 form-group">
                 <h6>{t("Statut")}</h6>
-                <select className="choices form-select">
-                  <option value="" disabled selected></option>
-                  <option value="square">{t("Approuver")}</option>
-                  <option value="rectangle">{t("En attente")}</option>
-                  <option value="rectangle">{t("Refuser")}</option>
+                <select value={statusDemBid} onChange={e=>setstatusDemBid(e.target.value)} className="choices form-select">
+                <option value=""  selected></option>
+                  <option value="APPROUVER">{t("Approuver")}</option>
+                  <option value="EN_ATTENTE">{t("En attente")}</option>
+                  <option value="REFUSER">{t("Refuser")}</option>
+                </select>
+              </div>
+              <div className="col-4 form-group">
+                <h6>{t("Action")}</h6>
+                <select value={actionDemBid} onChange={e=>setactionDemBid(e.target.value)} className="choices form-select">
+                <option value=""  selected></option>
+                  <option value="ANNULATION">{t("ANNULATION")}</option>
+                  <option value="MODIFICATION">{t("MODIFICATION")}</option>
+                
                 </select>
               </div>
             </div>
             {isMobile ? (
               <Table responsive="sm">
-                {/* <tbody>
+                  <tbody>
+                  {demandesBid &&
+                    demandesBid?.map((item) => ( 
+                      <> 
+                  
                   <tr>
                     <td>{t("Photo de Profile")}</td>
-                    <td>
-                      <img
-                        style={{ borderRadius: "50px" }}
-                        className="imgtable"
-                        src="./Mazed.jpg"
-                        alt="img"
-                      />
-                    </td>
+<td>
+  <img
+    style={{ borderRadius: "50px" }}
+    className="imgtable"
+    src={item?.administrateur?.photoDeProfil || "/user.png"}
+    alt="img"
+    onError={(e) => {
+      e.target.onerror = null; // évite une boucle infinie si l'image par défaut échoue aussi
+      e.target.src = "/user.png"; // image par défaut
+    }}
+  />
+</td>
+                  </tr>
+                  <tr>
+                     <td>{t("Identifiant")}</td>
+                  <td>{item?.administrateur?.identifiant}</td>
+
                   </tr>
                   <tr>
                     <td>{t("Nom")}</td>
-                    <td>Lorem</td>
+                    <td>{item?.administrateur?.nomFamille}</td>
                   </tr>
                   <tr>
                     <td>{t("Prénom")}</td>
-                    <td>Lorem</td>
+                    <td>{item?.administrateur?.prenom}</td>
                   </tr>
                   <tr>
                     <td>{t("Ancien produit")}</td>
-                    <td>
-                      <img
-                        className="imgtable"
-                        src="./Mazed.jpg"
-                        alt="img"
-                        onClick={handleAncienModalShow}
-                      />
-                    </td>
+                     <td>
+                            <button
+                              onClick={() => showModal(item.oldEnchere)}
+                              class="btn btn-primary"
+                            >
+                              View
+                            </button>
+                          </td>
                   </tr>
                   <tr>
                     <td>{t("Nouveau produit")}</td>
-                    <td>
-                      <img
-                        className="imgtable"
-                        src="./Mazed.jpg"
-                        alt="img"
-                        onClick={handleNouveauModalShow}
-                      />
-                    </td>
+                     <td>
+                            <button
+                              onClick={() => showModal(item.newEnchere)}
+                              class="btn btn-primary"
+                            >
+                              View
+                            </button>
+                          </td>
                   </tr>
                   <tr>
                     <td>{t("Statut")}</td>
-                    <td>
-                      <button className="btn btn-secondary">
-                        {t("Publié")}
-                      </button>
-                    </td>
+                  <td>
+        <span
+          className={
+            item.status === "EN_ATTENTE"
+              ? "badge bg-info"
+              : item.status === "REFUSER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span>
+      </td>
                   </tr>
-                  <tr>
-                    <td>{t("Valider")}</td>
-                    <td>
-                      <i
-                        className="fa-solid fa-circle-check text-success"
-                        onClick={() => handleValidation("valider")}
-                      ></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{t("Refuser")}</td>
-                    <td>
-                      <i
-                        className="fa-solid fa-circle-xmark text-danger"
-                        onClick={() => handleValidation("refuser")}
-                      ></i>
-                    </td>
-                  </tr>
-                </tbody> */}
+              <tr>
+                          <td>{t("Valider")}</td>
+                          <td>
+                            {item.status === "EN_ATTENTE" ? (
+                              <i
+                                className="fa-solid fa-circle-check text-success"
+                                onClick={() =>
+                                  handleValidation(
+                                    "valider",
+                                    "APPROUVER",
+                                    item.id,
+                                    item.action
+                                  )
+                                }
+                              ></i>
+                            ) : (
+                              <h6>-</h6>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{t("Refuser")}</td>
+                          <td>
+                            {item.status === "EN_ATTENTE" ? (
+                              <i
+                                className="fa-solid fa-circle-xmark text-danger"
+                                onClick={() =>
+                                  handleValidation(
+                                    "refuser",
+                                    "REFUSER",
+                                    item.id,
+                                    item.action
+                                  )
+                                }
+                              ></i>
+                            ) : (
+                              <h6>-</h6>
+                            )}
+                          </td>
+                        </tr>
+               </>
+                ))}
+               
+                </tbody>
               </Table>
             ) : (
               <Table responsive="sm">
@@ -211,6 +316,7 @@ const DemandeEnchereAdmin = () => {
                   <tr>
                     <th>{t("Photo de Profile")}</th>
                     <th>{t("Nom")}</th>
+                    <th>{t("Identifiant")}</th>
                     <th>{t("Prénom")}</th>
                     <th>{t("Ancien Enchére")}</th>
                     <th>{t("Nouveau Enchére")}</th>
@@ -220,54 +326,87 @@ const DemandeEnchereAdmin = () => {
                     <th>{t("Refuser")}</th>
                   </tr>
                 </thead>
-                {/* <tbody>
+                <tbody>
+                    {demandesBid &&
+                    demandesBid?.map((item) => (
                   <tr>
+  <td>
+  <img
+    style={{ borderRadius: "50px" }}
+    className="imgtable"
+    src={item?.administrateur?.photoDeProfil || "/user.png"}
+    alt="img"
+    onError={(e) => {
+      e.target.onerror = null; // évite une boucle infinie si l'image par défaut échoue aussi
+      e.target.src = "/user.png"; // image par défaut
+    }}
+  />
+</td>
+                    <td>{item?.administrateur?.identifiant}</td>
+                    <td>{item?.administrateur?.nomFamille}</td>
+                    <td>{item?.administrateur?.prenom}</td>
+                   <td>
+                            <button
+                              onClick={handleAncienModalShow}
+                              class="btn btn-primary"
+                            >
+                              View
+                            </button>
+                          </td>
                     <td>
-                      <img
-                        style={{ borderRadius: "50px" }}
-                        className="imgtable"
-                        src="./Mazed.jpg"
-                        alt="img"
-                      />
-                    </td>
-                    <td>lorem</td>
-                    <td>Lorem</td>
-                    <td>
-                      <img
-                        className="imgtable"
-                        src="./Mazed.jpg"
-                        alt="img"
-                        onClick={handleAncienModalShow}
-                      />
-                    </td>
-                    <td>
-                      <img
-                        className="imgtable"
-                        src="./Mazed.jpg"
-                        alt="img"
-                        onClick={handleNouveauModalShow}
-                      />
-                    </td>
-                    <td>
-                      <button className="btn btn-secondary">
-                        {t("Publié")}
-                      </button>
-                    </td>
-                    <td>Action</td>
-                    <td>
-                      <i
-                        className="fa-solid fa-circle-check text-success"
-                        onClick={() => handleValidation("valider")}
-                      ></i>
-                    </td>
-                    <td>
-                      <i
-                        className="fa-solid fa-circle-xmark text-danger"
-                        onClick={() => handleValidation("refuser")}
-                      ></i>
-                    </td>
-                  </tr>
-                </tbody> */}
+                            <button
+                              onClick={handleNouveauModalShow}
+                              class="btn btn-primary"
+                            >
+                              View
+                            </button>
+                          </td>
+               <td>
+        <span
+          className={
+            item.status === "EN_ATTENTE"
+              ? "badge bg-info"
+              : item.status === "REFUSER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.status}
+        </span>
+      </td>
+                    <td>{item.action}</td>
+                       <td>
+                          {item.status === "EN_ATTENTE" ? (
+                            <i
+                              className="fa-solid fa-circle-check text-success"
+                              onClick={() =>
+                                handleValidation(
+                                  "valider",
+                                  "APPROUVER",
+                                  item.id, 
+                                  item.action
+                                )
+                              }
+                            ></i>
+                          ) : (
+                            <h6>-</h6>
+                          )}
+                        </td>
+                        <td>
+                          {item.status === "EN_ATTENTE" ? (
+                            <i
+                              className="fa-solid fa-circle-xmark text-danger"
+                              onClick={() =>
+                                handleValidation("valider", "REFUSER", item.id , item.action)
+                              }
+                            ></i>
+                          ) : (
+                            <h6>-</h6>
+                          )}
+                        </td>
+                      </tr>
+                   ))}
+                </tbody> 
               </Table>
             )}
           </div>

@@ -302,6 +302,7 @@ function DemandeAds() {
                       <th>{t("Numéro de téléphone")}</th>
                       <th>{t("Type")}</th>
                       <th>{t("Action")}</th>
+                      <th>{t("statut")}</th>
                       <th>{t("Voir")}</th>
                       <th>{t("Accepter")}</th>
                       <th>{t("Refuser")}</th>
@@ -313,11 +314,25 @@ function DemandeAds() {
                         <tr>
                          
                           <td>{item.user.nomFamille}</td>
+
                           <td>{item.user.prenom}</td>
                           <td>{item.user.pseudo}</td>
                           <td>{item.user.numTel}</td>
                           <td>{item.type}</td>
                           <td>{item.actionAnnonce}</td>
+                               <td>
+        <span
+          className={
+            item.statusDemande === "EN_ATTENTE"
+              ? "badge bg-info"
+              : item.statusDemande === "REFUSER"
+              ? "badge bg-danger"
+              : "badge bg-success"
+          }
+        >
+          {item.statusDemande}
+        </span>
+      </td>
                           <td>
                             <Button
                               className="btn"
